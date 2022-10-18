@@ -2,20 +2,24 @@
 
 namespace Models;
 
+/**
+ * @class Owner
+ * @package Models
+ */
+
+
 class Owner {
 
-    private $id;
-    private $firstname;
-    private $lastname;
-    private $email;
-    private $password;
-    private $phone;
-    private $idKepeerXOwner;
-    
+    private int $id;
+    private string $firstname;
+    private string $lastname;
+    private string $email;
+    private string $password;
+    private string $phone;
 
     // Getters and setters
 
-    public function getId() {
+    public function getId(): int {
         return $this->id;
     }
 
@@ -23,7 +27,7 @@ class Owner {
         $this->id = $id;
     }
 
-    public function getFirstname() {
+    public function getFirstname(): string {
         return $this->firstname;
     }
 
@@ -31,7 +35,7 @@ class Owner {
         $this->firstname = $firstname;
     }
 
-    public function getLastname() {
+    public function getLastname(): string {
         return $this->lastname;
     }
 
@@ -39,7 +43,7 @@ class Owner {
         $this->lastname = $lastname;
     }
 
-    public function getEmail() {
+    public function getEmail(): string {
         return $this->email;
     }
 
@@ -47,7 +51,7 @@ class Owner {
         $this->email = $email;
     }
 
-    public function getPassword() {
+    public function getPassword(): string {
         return $this->password;
     }
 
@@ -55,7 +59,7 @@ class Owner {
         $this->password = $password;
     }
 
-    public function getPhone() {
+    public function getPhone(): string {
         return $this->phone;
     }
 
@@ -63,12 +67,6 @@ class Owner {
         $this->phone = $phone;
     }
 
-    public function getIdKepeerXOwner() {
-        return $this->idKepeerXOwner;
-    }
-
-    public function setIdKepeerXOwner($idKepeerXOwner) {
-        $this->idKepeerXOwner = $idKepeerXOwner;
-    }
-
 }
+
+?>
