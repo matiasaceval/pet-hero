@@ -35,6 +35,7 @@ class OwnerController
 
     public function LogIn(string $email, string $password)
     {
+        // TODO: Implement GetByEmail method in OwnerDAO and Interface
         $owner = $this->ownerDAO->GetByEmail($email);
         if ($owner != null && $owner->getPassword() == $password) {
             // TODO: Locate to home and store owner in session
