@@ -13,9 +13,7 @@ abstract class Session {
     }
 
     public static function Get(string $key): mixed {
-        if (isset($_SESSION[$key]))
-            return $_SESSION[$key];
-        return null;
+        return $_SESSION[$key] ?? null;
     }
 
     public static function VerifySession(string $key): bool {
@@ -24,7 +22,6 @@ abstract class Session {
 
     public static function Logout(): void {
         session_destroy();
-        require_once(VIEWS_PATH . "index.php");
     }
 }
 

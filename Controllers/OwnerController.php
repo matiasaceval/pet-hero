@@ -4,18 +4,16 @@ namespace Controllers;
 
 use DAO\OwnerDAOJson as OwnerDAO;
 use Models\Owner as Owner;
+use Utils\Session;
 
-class OwnerController
-{
+class OwnerController {
     private OwnerDAO $ownerDAO;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->ownerDAO = new OwnerDAO();
     }
 
-    public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword)
-    {
+    public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
         if ($password != $confirmPassword) {
             // TODO: Locate with error message
         }
@@ -27,52 +25,54 @@ class OwnerController
         $owner->setPhone($phone);
         $owner->setPassword($password);
 
+        // TODO: Verify if email already exists, if so, locate with error message
+
         $this->ownerDAO->Add($owner);
 
+        Session::Set("owner", $owner);
+        header("location:" . FRONT_ROOT . "Owner");
         // TODO: Locate to home and store owner in session
 
     }
 
-    public function LogIn(string $email, string $password)
-    {
+    public function LogIn(string $email, string $password) {
         // TODO: Implement GetByEmail method in OwnerDAO and Interface
         $owner = $this->ownerDAO->GetByEmail($email);
         if ($owner != null && $owner->getPassword() == $password) {
-            // TODO: Locate to home and store owner in session
+            Session::Set("owner", $owner);
+            header("Location: " . FRONT_ROOT . "Owner");
         }
 
-        // TODO: Locate with error message
+
+        Session::Set("error", "Invalid credentials");
+        header("Location: " . FRONT_ROOT . "Home/Index");
+
 
     }
 
-    public function LogOut()
-    {
-        // TODO: Remove owner from session and locate to home
+    public function LogOut() {
+        Session::Logout();
+        header("Location: " . FRONT_ROOT . "Home/Index");
     }
 
 
-    public function Pets()
-    {
+    public function Pets() {
         // TODO: List pets FR-3
     }
 
-    public function AddPet(/* TODO: Parameters */)
-    {
+    public function AddPet(/* TODO: Parameters */) {
         // TODO: Business logic FR-2
     }
 
-    public function EditPet(/* TODO: Parameters */)
-    {
+    public function EditPet(/* TODO: Parameters */) {
         // TODO: Business logic
     }
 
-    public function RemovePet(/* TODO: Parameters */)
-    {
+    public function RemovePet(/* TODO: Parameters */) {
         // TODO: Business logic
     }
 
-    public function Keepers()
-    {
+    public function Keepers() {
         // TODO: List keepers FR-6
     }
 }
