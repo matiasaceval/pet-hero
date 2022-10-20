@@ -14,4 +14,6 @@ interface IOwnerDAO {
     public function RemoveById(int $id): bool;
 
     public function Update(Owner $owner): bool;
+
+    public function GetByEmail(string $email): ?Owner;
 }

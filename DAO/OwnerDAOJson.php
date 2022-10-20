@@ -114,4 +114,13 @@ class OwnerDAOJson implements IOwnerDAO {
         }
         return false;
     }
+
+    public function GetByEmail(string $email): ?Owner {
+
+        $this->RetrieveData();
+
+        $owner = array_filter($this->ownerList, fn($owner) => $owner->getEmail() == $email);
+
+        return array_shift($owner);
+    }
 }
