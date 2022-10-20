@@ -13,9 +13,22 @@ class OwnerController {
         $this->ownerDAO = new OwnerDAO();
     }
 
+    public function Index() {
+        if (Session::Get("owner") == null) {
+            Session::Set("error", "You must be logged in to access this page.");
+            header("location:" . FRONT_ROOT . "Owner/LogIn");
+        }
+        // TODO: Owner home view
+    }
+
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
+        // if there's an owner session already, redirect to home
+        if (Session::Get("owner") != null) {
+            header("location:" . FRONT_ROOT . "Owner");
+        }
         if ($password != $confirmPassword) {
-            // TODO: Locate with error message
+            Session::Set("error", "Passwords do not match");
+            header("location:" . FRONT_ROOT . "Owner/SignUp");
         }
 
         $owner = new Owner();
@@ -25,7 +38,10 @@ class OwnerController {
         $owner->setPhone($phone);
         $owner->setPassword($password);
 
-        // TODO: Verify if email already exists, if so, locate with error message
+        if ($this->ownerDAO->GetByEmail($email) != null) {
+            Session::Set("error", "Email already exists");
+            header("Location: " . FRONT_ROOT . "Owner/SignUp");
+        }
 
         $this->ownerDAO->Add($owner);
 
