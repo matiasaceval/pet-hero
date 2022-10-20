@@ -2,7 +2,10 @@
 
 namespace Models;
 
-use Cassandra\Date as Date;
+/**
+ * @class Owner
+ * @package Models
+ */
 
 class Pet
 {
@@ -11,10 +14,10 @@ class Pet
     private string $species; //if it is a dog, cat, bird, etc.
     private string $breed; //if it is a dog, what breed is it? labrador, poodle, etc.
     private string $gender;
-    private Date $birthdate;
+    private string $age;
     private Owner $owner;
 
-    //getter and setter methods
+    //Getters and setters
 
     public function getId(): int
     {
@@ -41,7 +44,6 @@ class Pet
         return $this->species;
     }
 
-
     public function setSpecies(string $species): void
     {
         $this->species = $species;
@@ -67,14 +69,14 @@ class Pet
         $this->gender = $gender;
     }
 
-    public function getBirthdate(): Date
+    public function getAge(): string
     {
-        return $this->birthdate;
+        return $this->age;
     }
 
-    public function setBirthdate(Date $birthdate): void
+    public function setAge(string $age): void
     {
-        $this->birthdate = $birthdate;
+        $this->age = $age;
     }
 
     public function getOwner(): Owner
