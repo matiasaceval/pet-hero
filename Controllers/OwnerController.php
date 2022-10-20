@@ -14,21 +14,20 @@ class OwnerController {
     }
 
     public function Index() {
-        if (Session::Get("owner") == null) {
+        if (Session::VerifySession("owner") == false) {
             Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LogIn");
+            header("location:" . FRONT_ROOT . "Owner/LoginView");
         }
         // TODO: Owner home view
     }
 
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
         // if there's an owner session already, redirect to home
-        if (Session::Get("owner") != null) {
-            header("location:" . FRONT_ROOT . "Owner");
-        }
+        $this->VerifyOwner();
+
         if ($password != $confirmPassword) {
             Session::Set("error", "Passwords do not match");
-            header("location:" . FRONT_ROOT . "Owner/SignUp");
+            header("location:" . FRONT_ROOT . "Owner/SignUpView");
         }
 
         $owner = new Owner();
@@ -40,28 +39,24 @@ class OwnerController {
 
         if ($this->ownerDAO->GetByEmail($email) != null) {
             Session::Set("error", "Email already exists");
-            header("Location: " . FRONT_ROOT . "Owner/SignUp");
+            header("Location: " . FRONT_ROOT . "Owner/SignUpView");
         }
 
         $this->ownerDAO->Add($owner);
 
         Session::Set("owner", $owner);
         header("location:" . FRONT_ROOT . "Owner");
-
     }
 
-    public function LogIn(string $email, string $password) {
+    public function Login(string $email, string $password) {
         $owner = $this->ownerDAO->GetByEmail($email);
         if ($owner != null && $owner->getPassword() == $password) {
             Session::Set("owner", $owner);
             header("Location: " . FRONT_ROOT . "Owner");
         }
 
-
         Session::Set("error", "Invalid credentials");
-        header("Location: " . FRONT_ROOT . "Home/Index");
-
-
+        header("Location: " . FRONT_ROOT . "Owner/LoginView");
     }
 
     public function LogOut() {
@@ -88,5 +83,21 @@ class OwnerController {
 
     public function Keepers() {
         // TODO: List keepers FR-6
+    }
+
+    public function SignUpView(){
+        $this->VerifyOwner();
+        require_once(VIEWS_PATH . "owner-signup.php");
+    }
+
+    public function LoginView(){
+        $this->VerifyOwner();
+        require_once(VIEWS_PATH . "owner-login.php");
+    }
+
+    private function VerifyOwner(){
+        if(Session::VerifySession("owner")){
+            header("Location: " . FRONT_ROOT . "Owner");
+        }
     }
 }
