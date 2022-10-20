@@ -31,7 +31,6 @@ class OwnerController {
 
         Session::Set("owner", $owner);
         header("location:" . FRONT_ROOT . "Owner");
-        // TODO: Locate to home and store owner in session
 
     }
 

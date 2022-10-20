@@ -4,8 +4,7 @@ namespace DAO;
 
 use Models\Owner;
 
-interface IOwnerDAO
-{
+interface IOwnerDAO {
     public function Add(Owner $owner);
 
     public function GetAll(): array;

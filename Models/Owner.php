@@ -6,8 +6,6 @@ namespace Models;
  * @class Owner
  * @package Models
  */
-
-
 class Owner {
 
     private int $id;
