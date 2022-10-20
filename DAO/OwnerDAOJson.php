@@ -59,6 +59,7 @@ class OwnerDAOJson implements IOwnerDAO {
 
     private function SaveData() {
         $arrayToEncode = array();
+
         foreach ($this->ownerList as $owner) {
             $valuesArray["id"] = $owner->getId();
             $valuesArray["firstname"] = $owner->getFirstname();
