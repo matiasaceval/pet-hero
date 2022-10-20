@@ -1,7 +1,7 @@
 <div class="main">
     <div class="container">
-        <div class="signin-image" class="signin-figure">
-            <figure id="pet-figure"></figure>
+        <div class="signin-image">
+            <figure id="pet-figure" class="signin-figure"></figure>
             <a href="<?php echo FRONT_ROOT ?>Owner/SignUpView" class=" signin-image-link">I do not have an account</a>
         </div>
         <div class="signin-content">
@@ -25,6 +25,3 @@
 
     </div>
 </div>
-<?php
-require_once(VIEWS_PATH . "pet-figure.php");
-?>

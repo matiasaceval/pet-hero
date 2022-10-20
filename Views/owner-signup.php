@@ -1,4 +1,3 @@
-
 <div class="main">
     <div class="container">
         <div class="signup-content">
@@ -41,6 +40,3 @@
         </div>
     </div>
 </div>
-<?php
-    require_once(VIEWS_PATH . "pet-figure.php");
-?>

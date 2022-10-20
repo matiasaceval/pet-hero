@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -17,4 +18,6 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="<?php echo VIEWS_PATH ?>img/favicon.ico" type="image/x-icon" />
     <title>Pet Hero</title>
+
+    <script type="module" src="<?php echo THREEJS_PATH ?>pet-figure.js"></script>
 </head>

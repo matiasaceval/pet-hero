@@ -312,7 +312,6 @@ class GLTFLoader extends Loader {
 				json = JSON.parse( extensions[ EXTENSIONS.KHR_BINARY_GLTF ].content );
 
 			} else {
-
 				json = JSON.parse( LoaderUtils.decodeText( new Uint8Array( data ) ) );
 
 			}

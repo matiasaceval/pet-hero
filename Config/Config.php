@@ -7,8 +7,7 @@ define("VIEWS_PATH", "Views/");
 define("CSS_PATH", FRONT_ROOT.VIEWS_PATH . "css/");
 define("JS_PATH", FRONT_ROOT.VIEWS_PATH . "js/");
 define("FONTS_PATH", FRONT_ROOT . VIEWS_PATH . "fonts/");
-define("THREEJS_PATH", VIEWS_PATH . "threejs/");
-define("MODELS_3D_PATH", VIEWS_PATH . "models/");
+define("THREEJS_PATH", FRONT_ROOT.VIEWS_PATH . "threejs/");
 
 define("DB_HOST", "localhost");
 define("DB_NAME", "University");
