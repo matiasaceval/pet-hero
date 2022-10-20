@@ -2,7 +2,7 @@
     <div class="container">
         <div class="signin-image" class="signin-figure">
             <figure id="pet-figure"></figure>
-            <a href="<?php echo FRONT_ROOT ?>Owner/SignUpView" onclick="window.onload()" class=" signin-image-link">I do not have an account</a>
+            <a href="<?php echo FRONT_ROOT ?>Owner/SignUpView" class=" signin-image-link">I do not have an account</a>
         </div>
         <div class="signin-content">
             <div class="signin-form">

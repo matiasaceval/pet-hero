@@ -139,7 +139,7 @@
             {
                 file: PATH + "just_a_hungry_cat.glb",
                 size: [2, 2, 2],
-                position: [0, -0.22, -1.5],
+                position: [0, -0.20, -1.5],
                 rotation: [0.1, -0.50, 0]
             },
 
@@ -147,7 +147,7 @@
             {
                 file: PATH + "kitty_cat.glb",
                 size: [0.5, 0.5, 0.5],
-                position: [0, -0.22, -1.5],
+                position: [0, -0.21, -1.5],
                 rotation: [0.1, -0.85, 0]
             },
 

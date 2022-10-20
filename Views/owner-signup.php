@@ -1,9 +1,10 @@
+
 <div class="main">
     <div class="container">
         <div class="signup-content">
             <div class="signup-form">
                 <h2 class="form-title">Sign up</h2>
-                <form method="POST" class="register-form" id="register-form">
+                <form method="POST" action="<?php echo FRONT_ROOT ?>Owner/SignUp" class="register-form" id="register-form">
                     <div class="form-group">
                         <label for="first-name"><i class="zmdi zmdi-account material-icons-name"></i></label>
                         <input type="text" name="first-name" id="first-name" placeholder="Your First Name" />
@@ -35,8 +36,11 @@
             </div>
         </div>
         <div class="signup-image">
-            <figure id="pet-figure"></figure>
-            <a href="#" class="signup-image-link">I am already member</a>
+            <figure id="pet-figure" class="signup-figure"></figure>
+            <a href="<?php echo FRONT_ROOT ?>Owner/LoginView" class="signup-image-link">I am already member</a>
         </div>
     </div>
 </div>
+<?php
+    require_once(VIEWS_PATH . "pet-figure.php");
+?>
