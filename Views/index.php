@@ -1,5 +1,4 @@
 <?php
-require_once('nav.php');
+    require_once "signup.php";
+    require_once "pet-figure.php";
 ?>
-<main>
-</main>
