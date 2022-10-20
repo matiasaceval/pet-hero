@@ -16,5 +16,5 @@ interface IPetDAO
 
     public function Update(Pet $pet): bool;
 
-    public function GetByOwnerId(int $ownerId): array;
+    public function GetOwnerId(int $petId): ?int;
 }
