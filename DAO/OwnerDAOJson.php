@@ -49,7 +49,7 @@ class OwnerDAOJson implements IOwnerDAO {
 
     private function GetNextId() {
         $lastElement = end($this->ownerList);
-        return $lastElement == false ? 0 : $lastElement->getId + 1;
+        return $lastElement == false ? 0 : $lastElement->getId() + 1;
     }
 
     private function SaveData() {
