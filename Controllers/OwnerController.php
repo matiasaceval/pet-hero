@@ -18,16 +18,16 @@ class OwnerController {
     }
 
     public function Index() {
-        if (Session::VerifySession("owner") == false) {
-            Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LoginView");
-        }
+        $this->VerifyIsLogged();
+
+        $owner = Session::Get("owner");
+        echo "¡Hola " . $owner->getFirstname() . "!";
         // TODO: Owner home view
     }
 
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
         // if there's an owner session already, redirect to home
-        $this->VerifyOwner();
+        $this->IfLoggedGoToIndex();
 
         if ($password != $confirmPassword) {
             Session::Set("error", "Passwords do not match");
@@ -69,18 +69,14 @@ class OwnerController {
     }
 
     public function Pets() {
-        if (Session::VerifySession("owner")) {
-            $petList = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
-            require_once(VIEWS_PATH . "list-pet.php");
-        } else {
-            Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LoginView");
-        }
+        $this->VerifyIsLogged();
+
+        $petList = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
+        require_once(VIEWS_PATH . "list-pet.php");
     }
 
     public function AddPet($name, $species, $breed, $age, $gender) {
-
-        $this->VerifyOwner();
+        $this->VerifyIsLogged();
 
         $pet = new Pet();
         $pet->setName($name);
@@ -95,55 +91,49 @@ class OwnerController {
     }
 
     public function AddPetView() {
-        if (Session::VerifySession("owner")) {
-            require_once(VIEWS_PATH . "add-pet.php");
-        } else {
-            Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LoginView");
-        }
+        $this->VerifyIsLogged();
+
+        require_once(VIEWS_PATH . "add-pet.php");
     }
 
     public function EditPet(/* TODO: Parameters */) {
-        if (Session::VerifySession("owner")) {
-            // TODO: Business logic
-        } else {
-            Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LoginView");
-        }
+        $this->VerifyIsLogged();
+
+        // TODO: Business logic
     }
 
     public function RemovePet(/* TODO: Parameters */) {
-        if (Session::VerifySession("owner")) {
-            // TODO: Business logic
-        } else {
-            Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LoginView");
-        }
+        $this->VerifyIsLogged();
+        
+        // TODO: Business logic
     }
 
-    public function Keepers() {
-        if (Session::VerifySession("owner")) {
-            // TODO: List keepers FR-6
-        } else {
-            Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/Login");
-
-        }
+    public function KeepersListView() {
+        $this->VerifyIsLogged();
+        
+        // TODO: List keepers FR-6
     }
 
     public function SignUpView() {
-        $this->VerifyOwner();
+        $this->IfLoggedGoToIndex();
         require_once(VIEWS_PATH . "owner-signup.php");
     }
 
     public function LoginView() {
-        $this->VerifyOwner();
+        $this->IfLoggedGoToIndex();
         require_once(VIEWS_PATH . "owner-login.php");
     }
 
-    private function VerifyOwner() {
+    private function IfLoggedGoToIndex() {
         if (Session::VerifySession("owner")) {
             header("Location: " . FRONT_ROOT . "Owner");
+        }
+    }
+
+    private function VerifyIsLogged() {
+        if (Session::VerifySession("owner") == false) {
+            Session::Set("error", "You must be logged in to access this page.");
+            header("location:" . FRONT_ROOT . "Owner/LoginView");
         }
     }
 }

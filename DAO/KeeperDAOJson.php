@@ -26,8 +26,6 @@ class KeeperDAOJson implements IKeeperDAO {
     function Add(Keeper $keeper) {
         $this->RetrieveData();
 
-        $keeper->setId($this->GetNextId());
-
         array_push($this->keeperList, $keeper);
 
         $this->SaveData();
@@ -57,7 +55,8 @@ class KeeperDAOJson implements IKeeperDAO {
         }
     }
 
-    private function GetNextId() {
+    public function GetNextId() {
+        $this->RetrieveData();
         $lastKeeper = end($this->keeperList);
         return $lastKeeper === false ? 0 : $lastKeeper->getId() + 1;
     }
@@ -74,6 +73,7 @@ class KeeperDAOJson implements IKeeperDAO {
             $valuesArray["phone"] = $keeper->getPhone();
             $valuesArray["fee"] = $keeper->getFee();
             $valuesArray["reviews"] = $this->ReviewsAsId($keeper->getReviews());
+            $valuesArray["stay"] = $keeper->getStay()->getId();
 
             array_push($arrayToEncode, $valuesArray);
         }

@@ -13,17 +13,27 @@
     <link rel="stylesheet" href="<?php echo FONTS_PATH ?>material-icon/css/material-design-iconic-font.min.css">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="<?php echo VIEWS_PATH ?>img/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="<?php echo VIEWS_PATH ?>img/favicon.ico" type="image/x-icon" />
     <title>Pet Hero</title>
 
     <!-- Login & Signup -->
-    <?php 
-        use Utils\Session;
-        if(!Session::VerifySession("owner") && !Session::VerifySession("keeper")){
-            ?>
-                <link rel="stylesheet" href="<?php echo CSS_PATH ?>login-style.css">
-                <script type="module" src="<?php echo THREEJS_PATH ?>pet-figure.js"></script>
-            <?php
-        }
-    ?>   
+    <?php
+
+    use Utils\Session;
+
+    if (!Session::VerifySession("owner") && !Session::VerifySession("keeper")) {
+    ?>
+        <link rel="stylesheet" href="<?php echo CSS_PATH ?>login-style.css">
+        <script type="module" src="<?php echo THREEJS_PATH ?>pet-figure.js"></script>
+    <?php
+    }
+    ?>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="<?php echo CSS_PATH ?>style.css">
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 </head>
