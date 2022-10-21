@@ -11,20 +11,26 @@ include_once 'nav.php';
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th>Photo</th>
                             <th>Nombre</th>
                             <th>Edad</th>
                             <th>Especie</th>
                             <th>Raza</th>
+                            <th>Vacunas</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if(isset($petList)) { ?>
-                            <?php foreach($petList as $pet) { ?>
+                            <?php /*
+                                    * @var Pet $pet
+                                    */ foreach($petList as $pet) { ?>
                                 <tr>
+                                    <td><img src="<?php echo $pet->getImage(); ?>" alt="Pet photo" width="75px" height="75px"></td>
                                     <td><?php echo $pet->getName(); ?></td>
                                     <td><?php echo $pet->getAge(); ?></td>
                                     <td><?php echo $pet->getSpecies(); ?></td>
                                     <td><?php echo $pet->getBreed(); ?></td>
+                                    <td><?php echo $pet->getVaccine(); ?></td>
                                 </tr>
                             <?php } ?>
                         <?php } ?>
