@@ -4,8 +4,7 @@ namespace DAO;
 
 use Models\Owner;
 
-interface IOwnerDAO
-{
+interface IOwnerDAO {
     public function Add(Owner $owner);
 
     public function GetAll(): array;
@@ -15,4 +14,6 @@ interface IOwnerDAO
     public function RemoveById(int $id): bool;
 
     public function Update(Owner $owner): bool;
+
+    public function GetByEmail(string $email): ?Owner;
 }
