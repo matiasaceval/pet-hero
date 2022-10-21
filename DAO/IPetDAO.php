@@ -19,8 +19,6 @@ interface IPetDAO
 
     public function GetOwnerId(int $petId): ?int;
 
-    public function GetOwnerByPetId(int $petId): ?Owner;
-
-    public function GetPetByOwnerId(int $ownerId): ?array;
+    public function GetPetsByOwnerId(int $ownerId): ?array;
 
 }
