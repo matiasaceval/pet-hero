@@ -5,19 +5,23 @@ include_once 'nav.php';
 
 
 <main class="py-5">
-    <section id="listado" class="mb-5">
-        <div class="container">
+    <section id="listado" class="mb-5"   >
+        <div class="container" >
             <h2 class="mb-4">Agregar mascota</h2>
-            <form class="bg-light-alpha p-5" method="post" action="<?php echo FRONT_ROOT?>Owner/AddPet">
+            <form class="bg-light-alpha p-5" method="post" action="<?php echo FRONT_ROOT?>Owner/AddPet" >
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="form-group">
+                            <label for="">Link foto</label>
+                            <input type="text" name="image" value="" class="form-control" required>
                             <label for="">Nombre</label>
                             <input type="text" name="name" class="form-control">
                             <label for="">Especie</label>
                             <input type="text" name="species" class="form-control">
                             <label for="">Raza</label>
                             <input type="text" name="breed" class="form-control">
+                            <label for="">Vacunas</label>
+                            <input type="text" name="vaccine" class="form-control">
                             <br/>
                             <label for="">Edad</label>
                             <select name="age">
