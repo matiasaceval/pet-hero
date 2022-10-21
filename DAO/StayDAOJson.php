@@ -111,14 +111,4 @@ class StayDAOJson implements IStayDAO
         }
         return false;
     }
-
-    public function GetByEmail(string $email): ?Stay
-    {
-
-        $this->RetrieveData();
-
-        $stay = array_filter($this->stayList, fn ($stay) => $stay->getEmail() == $email);
-
-        return array_shift($stay);
-    }
 }

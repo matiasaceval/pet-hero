@@ -73,7 +73,7 @@ class KeeperDAOJson implements IKeeperDAO {
             $valuesArray["password"] = $keeper->getPassword();
             $valuesArray["phone"] = $keeper->getPhone();
             $valuesArray["fee"] = $keeper->getFee();
-            $valuesArray["reviews"] = $this->reviewsAsId($keeper->getReviews());
+            $valuesArray["reviews"] = $this->ReviewsAsId($keeper->getReviews());
 
             array_push($arrayToEncode, $valuesArray);
         }
@@ -132,7 +132,7 @@ class KeeperDAOJson implements IKeeperDAO {
         return array_shift($keeper);
     }
 
-    private function reviewsAsId(array $reviews) {
+    private function ReviewsAsId(array $reviews) {
         return array_map(function (Reviews $review) {
             return $review->getId();
         }, $reviews);

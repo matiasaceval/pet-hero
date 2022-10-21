@@ -119,17 +119,7 @@ class ReviewsDAOJson implements IReviewsDAO
         }
         return false;
     }
-
-    public function GetByEmail(string $email): ?Reviews
-    {
-
-        $this->RetrieveData();
-
-        $review = array_filter($this->reviewList, fn ($review) => $review->getEmail() == $email);
-
-        return array_shift($review);
-    }
-
+    
     public function GetByArrIds(array $arrIds): array
     {
         $this->RetrieveData();

@@ -15,4 +15,6 @@ interface IReviewsDAO
     public function RemoveById(int $id): bool;
 
     public function Update(Reviews $reviews): bool;
+
+    public function GetByArrIds(array $arrIds): array;
 }
