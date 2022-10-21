@@ -87,10 +87,11 @@ class OwnerController
         $this->VerifyIsLogged();
 
         $petList = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
-        require_once(VIEWS_PATH . "list-pet.php");
+
+        require_once(VIEWS_PATH . "pet-list.php");
     }
 
-    public function AddPet($name, $species, $breed, $age, $gender)
+    public function AddPet($name, $species, $breed, $age, $gender, $image, $vaccine)
     {
         $this->VerifyIsLogged();
 
@@ -100,6 +101,8 @@ class OwnerController
         $pet->setBreed($breed);
         $pet->setAge($age);
         $pet->setGender($gender);
+        $pet->setImage($image);
+        $pet->setVaccine($vaccine);
         $pet->setOwner(Session::Get("owner"));
         $this->petDAO->Add($pet);
         header("location:" . FRONT_ROOT . "Owner/AddPetView");
