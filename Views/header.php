@@ -12,11 +12,12 @@
     <!-- Font Icon -->
     <link rel="stylesheet" href="<?php echo FONTS_PATH ?>material-icon/css/material-design-iconic-font.min.css">
 
-    <!-- Main css -->
+    <!-- Main css
     <link rel="stylesheet" href="<?php echo CSS_PATH ?>style.css">
+    -->
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="<?php echo VIEWS_PATH ?>img/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?php echo VIEWS_PATH ?>img/favicon.ico" type="image/x-icon"/>
     <title>Pet Hero</title>
 
     <script type="module" src="<?php echo THREEJS_PATH ?>pet-figure.js"></script>

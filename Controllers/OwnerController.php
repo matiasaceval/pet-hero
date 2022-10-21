@@ -68,66 +68,82 @@ class OwnerController {
         header("Location: " . FRONT_ROOT . "Home/Index");
     }
 
-    public function Pets()
-    {
+    public function Pets() {
         if (Session::VerifySession("owner")) {
-            // TODO: List pets FR-3
+            $petList = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
+            require_once(VIEWS_PATH . "list-pet.php");
         } else {
             Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LogIn");
+            header("location:" . FRONT_ROOT . "Owner/LoginView");
         }
     }
 
-    public function AddPet($name, $species, $breed, $age, $gender)
-    {
+    public function AddPet($name, $species, $breed, $age, $gender) {
 
-        if (!Session::VerifySession("owner")) {
-            header("location:" . FRONT_ROOT . "Owner/LogIn");
-        } else {
-            $pet = new Pet();
-            $pet->setName($name);
-            $pet->setSpecies($species);
-            $pet->setBreed($breed);
-            $pet->setAge($age);
-            $pet->setGender($gender);
-            $pet->setOwner(Session::Get("owner"));
-            $this->petDAO->Add($pet);
-            header("location:" . FRONT_ROOT . "AddPet/Index");
-        }
+        $this->VerifyOwner();
+
+        $pet = new Pet();
+        $pet->setName($name);
+        $pet->setSpecies($species);
+        $pet->setBreed($breed);
+        $pet->setAge($age);
+        $pet->setGender($gender);
+        $pet->setOwner(Session::Get("owner"));
+        $this->petDAO->Add($pet);
+        header("location:" . FRONT_ROOT . "Owner/AddPetView");
+
     }
 
-
-    public
-    function EditPet(/* TODO: Parameters */)
-    {
+    public function AddPetView() {
         if (Session::VerifySession("owner")) {
-            // TODO: Business logic
+            require_once(VIEWS_PATH . "add-pet.php");
         } else {
             Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LogIn");
+            header("location:" . FRONT_ROOT . "Owner/LoginView");
         }
     }
 
-    public
-    function RemovePet(/* TODO: Parameters */)
-    {
+    public function EditPet(/* TODO: Parameters */) {
         if (Session::VerifySession("owner")) {
             // TODO: Business logic
         } else {
             Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LogIn");
+            header("location:" . FRONT_ROOT . "Owner/LoginView");
         }
     }
 
-    public
-    function Keepers()
-    {
+    public function RemovePet(/* TODO: Parameters */) {
+        if (Session::VerifySession("owner")) {
+            // TODO: Business logic
+        } else {
+            Session::Set("error", "You must be logged in to access this page.");
+            header("location:" . FRONT_ROOT . "Owner/LoginView");
+        }
+    }
+
+    public function Keepers() {
         if (Session::VerifySession("owner")) {
             // TODO: List keepers FR-6
         } else {
             Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LogIn");
+            header("location:" . FRONT_ROOT . "Owner/Login");
 
+        }
+    }
+
+    public function SignUpView() {
+        $this->VerifyOwner();
+        require_once(VIEWS_PATH . "owner-signup.php");
+    }
+
+    public function LoginView() {
+        $this->VerifyOwner();
+        require_once(VIEWS_PATH . "owner-login.php");
+    }
+
+    private function VerifyOwner() {
+        if (Session::VerifySession("owner")) {
+            header("Location: " . FRONT_ROOT . "Owner");
         }
     }
 }
