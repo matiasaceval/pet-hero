@@ -6,7 +6,7 @@ import { GLTFLoader } from "./GLTFLoader.js";
 let scene, camera, stats;
 let renderer, mixer, clock;
 let container;
-let pet, rotationDirection = 1, rotation = 0;
+let pet;
 
 const MODELS_PATH = "/pet-hero/Views/models/";
 let models
@@ -116,14 +116,7 @@ function animate() {
     //composer.render();
     renderer.render(scene, camera);
 
-    if (rotation > 0.8) {
-        if (rotationDirection == 1) rotationDirection = -1;
-    } else if (rotation < -0.6) {
-        if (rotationDirection == -1) rotationDirection = 1;
-    }
-
-    pet.rotation.y += rotationDirection * ROTATION_VELOCITY;
-    rotation += rotationDirection * ROTATION_VELOCITY;
+    pet.rotation.y += ROTATION_VELOCITY;
 }
 
 function showStats() {
@@ -169,17 +162,33 @@ function getKeeperModels() {
         // "Medieval viking house" (https://skfb.ly/oqCNs) by vlad_design228
         {
             file: MODELS_PATH + "medieval_viking_house.glb",
-            size: [0.36, 0.36, 0.36],
-            position: [0.06, -0.03, -1.5],
+            size: [0.32, 0.32, 0.32],
+            position: [0.0, -0.03, -1.5],
             rotation: [0.1, -0.5, 0],
         },
 
-        // "Hotel Building" (https://skfb.ly/6XuKU) by HerbeMalveillante
+        // "Medieval House Low Poly (For Gamedev)" (https://skfb.ly/6R6sM) by Lesnyak
         {
-            file: MODELS_PATH + "hotel_building.glb",
-            size: [0.05, 0.05, 0.05],
-            position: [0.06, -0.17, -1.5],
-            rotation: [0.1, -0.3, 0],
+            file: MODELS_PATH + "medieval_house_low_poly.glb",
+            size: [0.12, 0.12, 0.12],
+            position: [0.0, -0.19, -1.5],
+            rotation: [0.1, -1.7, 0],
+        },
+
+        // "House draft" (https://skfb.ly/6VMpp) by YD92
+        {
+            file: MODELS_PATH + "house_draft.glb",
+            size: [0.0025, 0.0025, 0.0025],
+            position: [-0.01, 0.03, -1.5],
+            rotation: [0.1, -1.7, 0],
+        },
+
+        // "Fantasy house." (https://skfb.ly/6QSOO) by Tomas Anglim
+        {
+            file: MODELS_PATH + "fantasy_house.glb",
+            size: [0.8, 0.8, 0.8],
+            position: [0, -0.27, -1.5],
+            rotation: [0.1, -1.7, 0],
         },
         // These models are licensed under Creative Commons Attribution
         // (http://creativecommons.org/licenses/by/4.0/).

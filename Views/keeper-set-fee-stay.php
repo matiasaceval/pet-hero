@@ -5,7 +5,7 @@
 
                                         use Utils\Session;
 
-                                        $keeper = Session::Get("keeper") ?? Session::Get("temp-keeper");
+                                        $keeper = Session::Get("temp-keeper") ?? Session::Get("keeper");
                                         echo "¡Hola " . $keeper->getFirstname() . "!";
 
                                         $fee = '';

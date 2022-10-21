@@ -272,10 +272,10 @@ body {
   overflow: hidden; }
 
 .signup-image {
-  margin: 0 0px; }
+  margin:auto; }
 
 .signin-image {
-  margin: 0 0px; }
+  margin:auto; }
 
 .form-title {
   margin-bottom: 33px; }
@@ -294,7 +294,8 @@ figure {
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center; }
+  text-align: center;
+  margin-right: 30px; }
 
 .signup-figure { 
   margin-top: 60px;
