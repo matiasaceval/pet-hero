@@ -48,13 +48,8 @@ class OwnerDAOJson implements IOwnerDAO {
     }
 
     private function GetNextId() {
-        $id = 0;
-
-        foreach ($this->ownerList as $owner) {
-            $id = ($owner->getId() > $id) ? $owner->getId() : $id;
-        }
-
-        return $id + 1;
+        $lastElement = end($this->ownerList);
+        return $lastElement == false ? 0 : $lastElement->getId() + 1;
     }
 
     private function SaveData() {

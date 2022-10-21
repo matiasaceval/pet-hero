@@ -1,5 +1,3 @@
 <?php
-require_once('nav.php');
+    require_once "owner-login.php";
 ?>
-<main>
-</main>

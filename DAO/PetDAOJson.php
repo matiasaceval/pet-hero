@@ -2,9 +2,10 @@
 
 namespace DAO;
 
-use Models\Pet;
 use DAO\OwnerDAOJson as OwnerDAO;
-use Models\Owner as Owner;
+use Models\Pet;
+use Models\Owner;
+
 
 class PetDAOJson implements IPetDAO
 {
@@ -38,6 +39,7 @@ class PetDAOJson implements IPetDAO
                 $pet->setAge($valuesArray["age"]);
                 $pet->setSpecies($valuesArray["species"]);
                 $pet->setBreed($valuesArray["breed"]);
+                $pet->setOwner($this->ownerDAO->GetById($valuesArray["ownerId"]));
                 array_push($this->petList, $pet);
             }
         }
@@ -67,13 +69,8 @@ class PetDAOJson implements IPetDAO
 
     private function GetNextId()
     {
-        $id = 0;
-
-        foreach ($this->petList as $pet) {
-            $id = ($pet->getId() > $id) ? $pet->getId() : $id;
-        }
-
-        return $id + 1;
+        $lastPet = end($this->petList);
+        return $lastPet === false ? 0 : $lastPet->getId() + 1;
     }
 
     public function Add(Pet $pet)
