@@ -107,13 +107,9 @@ class ReviewsDAOJson implements IReviewsDAO
     function Update(Reviews $review): bool
     {
         $this->RetrieveData();
-        foreach ($this->reviewList as $reviewOfList) {
+        foreach ($this->reviewList as $key => $reviewOfList) {
             if ($reviewOfList->getId() == $review->getId()) {
-                $reviewOfList->setComment($review->getComment());
-                $reviewOfList->setRating($review->getRating());
-                $reviewOfList->setDate($review->getDate());
-                $reviewOfList->setPet($review->getPet());
-
+                $this->reviewList[$key] = $review;
                 $this->SaveData();
                 return true;
             }

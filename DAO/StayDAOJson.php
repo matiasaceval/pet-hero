@@ -101,11 +101,9 @@ class StayDAOJson implements IStayDAO
     function Update(Stay $stay): bool
     {
         $this->RetrieveData();
-        foreach ($this->stayList as $stayOfList) {
+        foreach ($this->stayList as $key => $stayOfList) {
             if ($stayOfList->getId() == $stay->getId()) {
-                $stayOfList->setSince($stay->getSince());
-                $stayOfList->setUntil($stay->getUntil());
-
+                $this->stayList[$key] = $stay;
                 $this->SaveData();
                 return true;
             }

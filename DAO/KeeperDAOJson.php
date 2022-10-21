@@ -118,14 +118,9 @@ class KeeperDAOJson implements IKeeperDAO
     function Update(Keeper $keeper): bool
     {
         $this->RetrieveData();
-        foreach ($this->keeperList as $keeperOfList) {
+        foreach ($this->keeperList as $key => $keeperOfList) {
             if ($keeperOfList->getId() == $keeper->getId()) {
-                $keeperOfList->setFirstname($keeper->getFirstname());
-                $keeperOfList->setLastname($keeper->getLastname());
-                $keeperOfList->setEmail($keeper->getEmail());
-                $keeperOfList->setPassword($keeper->getPassword());
-                $keeperOfList->setPhone($keeper->getPhone());
-
+                $this->keeperList[$key] = $keeper;
                 $this->SaveData();
                 return true;
             }
