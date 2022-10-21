@@ -33,7 +33,7 @@ include_once 'nav.php';
                                 <option value="F">Macho</option>
                             </select>
                         </div>
-                        <button type="submit" name="button" class="btn btn-dark ml-auto d-block">Agregar</button>
+                        <button type="submit" class="btn btn-dark ml-auto d-block">Agregar</button>
                     </div>
                 </div>
             </form>
