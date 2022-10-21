@@ -8,7 +8,8 @@ use DAO\ReviewsDAOJson as ReviewsDAO;
 use Models\Keeper;
 use Models\Reviews as Reviews;
 
-class KeeperDAOJson implements IKeeperDAO {
+class KeeperDAOJson implements IKeeperDAO
+{
     /**
      * @var Keeper[]
      */
@@ -17,13 +18,15 @@ class KeeperDAOJson implements IKeeperDAO {
     private StayDAO $stayDAO;
     private ReviewsDAO $reviewsDAO;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->fileName = ROOT . "/Data/keepers.json";
         $this->stayDAO = new StayDAO();
         $this->reviewsDAO = new ReviewsDAO();
     }
 
-    function Add(Keeper $keeper) {
+    function Add(Keeper $keeper)
+    {
         $this->RetrieveData();
 
         array_push($this->keeperList, $keeper);
@@ -31,7 +34,8 @@ class KeeperDAOJson implements IKeeperDAO {
         $this->SaveData();
     }
 
-    private function RetrieveData() {
+    private function RetrieveData()
+    {
         $this->keeperList = array();
 
         if (file_exists($this->fileName)) {
@@ -55,13 +59,15 @@ class KeeperDAOJson implements IKeeperDAO {
         }
     }
 
-    public function GetNextId() {
+    public function GetNextId()
+    {
         $this->RetrieveData();
         $lastKeeper = end($this->keeperList);
         return $lastKeeper === false ? 0 : $lastKeeper->getId() + 1;
     }
 
-    private function SaveData() {
+    private function SaveData()
+    {
         $arrayToEncode = array();
 
         foreach ($this->keeperList as $keeper) {
@@ -83,30 +89,34 @@ class KeeperDAOJson implements IKeeperDAO {
         file_put_contents($this->fileName, $jsonContent);
     }
 
-    function &GetAll(): array {
+    function &GetAll(): array
+    {
         $this->RetrieveData();
 
         return $this->keeperList;
     }
 
-    function GetById(int $id): ?Keeper {
+    function GetById(int $id): ?Keeper
+    {
         $this->RetrieveData();
 
-        $keeper = array_filter($this->keeperList, fn ($keeper) => $keeper->getId() == $id);
+        $keeper = array_filter($this->keeperList, fn($keeper) => $keeper->getId() == $id);
 
         return array_shift($keeper);
     }
 
-    function RemoveById(int $id): bool {
+    function RemoveById(int $id): bool
+    {
         $this->RetrieveData();
 
-        $cleanedArray = array_filter($this->keeperList, fn ($keeper) => $keeper->getId() != $id);
+        $cleanedArray = array_filter($this->keeperList, fn($keeper) => $keeper->getId() != $id);
 
         $this->SaveData();
         return count($cleanedArray) < count($this->keeperList);
     }
 
-    function Update(Keeper $keeper): bool {
+    function Update(Keeper $keeper): bool
+    {
         $this->RetrieveData();
         foreach ($this->keeperList as $keeperOfList) {
             if ($keeperOfList->getId() == $keeper->getId()) {
@@ -123,16 +133,18 @@ class KeeperDAOJson implements IKeeperDAO {
         return false;
     }
 
-    public function GetByEmail(string $email): ?Keeper {
+    public function GetByEmail(string $email): ?Keeper
+    {
 
         $this->RetrieveData();
 
-        $keeper = array_filter($this->keeperList, fn ($keeper) => $keeper->getEmail() == $email);
+        $keeper = array_filter($this->keeperList, fn($keeper) => $keeper->getEmail() == $email);
 
         return array_shift($keeper);
     }
 
-    private function ReviewsAsId(array $reviews) {
+    private function ReviewsAsId(array $reviews)
+    {
         return array_map(function (Reviews $review) {
             return $review->getId();
         }, $reviews);

@@ -50,6 +50,7 @@ class StayDAOJson implements IStayDAO
 
     private function GetNextId()
     {
+        $this->RetrieveData();
         $lastStay = end($this->stayList);
         return $lastStay === false ? 0 : $lastStay->getId() + 1;
     }
@@ -82,7 +83,7 @@ class StayDAOJson implements IStayDAO
     {
         $this->RetrieveData();
 
-        $stay = array_filter($this->stayList, fn ($stay) => $stay->getId() == $id);
+        $stay = array_filter($this->stayList, fn($stay) => $stay->getId() == $id);
 
         return array_shift($stay);
     }
@@ -91,7 +92,7 @@ class StayDAOJson implements IStayDAO
     {
         $this->RetrieveData();
 
-        $cleanedArray = array_filter($this->stayList, fn ($stay) => $stay->getId() != $id);
+        $cleanedArray = array_filter($this->stayList, fn($stay) => $stay->getId() != $id);
 
         $this->SaveData();
         return count($cleanedArray) < count($this->stayList);
@@ -104,7 +105,7 @@ class StayDAOJson implements IStayDAO
             if ($stayOfList->getId() == $stay->getId()) {
                 $stayOfList->setSince($stay->getSince());
                 $stayOfList->setUntil($stay->getUntil());
-                
+
                 $this->SaveData();
                 return true;
             }

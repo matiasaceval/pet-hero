@@ -70,6 +70,7 @@ class PetDAOJson implements IPetDAO
 
     private function GetNextId()
     {
+        $this->RetrieveData();
         $lastPet = end($this->petList);
         return $lastPet === false ? 0 : $lastPet->getId() + 1;
     }

@@ -54,6 +54,7 @@ class ReviewsDAOJson implements IReviewsDAO
 
     private function GetNextId()
     {
+        $this->RetrieveData();
         $lastReviews = end($this->reviewList);
         return $lastReviews === false ? 0 : $lastReviews->getId() + 1;
     }
@@ -88,7 +89,7 @@ class ReviewsDAOJson implements IReviewsDAO
     {
         $this->RetrieveData();
 
-        $review = array_filter($this->reviewList, fn ($review) => $review->getId() == $id);
+        $review = array_filter($this->reviewList, fn($review) => $review->getId() == $id);
 
         return array_shift($review);
     }
@@ -97,7 +98,7 @@ class ReviewsDAOJson implements IReviewsDAO
     {
         $this->RetrieveData();
 
-        $cleanedArray = array_filter($this->reviewList, fn ($review) => $review->getId() != $id);
+        $cleanedArray = array_filter($this->reviewList, fn($review) => $review->getId() != $id);
 
         $this->SaveData();
         return count($cleanedArray) < count($this->reviewList);
@@ -119,12 +120,12 @@ class ReviewsDAOJson implements IReviewsDAO
         }
         return false;
     }
-    
+
     public function GetByArrIds(array $arrIds): array
     {
         $this->RetrieveData();
 
-        $reviews = array_filter($this->reviewList, fn ($review) => in_array($review->getId(), $arrIds));
+        $reviews = array_filter($this->reviewList, fn($review) => in_array($review->getId(), $arrIds));
 
         return $reviews;
     }
