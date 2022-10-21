@@ -6,10 +6,21 @@ import { GLTFLoader } from "./GLTFLoader.js";
 let scene, camera, stats;
 let renderer, mixer, clock;
 let container;
-let pet, rotation = 1;
+let pet, rotationDirection = 1, rotation = 0;
 
-const i = Math.floor(Math.random() * 3);
-const model = getModel(i);
+const MODELS_PATH = "/pet-hero/Views/models/";
+let models
+const userType = getUserType();
+if (!userType) {
+    models = getModels();
+} else if (userType == "owner") {
+    models = getOwnerModels();
+} else if (userType == "keeper") {
+    models = getKeeperModels();
+}
+
+const i = Math.floor(Math.random() * models.length);
+const model = models[i];
 
 const REDUCED_SIZE = 0.73;
 const WIDTH = 400;
@@ -105,13 +116,14 @@ function animate() {
     //composer.render();
     renderer.render(scene, camera);
 
-    if (pet.rotation.y > 0.8) {
-        if (rotation == 1) rotation = -1;
-    } else if (pet.rotation.y < -0.6) {
-        if (rotation == -1) rotation = 1;
+    if (rotation > 0.8) {
+        if (rotationDirection == 1) rotationDirection = -1;
+    } else if (rotation < -0.6) {
+        if (rotationDirection == -1) rotationDirection = 1;
     }
 
-    pet.rotation.y += rotation * ROTATION_VELOCITY;
+    pet.rotation.y += rotationDirection * ROTATION_VELOCITY;
+    rotation += rotationDirection * ROTATION_VELOCITY;
 }
 
 function showStats() {
@@ -121,13 +133,12 @@ function showStats() {
 }
 
 // models
-function getModel(index) {
+function getOwnerModels() {
     // Kevin Reyna <3
-    const PATH = "/pet-hero/Views/models/";
-    const models = [
+    return [
         // "Just a Hungry Cat" (https://skfb.ly/oyvPQ) by Coco Jinjo
         {
-            file: PATH + "just_a_hungry_cat.glb",
+            file: MODELS_PATH + "just_a_hungry_cat.glb",
             size: [2, 2, 2],
             position: [0, -0.2, -1.5],
             rotation: [0.1, -0.5, 0],
@@ -135,7 +146,7 @@ function getModel(index) {
 
         // "Kitty Cat" (https://skfb.ly/otHnL) by roto
         {
-            file: PATH + "kitty_cat.glb",
+            file: MODELS_PATH + "kitty_cat.glb",
             size: [0.5, 0.5, 0.5],
             position: [0, -0.21, -1.5],
             rotation: [0.1, -0.85, 0],
@@ -143,23 +154,44 @@ function getModel(index) {
 
         // "Cute Cat" (https://skfb.ly/6SwZP) by Fayme Wong
         {
-            file: PATH + "cute_cat.glb",
+            file: MODELS_PATH + "cute_cat.glb",
             size: [0.565, 0.565, 0.565],
             position: [0.03, -0.24, -1.5],
             rotation: [0.1, -0.85, 0],
-        },
-
-        /*
-            // "Playful Dog" (https://skfb.ly/oxooG) by NightMare
-            {
-                file: PATH + "playful-dog.glb",
-                size: [2, 2, 2],
-                position: [0, -0.22, -1.5],
-                rotation: [0.1, -0.70, 0]
-            }
-            */
+        },        
         // These models are licensed under Creative Commons Attribution
         // (http://creativecommons.org/licenses/by/4.0/).
     ];
-    return models[index];
+}
+
+function getKeeperModels() {
+    return [
+        // "Medieval viking house" (https://skfb.ly/oqCNs) by vlad_design228
+        {
+            file: MODELS_PATH + "medieval_viking_house.glb",
+            size: [0.36, 0.36, 0.36],
+            position: [0.06, -0.03, -1.5],
+            rotation: [0.1, -0.5, 0],
+        },
+
+        // "Hotel Building" (https://skfb.ly/6XuKU) by HerbeMalveillante
+        {
+            file: MODELS_PATH + "hotel_building.glb",
+            size: [0.05, 0.05, 0.05],
+            position: [0.06, -0.17, -1.5],
+            rotation: [0.1, -0.3, 0],
+        },
+        // These models are licensed under Creative Commons Attribution
+        // (http://creativecommons.org/licenses/by/4.0/).
+    ];
+}
+
+function getModels() {
+    return getOwnerModels().concat(getKeeperModels());
+}
+
+function getUserType() {
+    const path = window.location.pathname;
+    const userType = (path.split("/")[2]).toLowerCase();
+    return userType;
 }
