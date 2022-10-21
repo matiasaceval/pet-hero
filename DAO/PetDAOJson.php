@@ -4,6 +4,8 @@ namespace DAO;
 
 use Models\Pet;
 use DAO\OwnerDAOJson as OwnerDAO;
+use Models\Owner as Owner;
+use DAO\PetDAOJson as PetDAO;
 
 class PetDAOJson implements IPetDAO
 {
@@ -13,10 +15,14 @@ class PetDAOJson implements IPetDAO
 
     private array $petList = array();
     private string $fileName;
+    private OwnerDAO $ownerDAO;
+    private PetDAO $petDAO;
 
     public function __construct()
     {
         $this->fileName = ROOT . "/Data/pets.json";
+        $this->ownerDAO = new OwnerDAO();
+        $this->petDAO = new PetDAO();
     }
 
     private function RetrieveData()
@@ -84,7 +90,7 @@ class PetDAOJson implements IPetDAO
         $this->SaveData();
     }
 
-    public function &GetAll(): array
+    public function GetAll(): array
     {
         $this->RetrieveData();
 
@@ -118,15 +124,15 @@ class PetDAOJson implements IPetDAO
 
     public function Update(Pet $pet): bool
     {
-       $this->RetrieveData();
+        $this->RetrieveData();
 
-       foreach ($this->petList as $key => $value) {
-           if($value->getId() == $pet->getId()){
-               $this->petList[$key] = $pet;
-               $this->SaveData();
-               return true;
-           }
-       }
+        foreach ($this->petList as $key => $value) {
+            if ($value->getId() == $pet->getId()) {
+                $this->petList[$key] = $pet;
+                $this->SaveData();
+                return true;
+            }
+        }
 
     }
 
@@ -146,6 +152,38 @@ class PetDAOJson implements IPetDAO
             }
             return null;
         }
+
+    }
+
+    public function GetOwnerByPetId(int $petId): ?Owner
+    {
+        return $this->ownerDAO->GetById($this->petDAO->GetOwnerId($petId));
+    }
+
+    public function GetPets(): array
+    {
+        /**
+         * & is used to get the reference of the object, not a copy of it.
+         */
+        $petList = $this->petDAO->GetAll();
+        /*
+         * @var Pet $pet
+         */
+        foreach ($petList as $pet) {
+            $owner = $this->ownerDAO->GetById($this->petDAO->GetOwnerId($pet->getId()));
+            $pet->setOwner($owner);
+        }
+
+        return $petList;
+    }
+
+    public function GetPetByOwnerId(int $ownerId): ?array
+    {
+        $petList = $this->GetPets();
+
+        $petListByOwnerId = array_filter($petList, fn($pet) => $pet->getOwner()->getId() == $ownerId);
+
+        return $petListByOwnerId;
 
     }
 }
