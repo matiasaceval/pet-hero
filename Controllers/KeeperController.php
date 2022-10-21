@@ -37,6 +37,12 @@ class KeeperController {
         if ($password != $confirmPassword) {
             Session::Set("error", "Passwords do not match");
             header("location:" . FRONT_ROOT . "Keeper/SignUpView");
+            exit;
+        }
+        if ($this->keeperDAO->GetByEmail($email) != null) {
+            Session::Set("error", "Email already exists");
+            header("Location: " . FRONT_ROOT . "Keeper/SignUpView");
+            exit;
         }
 
         $keeper = new Keeper();
@@ -48,11 +54,7 @@ class KeeperController {
         $keeper->setPassword(password_hash($password, PASSWORD_DEFAULT));
         $keeper->setFee(-1);
         $keeper->setReviews([]);
-        
-        if ($this->keeperDAO->GetByEmail($email) != null) {
-            Session::Set("error", "Email already exists");
-            header("Location: " . FRONT_ROOT . "Keeper/SignUpView");
-        }
+
 
         Session::Set("keeper", $keeper);
         header("location:" . FRONT_ROOT . "Keeper/SetFeeStayView");
@@ -63,6 +65,7 @@ class KeeperController {
         if ($keeper != null && password_verify($password, $keeper->getPassword())) {
             Session::Set("keeper", $keeper);
             header("Location: " . FRONT_ROOT . "Keeper/Index");
+            exit;
         }
 
         Session::Set("error", "Invalid credentials");
@@ -71,7 +74,7 @@ class KeeperController {
 
     public function LogOut() {
         Session::Logout();
-        header("Location: " . FRONT_ROOT . "Home/Index");
+        header("Location: " . FRONT_ROOT . "Keeper/LoginView");
     }
 
     public function SignUpView() {
@@ -84,7 +87,7 @@ class KeeperController {
         require_once(VIEWS_PATH . "keeper-login.php");
     }
 
-    public function SetFeeStay($fee, $since, $until){
+    public function SetFeeStay($fee, $since, $until) {
         $this->VerifyIsLogged();
 
         $keeper = Session::Get("keeper");
@@ -103,15 +106,15 @@ class KeeperController {
         header("Location: " . FRONT_ROOT . "Keeper/Index");
     }
 
-    public function SetFeeStayView(){
+    public function SetFeeStayView() {
         $this->VerifyIsLogged();
-        
         require_once(VIEWS_PATH . "keeper-set-fee-stay.php");
     }
 
     private function IfLoggedGoToIndex() {
         if (Session::VerifySession("keeper")) {
             header("Location: " . FRONT_ROOT . "Keeper/Index");
+            exit;
         }
     }
 
@@ -119,6 +122,7 @@ class KeeperController {
         if (Session::VerifySession("keeper") == false) {
             Session::Set("error", "You must be logged in to access this page.");
             header("location:" . FRONT_ROOT . "Keeper/LoginView");
+            exit;
         }
     }
 }

@@ -32,6 +32,13 @@ class OwnerController {
         if ($password != $confirmPassword) {
             Session::Set("error", "Passwords do not match");
             header("location:" . FRONT_ROOT . "Owner/SignUpView");
+			exit;
+        }
+		
+		if ($this->ownerDAO->GetByEmail($email) != null) {
+            Session::Set("error", "Email already exists");
+            header("Location: " . FRONT_ROOT . "Owner/SignUpView");
+			exit;
         }
 
         $owner = new Owner();
@@ -41,10 +48,7 @@ class OwnerController {
         $owner->setPhone($phone);
         $owner->setPassword(password_hash($password, PASSWORD_DEFAULT));
 
-        if ($this->ownerDAO->GetByEmail($email) != null) {
-            Session::Set("error", "Email already exists");
-            header("Location: " . FRONT_ROOT . "Owner/SignUpView");
-        }
+        
 
         $this->ownerDAO->Add($owner);
 
@@ -57,6 +61,7 @@ class OwnerController {
         if ($owner != null && password_verify($password, $owner->getPassword())) {
             Session::Set("owner", $owner);
             header("Location: " . FRONT_ROOT . "Owner");
+			exit;
         }
 
         Session::Set("error", "Invalid credentials");
@@ -127,6 +132,7 @@ class OwnerController {
     private function IfLoggedGoToIndex() {
         if (Session::VerifySession("owner")) {
             header("Location: " . FRONT_ROOT . "Owner");
+			exit;
         }
     }
 
@@ -134,6 +140,7 @@ class OwnerController {
         if (Session::VerifySession("owner") == false) {
             Session::Set("error", "You must be logged in to access this page.");
             header("location:" . FRONT_ROOT . "Owner/LoginView");
+			exit;
         }
     }
 }
