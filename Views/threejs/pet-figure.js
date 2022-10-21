@@ -11,12 +11,12 @@ let pet, rotationDirection = 1, rotation = 0;
 const MODELS_PATH = "/pet-hero/Views/models/";
 let models
 const userType = getUserType();
-if (!userType) {
-    models = getModels();
-} else if (userType == "owner") {
+if (userType == "owner") {
     models = getOwnerModels();
 } else if (userType == "keeper") {
     models = getKeeperModels();
+} else {
+    models = getModels();
 }
 
 const i = Math.floor(Math.random() * models.length);
