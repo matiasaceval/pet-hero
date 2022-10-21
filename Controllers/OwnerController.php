@@ -150,6 +150,9 @@ class OwnerController
     {
         if (Session::VerifySession("owner")) {
             header("Location: " . FRONT_ROOT . "Owner");
+			      exit;
+        } else if (Session::VerifySession("keeper")) {
+            header("Location: " . FRONT_ROOT . "Keeper");
             exit;
         }
     }

@@ -12,6 +12,10 @@ abstract class Session {
         $_SESSION[$key] = $value;
     }
 
+    public static function Unset(string $key): void {
+        unset($_SESSION[$key]);
+    }
+
     public static function Get(string $key): mixed {
         return $_SESSION[$key] ?? null;
     }

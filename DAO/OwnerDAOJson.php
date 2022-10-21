@@ -107,14 +107,9 @@ class OwnerDAOJson implements IOwnerDAO
     function Update(Owner $owner): bool
     {
         $this->RetrieveData();
-        foreach ($this->ownerList as $ownerOfList) {
+        foreach ($this->ownerList as $key => $ownerOfList) {
             if ($ownerOfList->getId() == $owner->getId()) {
-                $ownerOfList->setFirstname($owner->getFirstname());
-                $ownerOfList->setLastname($owner->getLastname());
-                $ownerOfList->setEmail($owner->getEmail());
-                $ownerOfList->setPassword($owner->getPassword());
-                $ownerOfList->setPhone($owner->getPhone());
-
+                $this->ownerList[$key] = $owner;
                 $this->SaveData();
                 return true;
             }
