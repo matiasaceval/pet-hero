@@ -15,6 +15,8 @@ class Pet
     private string $breed; //if it is a dog, what breed is it? labrador, poodle, etc.
     private string $gender;
     private string $age;
+    private string $image;
+    private string $vaccine;
     private Owner $owner;
 
     //Getters and setters
@@ -87,6 +89,26 @@ class Pet
     public function setOwner(Owner $owner): void
     {
         $this->owner = $owner;
+    }
+
+    public function getImage(): string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): void
+    {
+        $this->image = $image;
+    }
+
+    public function getVaccine(): string
+    {
+        return $this->vaccine;
+    }
+
+    public function setVaccine(string $vaccine): void
+    {
+        $this->vaccine = $vaccine;
     }
 }
 
