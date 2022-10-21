@@ -12,19 +12,18 @@
     <!-- Font Icon -->
     <link rel="stylesheet" href="<?php echo FONTS_PATH ?>material-icon/css/material-design-iconic-font.min.css">
 
-    <!-- Login & Signup css -->
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="<?php echo VIEWS_PATH ?>img/favicon.ico" type="image/x-icon"/>
+    <title>Pet Hero</title>
+
+    <!-- Login & Signup -->
     <?php 
         use Utils\Session;
         if(!Session::VerifySession("owner") && !Session::VerifySession("keeper")){
             ?>
                 <link rel="stylesheet" href="<?php echo CSS_PATH ?>login-style.css">
+                <script type="module" src="<?php echo THREEJS_PATH ?>pet-figure.js"></script>
             <?php
         }
     ?>   
-
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="<?php echo VIEWS_PATH ?>img/favicon.ico" type="image/x-icon"/>
-    <title>Pet Hero</title>
-
-    <script type="module" src="<?php echo THREEJS_PATH ?>pet-figure.js"></script>
 </head>
