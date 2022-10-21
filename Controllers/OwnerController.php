@@ -39,7 +39,7 @@ class OwnerController {
         $owner->setLastname($lastname);
         $owner->setEmail($email);
         $owner->setPhone($phone);
-        $owner->setPassword($password);
+        $owner->setPassword(password_hash($password, PASSWORD_DEFAULT));
 
         if ($this->ownerDAO->GetByEmail($email) != null) {
             Session::Set("error", "Email already exists");
@@ -54,7 +54,7 @@ class OwnerController {
 
     public function Login(string $email, string $password) {
         $owner = $this->ownerDAO->GetByEmail($email);
-        if ($owner != null && $owner->getPassword() == $password) {
+        if ($owner != null && password_verify($password, $owner->getPassword())) {
             Session::Set("owner", $owner);
             header("Location: " . FRONT_ROOT . "Owner");
         }
