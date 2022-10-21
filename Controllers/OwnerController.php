@@ -92,7 +92,7 @@ class OwnerController
         require_once(VIEWS_PATH . "pet-list.php");
     }
 
-    public function AddPet($name, $species, $breed, $age, $gender, $image, $vaccine)
+    public function AddPet($name, $species, $breed, $age, $sex, $image, $vaccine)
     {
         $this->VerifyIsLogged();
 
@@ -101,7 +101,7 @@ class OwnerController
         $pet->setSpecies($species);
         $pet->setBreed($breed);
         $pet->setAge($age);
-        $pet->setGender($gender);
+        $pet->setSex($sex);
         $pet->setImage($image);
         $pet->setVaccine($vaccine);
         $pet->setOwner(Session::Get("owner"));

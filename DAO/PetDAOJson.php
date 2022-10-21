@@ -37,6 +37,7 @@ class PetDAOJson implements IPetDAO
                 $pet->setId($valuesArray["id"]);
                 $pet->setName($valuesArray["name"]);
                 $pet->setAge($valuesArray["age"]);
+                $pet->setSex($valuesArray["sex"]);
                 $pet->setSpecies($valuesArray["species"]);
                 $pet->setOwner($this->ownerDAO->GetById($valuesArray["ownerId"]));
                 $pet->setBreed($valuesArray["breed"]);
@@ -58,6 +59,7 @@ class PetDAOJson implements IPetDAO
             $valuesArray["id"] = $pet->getId();
             $valuesArray["name"] = $pet->getName();
             $valuesArray["age"] = $pet->getAge();
+            $valuesArray["sex"] = $pet->getSex();
             $valuesArray["species"] = $pet->getSpecies();
             $valuesArray["breed"] = $pet->getBreed();
             $valuesArray["ownerId"] = $pet->getOwner()->getId();

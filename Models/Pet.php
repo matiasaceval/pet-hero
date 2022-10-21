@@ -13,7 +13,7 @@ class Pet
     private string $name;
     private string $species; //if it is a dog, cat, bird, etc.
     private string $breed; //if it is a dog, what breed is it? labrador, poodle, etc.
-    private string $gender;
+    private string $sex;
     private string $age;
     private string $image;
     private string $vaccine;
@@ -61,14 +61,14 @@ class Pet
         $this->breed = $breed;
     }
 
-    public function getGender(): string
+    public function getSex(): string
     {
-        return $this->gender;
+        return $this->sex;
     }
 
-    public function setGender(string $gender): void
+    public function setSex(string $sex): void
     {
-        $this->gender = $gender;
+        $this->sex = $sex;
     }
 
     public function getAge(): string

@@ -12,25 +12,27 @@ include_once 'nav.php';
                     <thead>
                         <tr>
                             <th>Photo</th>
-                            <th>Nombre</th>
-                            <th>Edad</th>
-                            <th>Especie</th>
-                            <th>Raza</th>
-                            <th>Vacunas</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Sex</th>
+                            <th>Specie</th>
+                            <th>Breed</th>
+                            <th>Vaccines</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if(isset($petList)) { ?>
+                        <?php if (isset($petList)) { ?>
                             <?php /*
                                     * @var Pet $pet
-                                    */ foreach($petList as $pet) { ?>
+                                    */ foreach ($petList as $pet) { ?>
                                 <tr>
                                     <td><img src="<?php echo $pet->getImage(); ?>" alt="Pet photo" width="75px" height="75px"></td>
                                     <td><?php echo $pet->getName(); ?></td>
                                     <td><?php echo $pet->getAge(); ?></td>
+                                    <td><?php echo $pet->getSex() == 'F' ? "Female" : "Male"; ?></td>
                                     <td><?php echo $pet->getSpecies(); ?></td>
                                     <td><?php echo $pet->getBreed(); ?></td>
-                                    <td><?php echo $pet->getVaccine(); ?></td>
+                                    <td><img src="<?php echo $pet->getVaccine(); ?>" alt="Pet vaccines" width="75px" height="75px"></td>
                                 </tr>
                             <?php } ?>
                         <?php } ?>
