@@ -174,7 +174,12 @@ figure {
 p {
   margin-bottom: 0px;
   font-size: 15px;
+  text-decoration: none;
   color: #777; }
+
+p:hover{
+    text-decoration: none;
+}
 
 h2 {
   line-height: 1.66;
@@ -615,4 +620,70 @@ label.valid {
 
 canvas {
     margin: 0px;
+}
+
+.index-figure {
+    padding-left: 200px;
+    padding-right: 200px;
+}
+
+.user-type {
+    color:#222;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 32px;
+    margin-top: 16px;
+    text-decoration: none;
+}
+
+.user-type:hover {
+    text-decoration: none;
+    color:rgb(92, 92, 92);
+}
+
+.user-type:link { text-decoration: none; }
+
+.user-type:visited { text-decoration: none; }
+
+.user-type:active { text-decoration: none; }
+
+.index-container {
+    
+  position: relative;
+  top: 0;
+  transition: top ease 0.5s;
+  display: flex;
+  width: fit-content;
+  background: #fff;
+  margin: 0 auto;
+  box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+  -o-box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+  -ms-box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -o-border-radius: 20px;
+  -ms-border-radius: 20px; }
+
+.index-container:hover {
+  top: -30px;
+  text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.index-main { 
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height:100vh;
+  background: #eeeeee;}
+
+#owner-container {
+    margin: 50px;
 }
