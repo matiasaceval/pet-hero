@@ -5,7 +5,6 @@ namespace DAO;
 use Models\Pet;
 use DAO\OwnerDAOJson as OwnerDAO;
 use Models\Owner as Owner;
-use DAO\PetDAOJson as PetDAO;
 
 class PetDAOJson implements IPetDAO
 {
@@ -16,13 +15,11 @@ class PetDAOJson implements IPetDAO
     private array $petList = array();
     private string $fileName;
     private OwnerDAO $ownerDAO;
-    private PetDAO $petDAO;
 
     public function __construct()
     {
         $this->fileName = ROOT . "/Data/pets.json";
         $this->ownerDAO = new OwnerDAO();
-        $this->petDAO = new PetDAO();
     }
 
     private function RetrieveData()
