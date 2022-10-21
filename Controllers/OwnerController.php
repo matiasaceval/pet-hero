@@ -3,16 +3,20 @@
 namespace Controllers;
 
 use DAO\OwnerDAOJson as OwnerDAO;
+use DAO\PetDAOJson as PetDAO;
 use Models\Owner as Owner;
+use Models\Pet;
 use Utils\Session;
 
 class OwnerController
 {
     private OwnerDAO $ownerDAO;
+    private PetDAO $petDAO;
 
     public function __construct()
     {
         $this->ownerDAO = new OwnerDAO();
+        $this->petDAO = new PetDAO();
     }
 
     public function Index()
@@ -79,44 +83,56 @@ class OwnerController
     public function Pets()
     {
         if (Session::VerifySession("owner")) {
-        // TODO: List pets FR-3
+            // TODO: List pets FR-3
         } else {
             Session::Set("error", "You must be logged in to access this page.");
             header("location:" . FRONT_ROOT . "Owner/LogIn");
         }
     }
 
-    public function AddPet(/* TODO: Parameters */)
+    public function AddPet($name, $species, $breed, $age, $gender)
+    {
+
+        if (!Session::VerifySession("owner")) {
+            header("location:" . FRONT_ROOT . "Owner/LogIn");
+        } else {
+            $pet = new Pet();
+            $pet->setName($name);
+            $pet->setSpecies($species);
+            $pet->setBreed($breed);
+            $pet->setAge($age);
+            $pet->setGender($gender);
+            $pet->setOwner(Session::Get("owner"));
+            $this->petDAO->Add($pet);
+            header("location:" . FRONT_ROOT . "AddPet/Index");
+        }
+    }
+
+
+    public
+    function EditPet(/* TODO: Parameters */)
     {
         if (Session::VerifySession("owner")) {
-        // TODO: Business logic FR-2
+            // TODO: Business logic
         } else {
             Session::Set("error", "You must be logged in to access this page.");
             header("location:" . FRONT_ROOT . "Owner/LogIn");
         }
     }
 
-    public function EditPet(/* TODO: Parameters */)
+    public
+    function RemovePet(/* TODO: Parameters */)
     {
         if (Session::VerifySession("owner")) {
-        // TODO: Business logic
+            // TODO: Business logic
         } else {
             Session::Set("error", "You must be logged in to access this page.");
             header("location:" . FRONT_ROOT . "Owner/LogIn");
         }
     }
 
-    public function RemovePet(/* TODO: Parameters */)
-    {
-        if (Session::VerifySession("owner")) {
-        // TODO: Business logic
-        } else {
-            Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LogIn");
-        }
-    }
-
-    public function Keepers()
+    public
+    function Keepers()
     {
         if (Session::VerifySession("owner")) {
             // TODO: List keepers FR-6
