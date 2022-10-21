@@ -37,6 +37,7 @@ class PetDAOJson implements IPetDAO
                 $pet->setName($valuesArray["name"]);
                 $pet->setAge($valuesArray["age"]);
                 $pet->setSpecies($valuesArray["species"]);
+                $pet->setOwner($this->ownerDAO->GetById($valuesArray["ownerId"]));
                 $pet->setBreed($valuesArray["breed"]);
                 array_push($this->petList, $pet);
             }
@@ -130,7 +131,7 @@ class PetDAOJson implements IPetDAO
                 return true;
             }
         }
-
+        return false;
     }
 
     public function GetOwnerId(int $petId): ?int
@@ -147,38 +148,16 @@ class PetDAOJson implements IPetDAO
                     return $valuesArray["ownerId"];
                 }
             }
-            return null;
         }
+        return null;
 
     }
 
-    public function GetOwnerByPetId(int $petId): ?Owner
+    public function GetPetsByOwnerId(int $ownerId): ?array
     {
-        return $this->ownerDAO->GetById($this->petDAO->GetOwnerId($petId));
-    }
+        $this->RetrieveData();
 
-    public function GetPets(): array
-    {
-        /**
-         * & is used to get the reference of the object, not a copy of it.
-         */
-        $petList = $this->petDAO->GetAll();
-        /*
-         * @var Pet $pet
-         */
-        foreach ($petList as $pet) {
-            $owner = $this->ownerDAO->GetById($this->petDAO->GetOwnerId($pet->getId()));
-            $pet->setOwner($owner);
-        }
-
-        return $petList;
-    }
-
-    public function GetPetByOwnerId(int $ownerId): ?array
-    {
-        $petList = $this->GetPets();
-
-        $petListByOwnerId = array_filter($petList, fn($pet) => $pet->getOwner()->getId() == $ownerId);
+        $petListByOwnerId = array_filter($this->petList, fn($pet) => $pet->getOwner()->getId() == $ownerId);
 
         return $petListByOwnerId;
 
