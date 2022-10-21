@@ -79,7 +79,8 @@ class OwnerController
     public function LogOut()
     {
         Session::Logout();
-        header("Location: " . FRONT_ROOT . "Home/Index");
+        header("Location: " . FRONT_ROOT);
+        exit;
     }
 
     public function Pets()
@@ -150,7 +151,7 @@ class OwnerController
     {
         if (Session::VerifySession("owner")) {
             header("Location: " . FRONT_ROOT . "Owner");
-			      exit;
+			exit;
         } else if (Session::VerifySession("keeper")) {
             header("Location: " . FRONT_ROOT . "Keeper");
             exit;

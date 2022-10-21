@@ -74,7 +74,8 @@ class KeeperController {
 
     public function LogOut() {
         Session::Logout();
-        header("Location: " . FRONT_ROOT . "Keeper/LoginView");
+        header("Location: " . FRONT_ROOT);
+        exit;
     }
 
     public function SignUpView() {

@@ -2,205 +2,214 @@ import Stats from "./stats.module.js";
 import * as THREE from "./three.module.js";
 import { GLTFLoader } from "./GLTFLoader.js";
 
-//let composer;
-let scene, camera, stats;
-let renderer, mixer, clock;
-let container;
-let pet;
-
-const MODELS_PATH = "/pet-hero/Views/models/";
-let models
-const userType = getUserType();
-if (userType == "owner") {
-    models = getOwnerModels();
-} else if (userType == "keeper") {
-    models = getKeeperModels();
+if(window.location.pathname === "/pet-hero/") {
+    createModel("owner-figure");
+    createModel("keeper-figure");
 } else {
-    models = getModels();
+    createModel("pet-figure");
 }
 
-const i = Math.floor(Math.random() * models.length);
-const model = models[i];
+function createModel(elementId){
+    //let composer;
+    let scene, camera, stats;
+    let renderer, mixer, clock;
+    let container;
+    let pet;
 
-const REDUCED_SIZE = 0.73;
-const WIDTH = 400;
-const HEIGHT = 400;
-const ROTATION_VELOCITY = 0.005;
+    const MODELS_PATH = "/pet-hero/Views/models/";
+    let models;
+    const userType = getUserType();
+    if (userType == "owner" || elementId == "owner-figure") {
+        models = getOwnerModels();
+    } else if (userType == "keeper" || elementId == "keeper-figure") {
+        models = getKeeperModels();
+    } else {
+        models = getModels();
+    }
 
-init();
+    const i = Math.floor(Math.random() * models.length);
+    const model = models[i];
 
-function init() {
-    // appending stats
-    // showStats();
+    const REDUCED_SIZE = 0.73;
+    const WIDTH = 400;
+    const HEIGHT = 400;
+    const ROTATION_VELOCITY = 0.005;
 
-    clock = new THREE.Clock();
+    init();
 
-    renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true,
-    });
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.toneMapping = THREE.ReinhardToneMapping;
-    renderer.setClearColor(0x000000, 0);
-    container = document.getElementById("pet-figure");
-    //renderer.setSize(container.offsetWidth, container.offsetHeight);
-    renderer.setSize(WIDTH, HEIGHT);
-    container.appendChild(renderer.domElement);
+    function init() {
+        // appending stats
+        // showStats();
 
-    // creating the scene
-    scene = new THREE.Scene();
-    scene.background = null;
+        clock = new THREE.Clock();
 
-    // creating the camera
-    camera = new THREE.PerspectiveCamera(30, WIDTH / HEIGHT, 0.1, 1000);
-    camera.position.set(0, 0, 0);
-    scene.add(camera);
+        container = document.getElementById(elementId);
+        renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true,
+        });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.toneMapping = THREE.ReinhardToneMapping;
+        renderer.setClearColor(0x000000, 0);
+        //renderer.setSize(container.offsetWidth, container.offsetHeight);
+        renderer.setSize(WIDTH, HEIGHT);
+        container.appendChild(renderer.domElement);
 
-    // creating the light
-    scene.add(new THREE.AmbientLight(0x404040));
-    const pointLight = new THREE.PointLight(0xffffff, 1);
-    camera.add(pointLight);
+        // creating the scene
+        scene = new THREE.Scene();
+        scene.background = null;
 
-    pet = new THREE.Object3D();
-    scene.add(pet);
+        // creating the camera
+        camera = new THREE.PerspectiveCamera(30, WIDTH / HEIGHT, 0.1, 1000);
+        camera.position.set(0, 0, 0);
+        scene.add(camera);
 
-    // loading the model
-    new GLTFLoader().load(model.file, (gltf) => {
-        pet.rotation.set(0, 9.42, 0);
-        pet.scale.set(model.size[0] * (1 - REDUCED_SIZE), model.size[1] * (1 - REDUCED_SIZE), model.size[2] * (1 - REDUCED_SIZE));
-        pet.position.set(model.position[0], model.position[1], model.position[2]);
-        pet.rotation.set(model.rotation[0], model.rotation[1], model.rotation[2]);
-        pet.model = gltf.scene;
-        pet.add(pet.model);
+        // creating the light
+        scene.add(new THREE.AmbientLight(0x404040));
+        const pointLight = new THREE.PointLight(0xffffff, 1);
+        camera.add(pointLight);
 
-        mixer = new THREE.AnimationMixer(pet);
-        const clip = gltf.animations[0];
-        if (clip) mixer.clipAction(clip.optimize()).play();
-        animate();
-    });
+        pet = new THREE.Object3D();
+        scene.add(pet);
 
-    // creating lights
-    const light = new THREE.DirectionalLight(0xffffff, 2);
-    light.position.set(-0.75, 1, 3.8);
-    light.rotation.set(0, -0.2, 0);
+        // loading the model
+        new GLTFLoader().load(model.file, (gltf) => {
+            pet.rotation.set(0, 9.42, 0);
+            pet.scale.set(model.size[0] * (1 - REDUCED_SIZE), model.size[1] * (1 - REDUCED_SIZE), model.size[2] * (1 - REDUCED_SIZE));
+            pet.position.set(model.position[0], model.position[1], model.position[2]);
+            pet.rotation.set(model.rotation[0], model.rotation[1], model.rotation[2]);
+            pet.model = gltf.scene;
+            pet.add(pet.model);
 
-    scene.add(light);
+            mixer = new THREE.AnimationMixer(pet);
+            const clip = gltf.animations[0];
+            if (clip) mixer.clipAction(clip.optimize()).play();
+            animate();
+        });
 
-    // floor grid helper
-    // scene.add(new THREE.GridHelper(10, 10));
+        // creating lights
+        const light = new THREE.DirectionalLight(0xffffff, 2);
+        light.position.set(-0.75, 1, 3.8);
+        light.rotation.set(0, -0.2, 0);
 
-    window.addEventListener("resize", onWindowResize);
-}
+        scene.add(light);
 
-function onWindowResize() {
-    const canvas = renderer.domElement;
-    // look up the size the canvas is being displayed
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
+        // floor grid helper
+        // scene.add(new THREE.GridHelper(10, 10));
 
-    // you must pass false here or three.js sadly fights the browser
-    renderer.setSize(width, height, false);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-}
+        window.addEventListener("resize", onWindowResize);
+    }
 
-function animate() {
-    requestAnimationFrame(animate);
+    function onWindowResize() {
+        const canvas = renderer.domElement;
+        // look up the size the canvas is being displayed
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
 
-    const delta = clock.getDelta();
+        // you must pass false here or three.js sadly fights the browser
+        renderer.setSize(width, height, false);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+    }
 
-    if (mixer) mixer.update(delta);
+    function animate() {
+        requestAnimationFrame(animate);
 
-    if (stats) stats.update();
+        const delta = clock.getDelta();
 
-    //composer.render();
-    renderer.render(scene, camera);
+        if (mixer) mixer.update(delta);
 
-    pet.rotation.y += ROTATION_VELOCITY;
-}
+        if (stats) stats.update();
 
-function showStats() {
-    const container = document.getElementById("container");
-    stats = new Stats();
-    container.appendChild(stats.dom);
-}
+        //composer.render();
+        renderer.render(scene, camera);
 
-// models
-function getOwnerModels() {
-    // Kevin Reyna <3
-    return [
-        // "Just a Hungry Cat" (https://skfb.ly/oyvPQ) by Coco Jinjo
-        {
-            file: MODELS_PATH + "just_a_hungry_cat.glb",
-            size: [2, 2, 2],
-            position: [0, -0.2, -1.5],
-            rotation: [0.1, -0.5, 0],
-        },
+        pet.rotation.y += ROTATION_VELOCITY;
+    }
 
-        // "Kitty Cat" (https://skfb.ly/otHnL) by roto
-        {
-            file: MODELS_PATH + "kitty_cat.glb",
-            size: [0.5, 0.5, 0.5],
-            position: [0, -0.21, -1.5],
-            rotation: [0.1, -0.85, 0],
-        },
+    function showStats() {
+        const container = document.getElementById("container");
+        stats = new Stats();
+        container.appendChild(stats.dom);
+    }
 
-        // "Cute Cat" (https://skfb.ly/6SwZP) by Fayme Wong
-        {
-            file: MODELS_PATH + "cute_cat.glb",
-            size: [0.565, 0.565, 0.565],
-            position: [0.03, -0.24, -1.5],
-            rotation: [0.1, -0.85, 0],
-        },        
-        // These models are licensed under Creative Commons Attribution
-        // (http://creativecommons.org/licenses/by/4.0/).
-    ];
-}
+    // models
+    function getOwnerModels() {
+        // Kevin Reyna <3
+        return [
+            // "Just a Hungry Cat" (https://skfb.ly/oyvPQ) by Coco Jinjo
+            {
+                file: MODELS_PATH + "just_a_hungry_cat.glb",
+                size: [2, 2, 2],
+                position: [0, -0.2, -1.5],
+                rotation: [0.1, -0.5, 0],
+            },
 
-function getKeeperModels() {
-    return [
-        // "Medieval viking house" (https://skfb.ly/oqCNs) by vlad_design228
-        {
-            file: MODELS_PATH + "medieval_viking_house.glb",
-            size: [0.32, 0.32, 0.32],
-            position: [0.0, -0.03, -1.5],
-            rotation: [0.1, -0.5, 0],
-        },
+            // "Kitty Cat" (https://skfb.ly/otHnL) by roto
+            {
+                file: MODELS_PATH + "kitty_cat.glb",
+                size: [0.5, 0.5, 0.5],
+                position: [0, -0.21, -1.5],
+                rotation: [0.1, -0.85, 0],
+            },
 
-        // "Medieval House Low Poly (For Gamedev)" (https://skfb.ly/6R6sM) by Lesnyak
-        {
-            file: MODELS_PATH + "medieval_house_low_poly.glb",
-            size: [0.12, 0.12, 0.12],
-            position: [0.0, -0.19, -1.5],
-            rotation: [0.1, -1.7, 0],
-        },
+            // "Cute Cat" (https://skfb.ly/6SwZP) by Fayme Wong
+            {
+                file: MODELS_PATH + "cute_cat.glb",
+                size: [0.565, 0.565, 0.565],
+                position: [0.03, -0.24, -1.5],
+                rotation: [0.1, -0.85, 0],
+            },
+            // These models are licensed under Creative Commons Attribution
+            // (http://creativecommons.org/licenses/by/4.0/).
+        ];
+    }
 
-        // "House draft" (https://skfb.ly/6VMpp) by YD92
-        {
-            file: MODELS_PATH + "house_draft.glb",
-            size: [0.0025, 0.0025, 0.0025],
-            position: [-0.01, 0.03, -1.5],
-            rotation: [0.1, -1.7, 0],
-        },
+    function getKeeperModels() {
+        return [
+            // "Medieval viking house" (https://skfb.ly/oqCNs) by vlad_design228
+            {
+                file: MODELS_PATH + "medieval_viking_house.glb",
+                size: [0.32, 0.32, 0.32],
+                position: [0.0, -0.03, -1.5],
+                rotation: [0.1, -0.5, 0],
+            },
 
-        // "Fantasy house." (https://skfb.ly/6QSOO) by Tomas Anglim
-        {
-            file: MODELS_PATH + "fantasy_house.glb",
-            size: [0.8, 0.8, 0.8],
-            position: [0, -0.27, -1.5],
-            rotation: [0.1, -1.7, 0],
-        },
-        // These models are licensed under Creative Commons Attribution
-        // (http://creativecommons.org/licenses/by/4.0/).
-    ];
-}
+            // "Medieval House Low Poly (For Gamedev)" (https://skfb.ly/6R6sM) by Lesnyak
+            {
+                file: MODELS_PATH + "medieval_house_low_poly.glb",
+                size: [0.12, 0.12, 0.12],
+                position: [0.0, -0.19, -1.5],
+                rotation: [0.1, -1.7, 0],
+            },
 
-function getModels() {
-    return getOwnerModels().concat(getKeeperModels());
-}
+            // "House draft" (https://skfb.ly/6VMpp) by YD92
+            {
+                file: MODELS_PATH + "house_draft.glb",
+                size: [0.0025, 0.0025, 0.0025],
+                position: [-0.01, 0.03, -1.5],
+                rotation: [0.1, -1.7, 0],
+            },
 
-function getUserType() {
-    const path = window.location.pathname;
-    const userType = (path.split("/")[2]).toLowerCase();
-    return userType;
+            // "Fantasy house." (https://skfb.ly/6QSOO) by Tomas Anglim
+            {
+                file: MODELS_PATH + "fantasy_house.glb",
+                size: [0.8, 0.8, 0.8],
+                position: [0, -0.27, -1.5],
+                rotation: [0.1, -1.7, 0],
+            },
+            // These models are licensed under Creative Commons Attribution
+            // (http://creativecommons.org/licenses/by/4.0/).
+        ];
+    }
+
+    function getModels() {
+        return getOwnerModels().concat(getKeeperModels());
+    }
+
+    function getUserType() {
+        const path = window.location.pathname;
+        const userType = path.split("/")[2].toLowerCase();
+        return userType;
+    }
 }
