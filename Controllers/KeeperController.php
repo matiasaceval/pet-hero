@@ -56,7 +56,7 @@ class KeeperController {
         $keeper->setReviews([]);
 
 
-        Session::Set("keeper", $keeper);
+        Session::Set("temp-keeper", $keeper);
         header("location:" . FRONT_ROOT . "Keeper/SetFeeStayView");
     }
 
@@ -88,9 +88,11 @@ class KeeperController {
     }
 
     public function SetFeeStay($fee, $since, $until) {
-        $this->VerifyIsLogged();
+        if (Session::VerifySession("temp-keeper") == false) {
+            $this->VerifyIsLogged();
+        }
 
-        $keeper = Session::Get("keeper");
+        $keeper = Session::Get("temp-keeper") ?? Session::Get("keeper");
         $keeper->setFee($fee);
 
         $stay = new Stay();
@@ -100,15 +102,25 @@ class KeeperController {
 
         $keeper->setStay($stay);
 
-        $this->keeperDAO->Add($keeper);
-        $this->stayDAO->Add($stay);
+        if (Session::VerifySession("temp-keeper")) {
+            Session::Unset("temp-keeper");
+            $this->keeperDAO->Add($keeper);
+            $this->stayDAO->Add($stay);
+        } else {
+            $this->keeperDAO->Update($keeper);
+            $this->stayDAO->Update($stay);
+        }
+
+        Session::Set("keeper", $keeper);
 
         header("Location: " . FRONT_ROOT . "Keeper/Index");
     }
 
     public function SetFeeStayView() {
-        $this->VerifyIsLogged();
-        require_once(VIEWS_PATH . "keeper-set-fee-stay.php");
+        if (Session::VerifySession("temp-keeper") == false) {
+            $this->VerifyIsLogged();
+        }
+        include_once(VIEWS_PATH . "keeper-set-fee-stay.php");
     }
 
     private function IfLoggedGoToIndex() {
