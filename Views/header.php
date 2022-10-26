@@ -26,12 +26,17 @@
         <link rel="stylesheet" href="<?php echo CSS_PATH ?>login-style.css">
         <script type="module" src="<?php echo THREEJS_PATH ?>pet-figure.js"></script>
     <?php
+    } else {
+    ?>
+        <!-- Main CSS -->
+        <link rel="stylesheet" href="<?php echo CSS_PATH ?>style.css">
+    <?php
     }
     ?>
 
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="<?php echo CSS_PATH ?>style.css">
 
+
+    <!-- Daterangepicker library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>

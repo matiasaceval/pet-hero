@@ -28,8 +28,7 @@ class OwnerController
         $this->VerifyIsLogged();
 
         $owner = Session::Get("owner");
-        echo "¡Hola " . $owner->getFirstname() . "!";
-        // TODO: Owner home view
+        require_once(VIEWS_PATH . "owner-home.php");
     }
 
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword)
