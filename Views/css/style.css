@@ -96,8 +96,8 @@ a:hover {
 		transform:         translateX(0)
 	}
 	50% {
-		-webkit-transform: translateX(-30px);
-		-ms-transform:     translateX(-30px);
+		-webkit-transform: translateX(-10px);
+		-ms-transform:     translateX(-10px);
 		transform:         translateX(-10px)
 	}
 }
