@@ -27,5 +27,5 @@
 - [ ] FR11 - Create Payment Coupon for an Owner
 - [ ] FR12 - Coupon payment simulation (Reservation confirmation).
 
-### Miscellaneous
+## Miscellaneous
 - Runs in PHP >= 7.4 
