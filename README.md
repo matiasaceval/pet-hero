@@ -1,4 +1,4 @@
-# 🐱‍🏍 Pet Hero | 🖥 Computer Lab IV final project
+# 🐱‍🏍 Pet Hero | 🖥 Computer Lab IV Final Project
 ### Team
 - Aceval Ventura Matías
 - Labrador Joaquín Leonardo
@@ -10,15 +10,15 @@
 ## Functional Requirements
 
 ### First Checking
-- [ ] FR1 - Register new Owner.
-- [ ] FR2 - Register new Pet.
-- [ ] FR3 - Consult list of Pets (Owner).
-- [ ] FR4 - Register new Keeper.
-- [ ] FR5 - Stays management (Keeper).
-- [ ] FR6 - Consult Keepers list.
+- [X] FR1 - Register new Owner.
+- [X] FR2 - Register new Pet.
+- [X] FR3 - Consult list of Pets (Owner).
+- [X] FR4 - Register new Keeper.
+- [X] FR5 - Stays management (Keeper).
+- [X] FR6 - Consult Keepers list.
 
 ### Second Checking
-- [ ] FR7 - Consult Keepers availability on a range of dates.
+- [X] FR7 - Consult Keepers availability on a range of dates.
 - [ ] FR8 - Create a Reservation from an Owner to a Keeper
 - [ ] FR9 - Consult programmed Reservations and old ones as Keeper.
 - [ ] FR10 - Confirm Reservation as a Keeper.
@@ -26,3 +26,6 @@
 ### Third Checking
 - [ ] FR11 - Create Payment Coupon for an Owner
 - [ ] FR12 - Coupon payment simulation (Reservation confirmation).
+
+### Miscellaneous
+- Runs in PHP >= 7.4 
