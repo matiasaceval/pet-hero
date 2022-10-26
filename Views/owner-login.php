@@ -1,3 +1,6 @@
+<?php
+    require_once(VIEWS_PATH . "back-nav.php");
+?>
 <div class="main">
     <div class="container">
         <div class="signin-image">

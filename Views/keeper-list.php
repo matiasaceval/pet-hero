@@ -1,13 +1,8 @@
 <?php
-
-use Models\Keeper;
-
-include_once "header.php";
-include_once "nav.php";
+    require_once(VIEWS_PATH . "back-nav.php");
 ?>
-
 <div>
-    <h1 class="text-center">Listado de keepers</h1>
+    <h1 class="text-center">Keepers</h1>
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -26,6 +21,9 @@ include_once "nav.php";
                     <?php if (isset($keeperList)) { ?>
 
                         <?php /* @var $keeper Keeper */
+                        usort($keeperList, function ($item1, $item2) {
+                            return $item1->getStay()->GetSince() <=> $item2->getStay()->GetSince();
+                        });
                         foreach ($keeperList as $keeper) { ?>
                             <tr>
                                 <td><?php echo $keeper->getFirstname(); ?></td>

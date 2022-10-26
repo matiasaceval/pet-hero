@@ -1,5 +1,5 @@
 <?php
-require_once(VIEWS_PATH . "owner-nav.php");
+    require_once(VIEWS_PATH . "logged-nav.php");
 ?>
 <div class="container overflow-hidden">
     <div class="centered-element">
