@@ -1,5 +1,8 @@
 <?php
 require_once(VIEWS_PATH . "back-nav.php");
+
+use Utils\TempValues;
+use Utils\Session;
 ?>
 <div class="main">
     <div class="container">
@@ -9,19 +12,19 @@ require_once(VIEWS_PATH . "back-nav.php");
                 <form method="POST" action="<?php echo FRONT_ROOT ?>Keeper/SignUp" class="register-form" id="register-form">
                     <div class="form-group">
                         <label for="first-name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                        <input required type="text" name="firstname" id="first-name" placeholder="Your First Name" />
+                        <input required type="text" name="firstname" id="first-name" placeholder="Your First Name" value="<?php echo TempValues::GetValue("firstname") ?>" />
                     </div>
                     <div class="form-group">
                         <label for="last-name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                        <input required type="text" name="lastname" id="last-name" placeholder="Your Last Name" />
+                        <input required type="text" name="lastname" id="last-name" placeholder="Your Last Name" value="<?php echo TempValues::GetValue("lastname") ?>" />
                     </div>
                     <div class="form-group">
                         <label for="email"><i class="zmdi zmdi-email"></i></label>
-                        <input required type="email" name="email" id="email" placeholder="Your Email" />
+                        <input required type="email" name="email" id="email" placeholder="Your Email" value="<?php echo TempValues::GetValue("email") ?>" />
                     </div>
                     <div class="form-group">
                         <label for="phone"><i class="zmdi zmdi-phone"></i></label>
-                        <input required type="phone" name="phone" id="phone" placeholder="Your Phone" />
+                        <input required type="phone" name="phone" id="phone" placeholder="Your Phone" value="<?php echo TempValues::GetValue("phone") ?>" />
                     </div>
                     <div class="form-group">
                         <label for="pass"><i class="zmdi zmdi-lock"></i></label>
@@ -40,6 +43,15 @@ require_once(VIEWS_PATH . "back-nav.php");
         <div class="signup-image">
             <figure id="pet-figure" class="signup-figure"></figure>
             <a href="<?php echo FRONT_ROOT ?>Keeper/LoginView" class="signup-image-link">I am already member</a>
+            <span class="error">
+                <?php
+                $error = Session::Get("error");
+                if ($error) {
+                    echo $error;
+                    Session::Unset("error");
+                }
+                ?>
+            </span>
         </div>
     </div>
 </div>

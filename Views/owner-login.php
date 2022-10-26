@@ -1,5 +1,8 @@
 <?php
-    require_once(VIEWS_PATH . "back-nav.php");
+require_once(VIEWS_PATH . "back-nav.php");
+
+use Utils\TempValues;
+use Utils\Session;
 ?>
 <div class="main">
     <div class="container">
@@ -13,7 +16,7 @@
                 <form method="POST" action="<?php echo FRONT_ROOT ?>Owner/Login" class="register-form" id="register-form">
                     <div class="form-group">
                         <label for="email"><i class="zmdi zmdi-email"></i></label>
-                        <input required type="email" name="email" id="email" placeholder="Your Email" />
+                        <input required type="email" name="email" id="email" placeholder="Your Email" value="<?php echo TempValues::GetValue("email") ?>" />
                     </div>
                     <div class="form-group">
                         <label for="pass"><i class="zmdi zmdi-lock"></i></label>
@@ -22,6 +25,15 @@
                     <div class="form-group form-button">
                         <input required type="submit" id="signin" class="form-submit" value="Login" />
                     </div>
+                    <span class="error">
+                        <?php
+                        $error = Session::Get("error");
+                        if ($error) {
+                            echo $error;
+                            Session::Unset("error");
+                        }
+                        ?>
+                    </span>
                 </form>
             </div>
         </div>

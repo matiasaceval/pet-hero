@@ -9,6 +9,7 @@ use Models\Owner as Owner;
 use Models\Pet;
 use Models\Keeper as Keeper;
 use Utils\Session;
+use Utils\TempValues;
 
 class OwnerController
 {
@@ -36,6 +37,8 @@ class OwnerController
         // if there's an owner session already, redirect to home
         $this->IfLoggedGoToIndex();
 
+        TempValues::InitValues(["firstname" => $firstname, "lastname" => $lastname, "email" => $email, "phone" => $phone]);
+        
         if ($password != $confirmPassword) {
             Session::Set("error", "Passwords do not match");
             header("location:" . FRONT_ROOT . "Owner/SignUpView");
@@ -48,16 +51,18 @@ class OwnerController
             exit;
         }
 
+        
         $owner = new Owner();
         $owner->setFirstname($firstname);
         $owner->setLastname($lastname);
         $owner->setEmail($email);
         $owner->setPhone($phone);
         $owner->setPassword(password_hash($password, PASSWORD_DEFAULT));
-
-
+        
+        
         $this->ownerDAO->Add($owner);
-
+        
+        TempValues::UnsetValues();
         Session::Set("owner", $owner);
         header("location:" . FRONT_ROOT . "Owner");
     }
@@ -71,6 +76,7 @@ class OwnerController
             exit;
         }
 
+        TempValues::InitValues(["email" => $email]);
         Session::Set("error", "Invalid credentials");
         header("Location: " . FRONT_ROOT . "Owner/LoginView");
     }

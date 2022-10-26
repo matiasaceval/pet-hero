@@ -7,6 +7,7 @@ use DAO\StayDAOJson as StayDAO;
 use Models\Keeper as Keeper;
 use Models\Stay as Stay;
 use Utils\Session;
+use Utils\TempValues;
 
 class KeeperController {
     private KeeperDAO $keeperDAO;
@@ -34,6 +35,8 @@ class KeeperController {
         // if there's an keeper session already, redirect to home
         $this->IfLoggedGoToIndex();
 
+        TempValues::InitValues(["firstname" => $firstname, "lastname" => $lastname, "email" => $email, "phone" => $phone]);
+
         if ($password != $confirmPassword) {
             Session::Set("error", "Passwords do not match");
             header("location:" . FRONT_ROOT . "Keeper/SignUpView");
@@ -55,7 +58,7 @@ class KeeperController {
         $keeper->setFee(-1);
         $keeper->setReviews([]);
 
-
+        TempValues::UnsetValues();
         Session::Set("temp-keeper", $keeper);
         header("location:" . FRONT_ROOT . "Keeper/SetFeeStayView");
     }
@@ -67,7 +70,8 @@ class KeeperController {
             header("Location: " . FRONT_ROOT . "Keeper/Index");
             exit;
         }
-
+        
+        TempValues::InitValues(["email" => $email]);
         Session::Set("error", "Invalid credentials");
         header("Location: " . FRONT_ROOT . "Keeper/LoginView");
     }
