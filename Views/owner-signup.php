@@ -43,7 +43,7 @@ use Utils\Session;
         <div class="signup-image">
             <figure id="pet-figure" class="signup-figure"></figure>
             <a href="<?php echo FRONT_ROOT ?>Owner/LoginView" class="signup-image-link">I am already member</a>
-            <span class="error">
+            <span class="error-centered">
                 <?php
                 $error = Session::Get("error");
                 if ($error) {
