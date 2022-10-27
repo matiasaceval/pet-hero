@@ -7,7 +7,6 @@ use DAO\PetDAOJson as PetDAO;
 use DAO\KeeperDAOJson as KeeperDAO;
 use Models\Owner as Owner;
 use Models\Pet;
-use Models\Keeper as Keeper;
 use Utils\Session;
 use Utils\TempValues;
 
@@ -107,7 +106,7 @@ class OwnerController
         $pet->setBreed($breed);
         $pet->setAge($age);
         $pet->setSex($sex);
-        $pet->setImage($image);
+        $pet->setImage($image["name"]); // TODO: CHANGE WHEN DB IS IMPLEMENTED
         $pet->setVaccine($vaccine);
         $pet->setOwner(Session::Get("owner"));
         $this->petDAO->Add($pet);
@@ -119,7 +118,7 @@ class OwnerController
     {
         $this->VerifyIsLogged();
 
-        require_once(VIEWS_PATH . "add-pet.php");
+        require_once(VIEWS_PATH . "pet-add.php");
     }
 
     public function EditPet(/* TODO: Parameters */)
