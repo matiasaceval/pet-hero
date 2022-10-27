@@ -8,6 +8,10 @@
             }
         }
 
+        public static function ValueExist($key) {
+            return isset($_SESSION["temp-".$key]);
+        }
+
         public static function GetValue($key) {
             if (isset($_SESSION["temp-".$key])) {
                 $value = $_SESSION["temp-".$key];
