@@ -66,6 +66,7 @@ figure {
   margin: 0; }
 
 p {
+  text-align: center;
   margin-bottom: 0px;
   font-size: 15px;
   text-decoration: none;
@@ -233,6 +234,7 @@ figure {
   color: #574ae2;
   display: block;
   margin-bottom: 25px;
+  margin-top: 16px;
   transition: all 0.5s ease;
   text-align: center; }
 
@@ -667,4 +669,58 @@ a:hover {
 
 .back-btn:hover {
     animation-name: bounce;
+}
+
+.centered-element {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.card-box {
+    width: 400px;
+    height: fit-content;
+    background-color: #fefcfd;
+    border-radius: 10px;
+    margin: 0 auto;
+    padding: 64px 0px 64px 0px;
+    width: fit-content;
+    position: relative;
+    top: 0;
+    transition: width 0.5s ease, height 0.5s ease, top 0.5s ease;
+}
+
+.card-box-animation:hover { 
+    top: -30px;
+    width: 450px;
+    height: 850px;
+}
+
+/* Overwriting Bootstrap */
+.container-modified {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+h1 {
+    text-align: center;
+    color: #fefcfd;
+    font-family: "Outfit";
+    font-size: 64px;
+}
+
+.user-type h2 {
+    text-align: center;
+    color: #fefcfd;
+    font-family: "Outfit";
+    font-size: 36px;
+}
+
+input {
+    font-size: 18px;
 }

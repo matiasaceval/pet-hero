@@ -1,13 +1,14 @@
 <?php
-require_once(VIEWS_PATH . "back-nav.php");
-
 use Utils\TempValues;
 use Utils\Session;
+
+TempValues::InitValues(["back-page" => FRONT_ROOT]);
+require_once(VIEWS_PATH . "back-nav.php");
 ?>
 <div class="main">
     <div class="container">
         <div class="signin-image">
-            <figure id="pet-figure" class="signin-figure"></figure>
+            <img src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/keeper.png">
             <a href="<?php echo FRONT_ROOT ?>Keeper/SignUpView" class=" signin-image-link">I do not have an account</a>
         </div>
         <div class="signin-content">

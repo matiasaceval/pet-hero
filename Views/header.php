@@ -21,7 +21,7 @@
 
     use Utils\Session;
 
-    if ((!Session::VerifySession("owner") && !Session::VerifySession("keeper")) || $_SERVER['REQUEST_URI'] == ROOT) {
+    if ((!Session::VerifySession("owner") && !Session::VerifySession("keeper"))) {
     ?>
         <link rel="stylesheet" href="<?php echo CSS_PATH ?>login-style.css">
         <script type="module" src="<?php echo THREEJS_PATH ?>pet-figure.js"></script>

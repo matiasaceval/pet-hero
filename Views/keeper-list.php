@@ -1,4 +1,7 @@
 <?php
+    use Utils\TempValues;
+    
+    TempValues::InitValues(["back-page" => FRONT_ROOT."Owner/Index"]);
     require_once(VIEWS_PATH . "back-nav.php");
 ?>
 <div>
