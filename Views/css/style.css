@@ -26,6 +26,7 @@ a:hover {
     margin: 0 auto;
     padding: 64px 48px 64px 48px;
     width: fit-content;
+    position: relative;
 }
 
 .card-box img {
@@ -106,6 +107,49 @@ a:hover {
     animation-name: bounce;
 }
 
+p {
+    font-size: 14px;
+    margin: 0;
+    font-family: "Outfit";
+    color: #222;
+}
+
+.invert { filter: invert(100%); }
+.cover { 
+    object-fit: cover;
+    background-size: cover;
+    background-position: center;
+}
+
+.pet-data {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: none;
+    background-color: #fefcfd;
+}
+
+.image-upload {
+    appearance: none;
+    background-color: #463ac5;
+}
+
+.no-arrow input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.pointer:hover {
+    cursor: pointer;
+}
+
+#pet-background {
+    background: url("../img/pet-card-background.png") no-repeat 0 0;
+    width: 540px;
+    height: 440px;
+    float: left;
+    opacity: 0.3;
+}
 
 /* Overwriting Bootstrap */
 .container {
@@ -145,4 +189,19 @@ a:hover {
 .btn-primary:hover {
     background-color: rgba(34, 34, 34, 0) !important;
     color: #fefcfd !important;
+}
+
+.btn-secondary {
+    font-size: 16px;
+    border-radius: 10px;
+    padding-left: 24px;
+    padding-right: 24px;
+    transition: background-color 0.3s ease;
+    background-color: #463ac5 !important;
+    border-color: #463ac5 !important;
+    color: #fefcfd !important;
+}
+
+.btn-secondary:hover {
+    background-color: #574ae2 !important;
 }
