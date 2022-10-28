@@ -2,11 +2,12 @@
 
 namespace DAO;
 
+use Models\Stay;
 use Models\Keeper;
 
 interface IKeeperDAO
 {
-    public function Add(Keeper $keeper);
+    public function Add(Keeper $keeper, Stay $stay);
 
     public function GetAll(): array;
 

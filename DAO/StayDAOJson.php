@@ -92,6 +92,8 @@ class StayDAOJson implements IStayDAO
 
         $cleanedArray = array_filter($this->stayList, fn($stay) => $stay->getId() != $id);
 
+        $this->stayList = $cleanedArray;
+
         $this->SaveData();
         return count($cleanedArray) < count($this->stayList);
     }

@@ -7,7 +7,7 @@ use Models\Pet as Pet;
 
 interface IPetDAO
 {
-    public function Add(Pet $pet);
+    public function Add(Pet $pet, $image);
 
     public function GetAll(): array;
 
