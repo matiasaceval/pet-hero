@@ -9,7 +9,7 @@ require_once(VIEWS_PATH . "back-nav.php");
 <div class="container overflow-hidden">
     <div class="centered-element">
         <form method="post" enctype='multipart/form-data' action="<?php echo FRONT_ROOT ?>Owner/AddPet">
-            <div class="card-box cover" width="fit-content" style="padding: 24px 300px 24px 48px;">
+            <div class="card-box pet-card-background" width="fit-content" style="padding: 32px 48px 32px 48px;">
                 <!-- Head -->
                 <div class=" row">
                     <div class="row" style="padding: 0px 15px 0 15px">
@@ -37,7 +37,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                         <div class="row" style="padding: 0px 15px 0 15px">
                             <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/pet-placeholder.png" width="300px" height="300px">
                         </div>
-                        <div class="row mt-1">
+                        <div class="row mt-1 justify-content-center">
                             <div class="col-md-auto">
                                 <input required id="selectedFile" name="image" type="file" accept="image/png, image/jpeg" style="display:none" onchange="(function (){
                                                    var selectedFile = document.getElementById('selectedFile').files[0];
@@ -51,14 +51,8 @@ require_once(VIEWS_PATH . "back-nav.php");
                                 <input required type="button" value="Upload Image" class="btn-secondary" onclick="document.getElementById('selectedFile').click();" />
                             </div>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-md-auto">
-                                <p>Identifier</p>
-                                <p><span class="pet-data">Not assigned yet</span></p>
-                            </div>
-                        </div>
                     </div>
-                    <div class="col-md-auto">
+                    <div class="col-4">
                         <div class="row">
                             <div class="col-md-auto">
                                 <p>Name</p>
@@ -79,10 +73,18 @@ require_once(VIEWS_PATH . "back-nav.php");
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-auto">
+                                <p>Identifier</p>
+                                <p><span class="pet-data">Not assigned yet</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="row mt">
+                            <div class="col-md-auto">
                                 <p>Sex</p>
-                                <select name="sex" class="pet-data pointer">
-                                    <option class="pet-data" value="M" selected>MALE</option>
-                                    <option class="pet-data" value="M">FEMALE</option>
+                                <select name="sex" class="pet-data pointer" style="padding-right: 12px;">
+                                    <option class="pet-data" value="M">MALE</option>
+                                    <option class="pet-data" value="F">FEMALE</option>
                                 </select>
                             </div>
                         </div>
