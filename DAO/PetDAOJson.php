@@ -3,9 +3,9 @@
 namespace DAO;
 
 use DAO\OwnerDAOJson as OwnerDAO;
+use Exception;
 use Models\Pet;
-use Models\Owner;
-
+use Utils\Session;
 
 class PetDAOJson implements IPetDAO
 {
@@ -80,11 +80,33 @@ class PetDAOJson implements IPetDAO
         return $lastPet === false ? 0 : $lastPet->getId() + 1;
     }
 
-    public function Add(Pet $pet)
+    public function Add(Pet $pet, $image)
     {
         $this->RetrieveData();
 
         $pet->setId($this->GetNextId());
+
+        try {
+            $fileExt = explode(".", $image["name"]);
+            $fileType = strtolower(end($fileExt));
+            $fileName = "photo-pet-" . $pet->getId() . "." . $fileType;
+            $tempFileName = $image["tmp_name"];
+            $filePath = UPLOADS_PATH . basename($fileName);
+
+            $imageSize = getimagesize($tempFileName);
+
+            if ($imageSize !== false) {
+                if (move_uploaded_file($tempFileName, $filePath)) {
+                    $pet->setImage($fileName);
+                } else {
+                    Session::Set("error", "Error uploading image");
+                }
+            } else {
+                Session::Set("error", "File is not an image");
+            }
+        } catch (Exception $ex) {
+            Session::Set("error", $ex->getMessage());
+        }
 
         array_push($this->petList, $pet);
 

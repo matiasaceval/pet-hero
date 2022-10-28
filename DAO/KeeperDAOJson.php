@@ -5,6 +5,7 @@ namespace DAO;
 use DAO\StayDAOJson as StayDAO;
 use DAO\ReviewsDAOJson as ReviewsDAO;
 
+use Models\Stay;
 use Models\Keeper;
 use Models\Reviews as Reviews;
 
@@ -25,9 +26,17 @@ class KeeperDAOJson implements IKeeperDAO
         $this->reviewsDAO = new ReviewsDAO();
     }
 
-    function Add(Keeper $keeper)
+    function Add(Keeper $keeper, Stay $stay)
     {
         $this->RetrieveData();
+
+        $keeper->setId($this->GetNextId());
+
+        $stay->setId($keeper->getId());
+
+        $keeper->setStay = $stay;
+
+        $this->stayDAO->Add($stay);
 
         array_push($this->keeperList, $keeper);
 
@@ -89,7 +98,7 @@ class KeeperDAOJson implements IKeeperDAO
         file_put_contents($this->fileName, $jsonContent);
     }
 
-    function &GetAll(): array
+    function GetAll(): array
     {
         $this->RetrieveData();
 
@@ -110,6 +119,8 @@ class KeeperDAOJson implements IKeeperDAO
         $this->RetrieveData();
 
         $cleanedArray = array_filter($this->keeperList, fn($keeper) => $keeper->getId() != $id);
+
+        $this->keeperList = $cleanedArray;
 
         $this->SaveData();
         return count($cleanedArray) < count($this->keeperList);

@@ -5,9 +5,9 @@ namespace Controllers;
 use DAO\OwnerDAOJson as OwnerDAO;
 use DAO\PetDAOJson as PetDAO;
 use DAO\KeeperDAOJson as KeeperDAO;
+use Exception;
 use Models\Owner as Owner;
 use Models\Pet;
-use Models\Keeper as Keeper;
 use Utils\Session;
 use Utils\TempValues;
 
@@ -107,35 +107,89 @@ class OwnerController
         $pet->setBreed($breed);
         $pet->setAge($age);
         $pet->setSex($sex);
-        $pet->setImage($image);
         $pet->setVaccine($vaccine);
         $pet->setOwner(Session::Get("owner"));
-        $this->petDAO->Add($pet);
-        header("location:" . FRONT_ROOT . "Owner/AddPetView");
+        $this->petDAO->Add($pet, $image);
 
+        header("location:" . FRONT_ROOT . "Owner/Pets");
     }
 
     public function AddPetView()
     {
         $this->VerifyIsLogged();
 
-        require_once(VIEWS_PATH . "add-pet.php");
+        require_once(VIEWS_PATH . "pet-add.php");
     }
 
-    public function EditPet($name, $species, $breed, $age, $sex, $image, $vaccine)
+    public function Update($id)
     {
         $this->VerifyIsLogged();
 
+        $pet = $this->petDAO->GetById($id);
+        if (!$pet || $pet->getOwner()->getId() != Session::Get("owner")->getId()) {
+            header("location:" . FRONT_ROOT . "Owner/Pets");
+            exit;
+        }
+
+        require_once(VIEWS_PATH . "pet-update.php");
+    }
+
+    public function EditPet($id, $name, $species, $breed, $age, $sex, $image, $vaccine)
+    {
+        $this->VerifyIsLogged();
+
+        $getPet = $this->petDAO->GetById($id);
+        if ($getPet->getOwner()->getId() != Session::Get("owner")->getId()) {
+            header("location:" . FRONT_ROOT . "Owner/Pets");
+            exit;
+        }
+
         $pet = new Pet();
+        $pet->setId($id);
         $pet->setName($name);
         $pet->setSpecies($species);
         $pet->setBreed($breed);
         $pet->setAge($age);
         $pet->setSex($sex);
-        $pet->setImage($image);
         $pet->setVaccine($vaccine);
+        $pet->setOwner(Session::Get("owner"));
+        
+        if($image["size"] > 0){
+            try {
+                $fileExt = explode(".", $image["name"]);
+                $fileType = strtolower(end($fileExt));
+                $filePreName = "photo-pet-" . $pet->getId();
+                $fileName = $filePreName . "." . $fileType;
+                $tempFileName = $image["tmp_name"];
+                $filePath = UPLOADS_PATH . basename($fileName);
+
+                $imageSize = getimagesize($tempFileName);
+
+                if ($imageSize !== false) {
+                    $files = glob(UPLOADS_PATH . $filePreName . ".*");
+                    foreach ($files as $file) {
+                        chmod($file, 0755); //Change the file permissions if allowed
+                        unlink($file); //remove the file
+                    }
+
+                    if (move_uploaded_file($tempFileName, $filePath)) {
+                        $pet->setImage($fileName);
+                    } else {
+                        Session::Set("error", "Error uploading image");
+                    }
+                } else {
+                    Session::Set("error", "File is not an image");
+                }
+            } catch (Exception $ex) {
+                Session::Set("error", $ex->getMessage());
+            }
+        } else {
+            $pet->setImage($getPet->getImage());
+        }
         $this->petDAO->Update($pet);
-        require_once(VIEWS_PATH . "pet-list.php");
+
+
+        header("location:" . FRONT_ROOT . "Owner/Pets#id-" . $id);
     }
 
     public function RemovePet($id)
@@ -143,13 +197,12 @@ class OwnerController
         $this->VerifyIsLogged();
 
         $pet = $this->petDAO->GetById($id);
-        if ($pet->getOwner()->getId() == Session::Get("owner")->getId()) {
+        if ($pet && $pet->getOwner()->getId() == Session::Get("owner")->getId()) {
             $this->petDAO->RemoveById($id);
         } else {
             Session::Set("error", "You can't remove this pet");
         }
         header("location:" . FRONT_ROOT . "Owner/Pets");
-
     }
 
     public function KeepersListView()
