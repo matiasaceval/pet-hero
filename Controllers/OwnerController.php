@@ -38,7 +38,7 @@ class OwnerController
         $this->IfLoggedGoToIndex();
 
         TempValues::InitValues(["firstname" => $firstname, "lastname" => $lastname, "email" => $email, "phone" => $phone]);
-        
+
         if ($password != $confirmPassword) {
             Session::Set("error", "Passwords do not match");
             header("location:" . FRONT_ROOT . "Owner/SignUpView");
@@ -51,17 +51,17 @@ class OwnerController
             exit;
         }
 
-        
+
         $owner = new Owner();
         $owner->setFirstname($firstname);
         $owner->setLastname($lastname);
         $owner->setEmail($email);
         $owner->setPhone($phone);
         $owner->setPassword(password_hash($password, PASSWORD_DEFAULT));
-        
-        
+
+
         $this->ownerDAO->Add($owner);
-        
+
         TempValues::UnsetValues();
         Session::Set("owner", $owner);
         header("location:" . FRONT_ROOT . "Owner");
@@ -122,18 +122,34 @@ class OwnerController
         require_once(VIEWS_PATH . "add-pet.php");
     }
 
-    public function EditPet(/* TODO: Parameters */)
+    public function EditPet($name, $species, $breed, $age, $sex, $image, $vaccine)
     {
         $this->VerifyIsLogged();
 
-        // TODO: Business logic
+        $pet = new Pet();
+        $pet->setName($name);
+        $pet->setSpecies($species);
+        $pet->setBreed($breed);
+        $pet->setAge($age);
+        $pet->setSex($sex);
+        $pet->setImage($image);
+        $pet->setVaccine($vaccine);
+        $this->petDAO->Update($pet);
+        require_once(VIEWS_PATH . "pet-list.php");
     }
 
-    public function RemovePet(/* TODO: Parameters */)
+    public function RemovePet($id)
     {
         $this->VerifyIsLogged();
 
-        // TODO: Business logic
+        $pet = $this->petDAO->GetById($id);
+        if ($pet->getOwner()->getId() == Session::Get("owner")->getId()) {
+            $this->petDAO->RemoveById($id);
+        } else {
+            Session::Set("error", "You can't remove this pet");
+        }
+        header("location:" . FRONT_ROOT . "Owner/Pets");
+
     }
 
     public function KeepersListView()
@@ -159,7 +175,7 @@ class OwnerController
     {
         if (Session::VerifySession("owner")) {
             header("Location: " . FRONT_ROOT . "Owner");
-			exit;
+            exit;
         } else if (Session::VerifySession("keeper")) {
             header("Location: " . FRONT_ROOT . "Keeper");
             exit;
