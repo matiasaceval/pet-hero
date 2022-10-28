@@ -100,6 +100,8 @@ class OwnerDAOJson implements IOwnerDAO
 
         $cleanedArray = array_filter($this->ownerList, fn($owner) => $owner->getId() != $id);
 
+        $this->ownerList = $cleanedArray;
+
         $this->SaveData();
         return count($cleanedArray) < count($this->ownerList);
     }

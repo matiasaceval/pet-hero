@@ -21,8 +21,6 @@ class StayDAOJson implements IStayDAO
     {
         $this->RetrieveData();
 
-        $stay->setId($this->GetNextId());
-
         array_push($this->stayList, $stay);
 
         $this->SaveData();
