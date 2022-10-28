@@ -3,7 +3,6 @@
 namespace Controllers;
 
 use DAO\KeeperDAOJson as KeeperDAO;
-use DAO\StayDAOJson as StayDAO;
 use Models\Keeper as Keeper;
 use Models\Stay as Stay;
 use Utils\Session;
@@ -11,11 +10,9 @@ use Utils\TempValues;
 
 class KeeperController {
     private KeeperDAO $keeperDAO;
-    private StayDAO $stayDAO;
 
     public function __construct() {
         $this->keeperDAO = new KeeperDAO();
-        $this->stayDAO = new StayDAO();
     }
 
     public function Index() {
@@ -101,7 +98,6 @@ class KeeperController {
         $keeper->setFee($fee);
 
         $stay = new Stay();
-        $stay->setId($keeper->getId());
         $stay->setSince($since);
         $stay->setUntil($until);
 
@@ -109,11 +105,9 @@ class KeeperController {
 
         if (Session::VerifySession("temp-keeper")) {
             Session::Unset("temp-keeper");
-            $this->keeperDAO->Add($keeper);
-            $this->stayDAO->Add($stay);
+            $this->keeperDAO->Add($keeper, $stay);
         } else {
-            $this->keeperDAO->Update($keeper);
-            $this->stayDAO->Update($stay);
+            $this->keeperDAO->Update($keeper, $stay);
         }
 
         Session::Set("keeper", $keeper);
