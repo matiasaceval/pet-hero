@@ -29,3 +29,4 @@
 
 ## Miscellaneous
 - Runs in PHP >= 7.4 
+- Need to create "Data" and "Uploads" folders on root
