@@ -70,7 +70,14 @@ require_once(VIEWS_PATH . "back-nav.php");
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <a class="dropdown-item" href="<?php echo FRONT_ROOT ?>Owner/Update?id=<?php echo $pet->GetId() ?>">Update</a>
-                                        <a class="dropdown-item" href="<?php echo FRONT_ROOT ?>Owner/Delete?id=<?php echo $pet->GetId() ?>">Delete</a>
+                                        <a class="dropdown-item" href="" onclick="
+                                            const petName = <?php echo $pet->GetName() ?>;
+                                            const petId = <?php echo $pet->GetId() ?>;
+                                            const msg = `Are you sure you want to delete ${petName} (id: ${petId})?`;
+                                            if(confirm(msg)){
+                                                window.location.href = `<?php echo FRONT_ROOT ?>Owner/RemovePet?id=${petId}`;
+                                            }
+                                            ">Delete</a>
                                     </div>
                                 </div>
                             </div>
@@ -81,7 +88,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                     <div class="row mt-4">
                         <div class="col-md-auto">
                             <div class="row" style="padding: 0px 15px 0 15px">
-                                <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/pet-placeholder.png" width="200px" height="200px">
+                                <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT.UPLOADS_PATH.$pet->getImage() ?>" width="200px" height="200px">
                             </div>
                         </div>
                         <div class="col-3">
@@ -140,5 +147,4 @@ require_once(VIEWS_PATH . "back-nav.php");
         }
         ?>
     </div>
-</div>
 </div>
