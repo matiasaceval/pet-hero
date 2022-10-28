@@ -5,7 +5,6 @@ namespace DAO;
 use DAO\OwnerDAOJson as OwnerDAO;
 use Exception;
 use Models\Pet;
-use Models\Owner;
 use Utils\Session;
 
 class PetDAOJson implements IPetDAO
@@ -88,7 +87,8 @@ class PetDAOJson implements IPetDAO
         $pet->setId($this->GetNextId());
 
         try {
-            $fileType = end(explode($image["name"], "."));
+            $fileExt = explode(".", $image["name"]);
+            $fileType = strtolower(end($fileExt));
             $fileName = "photo-pet-" . $pet->getId() . "." . $fileType;
             $tempFileName = $image["tmp_name"];
             $filePath = UPLOADS_PATH . basename($fileName);

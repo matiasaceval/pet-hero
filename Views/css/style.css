@@ -211,6 +211,10 @@ select {
     text-decoration-color: #222;
 }
 
+#pet-image {
+    border-radius: 10px;
+}
+
 /* Overwriting Bootstrap */
 .container {
     scroll-behavior: smooth;

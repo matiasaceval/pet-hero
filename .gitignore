@@ -1,4 +1,5 @@
 .idea
 Data/*
+Uploads/*
 node_modules/*
 .env
