@@ -89,13 +89,19 @@ class PetDAOJson implements IPetDAO
         try {
             $fileExt = explode(".", $image["name"]);
             $fileType = strtolower(end($fileExt));
-            $fileName = "photo-pet-" . $pet->getId() . "." . $fileType;
+            $filePreName =  "photo-pet-" . $pet->getId();
+            $fileName = $filePreName . "." . $fileType;
             $tempFileName = $image["tmp_name"];
             $filePath = UPLOADS_PATH . basename($fileName);
-
             $imageSize = getimagesize($tempFileName);
 
             if ($imageSize !== false) {
+                $files = glob(UPLOADS_PATH . $filePreName . ".*");
+                    foreach ($files as $file) {
+                        chmod($file, 0755); //Change the file permissions if allowed
+                        unlink($file); //remove the file
+                    }
+
                 if (move_uploaded_file($tempFileName, $filePath)) {
                     $pet->setImage($fileName);
                 } else {
