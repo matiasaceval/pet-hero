@@ -56,7 +56,7 @@ class KeeperController {
         $keeper->setReviews([]);
 
         TempValues::UnsetValues();
-        Session::Set("temp-keeper", $keeper);
+        TempValues::InitValues(["keeper" => $keeper]);
         header("location:" . FRONT_ROOT . "Keeper/SetFeeStayView");
     }
 
@@ -90,33 +90,35 @@ class KeeperController {
     }
 
     public function SetFeeStay($fee, $since, $until) {
-        if (Session::VerifySession("temp-keeper") == false) {
+        $tempKeeper = TempValues::GetValue("keeper-set-fee-stay");
+
+        $keeper = $tempKeeper;
+        $stay = new Stay();
+        if ($tempKeeper == null) {
             $this->VerifyIsLogged();
+
+            $keeper = Session::Get("keeper");
+            $stay = $keeper->getStay();
         }
 
-        $keeper = Session::Get("temp-keeper") ?? Session::Get("keeper");
-        $keeper->setFee($fee);
-
-        $stay = new Stay();
         $stay->setSince($since);
         $stay->setUntil($until);
-
+        
+        $keeper->setFee($fee);
         $keeper->setStay($stay);
 
-        if (Session::VerifySession("temp-keeper")) {
-            Session::Unset("temp-keeper");
+        if ($tempKeeper) {
             $this->keeperDAO->Add($keeper, $stay);
         } else {
             $this->keeperDAO->Update($keeper, $stay);
         }
 
         Session::Set("keeper", $keeper);
-
         header("Location: " . FRONT_ROOT . "Keeper/Index");
     }
 
     public function SetFeeStayView() {
-        if (Session::VerifySession("temp-keeper") == false) {
+        if (TempValues::ValueExist("keeper") == false) {
             $this->VerifyIsLogged();
         }
         include_once(VIEWS_PATH . "keeper-set-fee-stay.php");

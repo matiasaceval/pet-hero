@@ -30,11 +30,12 @@ class KeeperDAOJson implements IKeeperDAO
     {
         $this->RetrieveData();
 
-        $keeper->setId($this->GetNextId());
+        $id = $this->GetNextId();
+        $keeper->setId($id);
 
-        $stay->setId($keeper->getId());
+        $stay->setId($id);
 
-        $keeper->setStay = $stay;
+        $keeper->setStay($stay);
 
         $this->stayDAO->Add($stay);
 
@@ -126,12 +127,13 @@ class KeeperDAOJson implements IKeeperDAO
         return count($cleanedArray) < count($this->keeperList);
     }
 
-    function Update(Keeper $keeper): bool
+    function Update(Keeper $keeper, Stay $stay): bool
     {
         $this->RetrieveData();
         foreach ($this->keeperList as $key => $keeperOfList) {
             if ($keeperOfList->getId() == $keeper->getId()) {
                 $this->keeperList[$key] = $keeper;
+                $this->stayDAO->Update($stay);
                 $this->SaveData();
                 return true;
             }

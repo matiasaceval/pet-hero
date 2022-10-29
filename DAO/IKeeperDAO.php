@@ -15,7 +15,7 @@ interface IKeeperDAO
 
     public function RemoveById(int $id): bool;
 
-    public function Update(Keeper $keeper): bool;
+    public function Update(Keeper $keeper, Stay $stay): bool;
 
     public function GetByEmail(string $email): ?Keeper;
 }

@@ -4,7 +4,7 @@ use Utils\TempValues;
 use Utils\Session;
 
 TempValues::InitValues(["back-page" => FRONT_ROOT]);
-require_once(VIEWS_PATH . "back-nav.php");
+require_once(VIEWS_PATH . "back-nav-no-logout.php");
 ?>
 <div class="main">
     <div class="container-modified overflow-hidden">
@@ -18,7 +18,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                         <h2 class="form-title" style="margin-bottom: 18px">Sign up</h2>
                     </div>
                 </div>
-                <form method="POST" action="<?php echo FRONT_ROOT ?>Owner/SignUp" class="register-form" id="register-form">
+                <form method="POST" action="<?php echo FRONT_ROOT ?>Keeper/SignUp" class="register-form" id="register-form">
                     <div class="row justify-content-center mt-3">
                         <div class="col-6">
                             <div class="form-group">
