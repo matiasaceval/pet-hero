@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Keeper {
+  id        Int      @id @default(autoincrement())
+  firstname String
+  lastname  String
+  email     String   @unique
+  password  String
+  phone     String
+  Reviews   Review[]
+  stay      Stay?
+}
+
+model Owner {
+  id       Int    @id @default(autoincrement())
+  firstname String
+  lastname  String
+  email    String @unique
+  password String
+  phone    String
+  Pets     Pet[]
+}
+
+model Pet {
+  id          Int      @id @default(autoincrement())
+  name        String
+  species     String
+  breed       String
+  sex         String
+  age         String
+  image       String
+  vaccines    String
+  //relations
+  Owner       Owner    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId     Int
+  Reviews     Review[]
+}
+
+model Review {
+  id       Int      @id @default(autoincrement())
+  comment  String
+  rating   Int
+  date     DateTime @default(now())
+  //relations
+  Pet      Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+  petId    Int
+  Keeper   Keeper   @relation(fields: [keeperId], references: [id], onDelete: Cascade)
+  keeperId Int
+}
+
+model Stay {
+  id    Int      @id @unique
+  since DateTime
+  until DateTime
+
+  Keeper Keeper @relation(fields: [id], references: [id], onDelete: Cascade)
+}
