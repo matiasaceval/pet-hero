@@ -4,8 +4,8 @@ CREATE PROCEDURE getAllKeepers ()
 BEGIN
 SELECT  k.* , s.since, s.until
 FROM keeper k
-INNER JOIN stay s ON k.id = s.id;
-END $$
+LEFT JOIN stay s ON k.id = s.id; -- left join to get all keepers even if they have no stay
+END$$
 DELIMITER ;
 
 DELIMITER $$
