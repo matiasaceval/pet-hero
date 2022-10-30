@@ -23,7 +23,8 @@ model Keeper {
 
 model Owner {
   id       Int    @id @default(autoincrement())
-  name     String
+  firstname String
+  lastname  String
   email    String @unique
   password String
   phone    String
@@ -35,7 +36,6 @@ model Pet {
   name        String
   species     String
   breed       String
-  description String
   sex         String
   age         String
   image       String

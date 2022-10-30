@@ -14,7 +14,8 @@ CREATE TABLE `Keeper` (
 -- CreateTable
 CREATE TABLE `Owner` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(191) NOT NULL,
+    `firstname` VARCHAR(191) NOT NULL,
+    `lastname` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
     `phone` VARCHAR(191) NOT NULL,
@@ -29,7 +30,6 @@ CREATE TABLE `Pet` (
     `name` VARCHAR(191) NOT NULL,
     `species` VARCHAR(191) NOT NULL,
     `breed` VARCHAR(191) NOT NULL,
-    `description` VARCHAR(191) NOT NULL,
     `sex` VARCHAR(191) NOT NULL,
     `age` VARCHAR(191) NOT NULL,
     `image` VARCHAR(191) NOT NULL,
