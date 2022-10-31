@@ -106,4 +106,30 @@ class Keeper {
         }
         return $sinceDate >= $staySince && $untilDate <= $stayUntil;
     }
+
+    public function calculatePrice(string $since, string $until): int {
+        /*
+        * Check more about createFromFormat method
+        * https://www.php.net/manual/en/datetime.createfromformat.php
+        */
+        $sinceDate = \DateTime::createFromFormat("m-d-Y", $since);
+        $untilDate = \DateTime::createFromFormat("m-d-Y", $until);
+
+        /* Whole price calculation
+        *
+         * DateTimeInterface::diff() method returns a DateInterval object representing the difference between two DateTimeInterface objects.
+         * https://www.php.net/manual/en/datetime.diff.php
+         *
+         * DateInterval::d property returns the number of days in the interval.
+         * https://www.php.net/manual/en/class.dateinterval.php
+         *
+         * Example:
+         * $since = new DateTime("2020-01-01");
+         * $until = new DateTime("2020-01-03");
+         * $interval = $since->diff($until);
+         * echo $interval->d; // 2
+         */
+        $days = $sinceDate->diff($untilDate)->d;
+        return $days * $this->getFee();
+    }
 }
