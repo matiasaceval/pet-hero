@@ -2,38 +2,36 @@
 
 namespace Controllers;
 
+use DAO\KeeperDAOJson as KeeperDAO;
 use DAO\OwnerDAOJson as OwnerDAO;
 use DAO\PetDAOJson as PetDAO;
-use DAO\KeeperDAOJson as KeeperDAO;
 use Exception;
 use Models\Owner as Owner;
 use Models\Pet;
+use Models\Reservation;
+use Models\ReservationState;
 use Utils\Session;
 use Utils\TempValues;
 
-class OwnerController
-{
+class OwnerController {
     private OwnerDAO $ownerDAO;
     private PetDAO $petDAO;
     private KeeperDAO $keeperDAO;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->ownerDAO = new OwnerDAO();
         $this->petDAO = new PetDAO();
         $this->keeperDAO = new KeeperDAO();
     }
 
-    public function Index()
-    {
+    public function Index() {
         $this->VerifyIsLogged();
 
         $owner = Session::Get("owner");
         require_once(VIEWS_PATH . "owner-home.php");
     }
 
-    public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword)
-    {
+    public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
         // if there's an owner session already, redirect to home
         $this->IfLoggedGoToIndex();
 
@@ -67,8 +65,7 @@ class OwnerController
         header("location:" . FRONT_ROOT . "Owner");
     }
 
-    public function Login(string $email, string $password)
-    {
+    public function Login(string $email, string $password) {
         $owner = $this->ownerDAO->GetByEmail($email);
         if ($owner != null && password_verify($password, $owner->getPassword())) {
             Session::Set("owner", $owner);
@@ -81,15 +78,13 @@ class OwnerController
         header("Location: " . FRONT_ROOT . "Owner/LoginView");
     }
 
-    public function LogOut()
-    {
+    public function LogOut() {
         Session::Logout();
         header("Location: " . FRONT_ROOT);
         exit;
     }
 
-    public function Pets()
-    {
+    public function Pets() {
         $this->VerifyIsLogged();
 
         $petList = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
@@ -97,8 +92,7 @@ class OwnerController
         require_once(VIEWS_PATH . "pet-list.php");
     }
 
-    public function AddPet($name, $species, $breed, $age, $sex, $image, $vaccine)
-    {
+    public function AddPet($name, $species, $breed, $age, $sex, $image, $vaccine) {
         $this->VerifyIsLogged();
 
         $pet = new Pet();
@@ -114,15 +108,13 @@ class OwnerController
         header("location:" . FRONT_ROOT . "Owner/Pets");
     }
 
-    public function AddPetView()
-    {
+    public function AddPetView() {
         $this->VerifyIsLogged();
 
         require_once(VIEWS_PATH . "pet-add.php");
     }
 
-    public function Update($id)
-    {
+    public function Update($id) {
         $this->VerifyIsLogged();
 
         $pet = $this->petDAO->GetById($id);
@@ -134,8 +126,7 @@ class OwnerController
         require_once(VIEWS_PATH . "pet-update.php");
     }
 
-    public function EditPet($id, $name, $species, $breed, $age, $sex, $image, $vaccine)
-    {
+    public function EditPet($id, $name, $species, $breed, $age, $sex, $image, $vaccine) {
         $this->VerifyIsLogged();
 
         $getPet = $this->petDAO->GetById($id);
@@ -153,8 +144,8 @@ class OwnerController
         $pet->setSex($sex);
         $pet->setVaccine($vaccine);
         $pet->setOwner(Session::Get("owner"));
-        
-        if($image["size"] > 0){
+
+        if ($image["size"] > 0) {
             try {
                 $fileExt = explode(".", $image["name"]);
                 $fileType = strtolower(end($fileExt));
@@ -192,8 +183,7 @@ class OwnerController
         header("location:" . FRONT_ROOT . "Owner/Pets#id-" . $id);
     }
 
-    public function RemovePet($id)
-    {
+    public function RemovePet($id) {
         $this->VerifyIsLogged();
 
         $pet = $this->petDAO->GetById($id);
@@ -205,27 +195,23 @@ class OwnerController
         header("location:" . FRONT_ROOT . "Owner/Pets");
     }
 
-    public function KeepersListView()
-    {
+    public function KeepersListView() {
         $this->VerifyIsLogged();
         $keeperList = $this->keeperDAO->GetAll();
         require_once(VIEWS_PATH . "keeper-list.php");
     }
 
-    public function SignUpView()
-    {
+    public function SignUpView() {
         $this->IfLoggedGoToIndex();
         require_once(VIEWS_PATH . "owner-signup.php");
     }
 
-    public function LoginView()
-    {
+    public function LoginView() {
         $this->IfLoggedGoToIndex();
         require_once(VIEWS_PATH . "owner-login.php");
     }
 
-    private function IfLoggedGoToIndex()
-    {
+    private function IfLoggedGoToIndex() {
         if (Session::VerifySession("owner")) {
             header("Location: " . FRONT_ROOT . "Owner");
             exit;
@@ -235,12 +221,61 @@ class OwnerController
         }
     }
 
-    private function VerifyIsLogged()
-    {
+    private function VerifyIsLogged() {
         if (Session::VerifySession("owner") == false) {
             Session::Set("error", "You must be logged in to access this page.");
             header("location:" . FRONT_ROOT . "Owner/LoginView");
             exit;
         }
+    }
+
+    public function PlaceReservation(int $petId, int $keeperId, string $since, string $until) {
+        $this->VerifyIsLogged();
+
+        $pet = $this->petDAO->GetById($petId);
+        $keeper = $this->keeperDAO->GetById($keeperId);
+
+        if (!$pet || !$keeper) {
+            Session::Set("error", "Invalid data");
+            header("location:" . FRONT_ROOT . "Owner/Pets");
+            exit;
+        }
+
+        /*
+        * Check more about createFromFormat method
+        * https://www.php.net/manual/en/datetime.createfromformat.php
+        */
+        $untilDateFormat = \DateTime::createFromFormat("m-d-Y", $since);
+        $sinceDateFormat = \DateTime::createFromFormat("m-d-Y", $until);
+        
+
+        $reservation = new Reservation();
+        $reservation->setPet($pet);
+        $reservation->setKeeper($keeper);
+        $reservation->setSince($since);
+        $reservation->setUntil($until);
+        $reservation->setState(ReservationState::PENDING);
+
+        /* Whole price calculation
+        *
+         * DateTimeInterface::diff() method returns a DateInterval object representing the difference between two DateTimeInterface objects.
+         * https://www.php.net/manual/en/datetime.diff.php
+         *
+         * DateInterval::d property returns the number of days in the interval.
+         * https://www.php.net/manual/en/class.dateinterval.php
+         *
+         * Example:
+         * $since = new DateTime("2020-01-01");
+         * $until = new DateTime("2020-01-03");
+         * $interval = $since->diff($until);
+         * echo $interval->d; // 2
+         */
+        $price = $keeper->getFee() * $untilDateFormat->diff($sinceDateFormat)->d;
+        $reservation->setPrice($price);
+
+        // TODO: ReservationDAO
+        $this->reservationDAO->Add($reservation);
+
+        header("location:" . FRONT_ROOT . "Owner/Resservations");
     }
 }
