@@ -1,13 +1,6 @@
 <?php
 
 use Utils\Session;
-use Utils\TempValues;
-
-$tempKeeper = TempValues::GetValue("keeper");
-$keeper = $tempKeeper ?? Session::Get("keeper");
-if ($tempKeeper){
-    TempValues::InitValues(["keeper-set-fee-stay" => $keeper]);
-}
 
 $name = explode(" ", $keeper->getFirstname())[0];
 $fee = '';

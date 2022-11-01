@@ -81,11 +81,13 @@ class KeeperController {
 
     public function SignUpView() {
         $this->IfLoggedGoToIndex();
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "keeper-signup.php");
     }
 
     public function LoginView() {
         $this->IfLoggedGoToIndex();
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "keeper-login.php");
     }
 
@@ -132,6 +134,13 @@ class KeeperController {
     public function SetFeeStayView() {
         if (TempValues::ValueExist("keeper") == false) {
             $this->VerifyIsLogged();
+        }
+        $tempKeeper = TempValues::GetValue("keeper");
+        $keeper = $tempKeeper ?? Session::Get("keeper");
+        if ($tempKeeper) {
+            TempValues::InitValues(["keeper-set-fee-stay" => $keeper]);
+        } else {
+            TempValues::InitValues(["back-page" => FRONT_ROOT]);
         }
         include_once(VIEWS_PATH . "keeper-set-fee-stay.php");
     }
