@@ -4,5 +4,8 @@
   },
   "dependencies": {
     "@prisma/client": "^4.5.0"
+  },
+  "prisma":{
+    "schema": "Schema/prisma/schema.prisma"
   }
 }
