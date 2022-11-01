@@ -3,4 +3,3 @@ Data/*
 Uploads/*
 node_modules/*
 .env
-Schema/prisma/migrations/*
