@@ -132,4 +132,16 @@ class Keeper {
         $days = $sinceDate->diff($untilDate)->d;
         return $days * $this->getFee();
     }
+
+    public function getReviewsAverage(){
+        if(count($this->getReviews()) == 0){
+            return -1;
+        }
+
+        $total = 0;
+        foreach($this->reviews as $review){
+            $total += $review->getRating();
+        }
+        return $total / count($this->reviews);
+    }
 }

@@ -198,7 +198,29 @@ class OwnerController {
     public function KeepersListView() {
         $this->VerifyIsLogged();
         $keeperList = $this->keeperDAO->GetAll();
-        require_once(VIEWS_PATH . "keeper-list.php");
+        $keepersFromToday = array_filter($keeperList, function ($keeper) {
+            $until = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getUntil());
+            $today = new \DateTime();
+            return $until >= $today;
+        });
+        usort($keepersFromToday, function ($a, $b) {
+            $aDate = \DateTime::createFromFormat("m-d-Y", $a->getStay()->getUntil());
+            $bDate = \DateTime::createFromFormat("m-d-Y", $b->getStay()->getUntil());
+            return $aDate <=> $bDate;
+        });
+        require_once(VIEWS_PATH . "owner-list-keepers.php");
+    }
+
+    public function Reviews($id){
+        $this->VerifyIsLogged();
+        $keeper = $this->keeperDAO->GetById($id);
+        if($keeper == null){
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+        $reviews = $keeper->getReviews();
+        TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/KeepersListView"]);
+        require_once(VIEWS_PATH . "keeper-reviews.php");
     }
 
     public function SignUpView() {

@@ -117,6 +117,18 @@ class KeeperController {
         header("Location: " . FRONT_ROOT . "Keeper/Index");
     }
 
+    public function Reviews($id = null) {
+        $this->VerifyIsLogged();
+        $keeper = $id ? $this->keeperDAO->GetById($id) : Session::Get("keeper");
+        if($keeper == null){
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+        $reviews = $keeper->getReviews();
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "keeper-reviews.php");
+    }
+
     public function SetFeeStayView() {
         if (TempValues::ValueExist("keeper") == false) {
             $this->VerifyIsLogged();

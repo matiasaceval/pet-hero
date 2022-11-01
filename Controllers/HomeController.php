@@ -16,6 +16,10 @@ class HomeController {
         
         require_once(VIEWS_PATH . "index.php");
     }
+
+    public function NotFound() {
+        require_once(VIEWS_PATH . "404.php");
+    }
 }
 
 ?>

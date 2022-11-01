@@ -14,6 +14,18 @@ body {
     padding-top: 124px;
 }
 
+.glitch-bg {
+    background: url(../img/background-glitch.png) no-repeat center center fixed;
+    background-size: cover;
+    position:fixed;
+    padding:0;
+    margin:0;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+}
+
 a:hover {
     text-decoration: none;
 }
@@ -166,6 +178,11 @@ select {
     background-size: cover;
 }
 
+.keeper-card-background {
+    background-image: url(../img/keeper-card-bg.png);
+    background-size: cover;
+}
+
 .small-card-box {
     border-radius: 10px;
     padding: 24px 100px 24px 24px;
@@ -267,6 +284,102 @@ select {
 
 .calendar-table {
     color: #222;
+}
+
+h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+}
+
+/* kl = keeper list */
+.kl h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+    border: none;
+    background-color: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.kl h2 {
+    font-size: 20px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kl p {
+    font-size: 18px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kl-card-box {
+    border-radius: 10px;
+    padding: 32px;
+    margin: 12px 12px 12px;
+    width: 500px;
+    position: relative;
+} 
+
+/* kr = keeper reviews */
+.kr-card-box {
+    border-radius: 10px;
+    padding: 32px;
+    margin: 12px 12px 12px;
+    width: 800px;
+    position: relative;
+    transform: translateY(25%);
+    background-color: #fefcfd;
+}
+
+.kr-card-box h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kr-card-box h3 {
+    font-size: 20px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kr-card-box h4 {
+    font-size: 18px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kr-card-box p {
+    font-size: 18px;
+    color: #222;
+    border: none;
+    background-color: none;
+    max-width: 600px;
+}
+
+.kr-comment-box {
+    white-space: wrap;
+    padding: 12px 0px 12px 0px;
+}
+
+.light-text-color {
+    color: rgba(34, 34, 34, 0.3);
+}
+
+/* Star icon */
+.checked {
+  color: orange;
 }
 
 /* Overwriting Bootstrap */

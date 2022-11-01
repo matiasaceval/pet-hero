@@ -6,7 +6,7 @@ class Reviews {
 
     private int $id;
     private string $comment;
-    private int $rating;
+    private float $rating;
     private string $date;
     private Pet $pet;
 
@@ -27,11 +27,11 @@ class Reviews {
         $this->comment = $comment;
     }
 
-    public function getRating(): int {
+    public function getRating(): float {
         return $this->rating;
     }
 
-    public function setRating(int $rating): void {
+    public function setRating(float $rating): void {
         $this->rating = $rating;
     }
 
