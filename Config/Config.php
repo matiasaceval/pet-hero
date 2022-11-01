@@ -8,7 +8,6 @@ define("UPLOADS_PATH", "Uploads/");
 define("CSS_PATH", FRONT_ROOT.VIEWS_PATH . "css/");
 define("JS_PATH", FRONT_ROOT.VIEWS_PATH . "js/");
 define("FONTS_PATH", FRONT_ROOT . VIEWS_PATH . "fonts/");
-define("THREEJS_PATH", FRONT_ROOT.VIEWS_PATH . "threejs/");
 
 define("DB_HOST", "localhost");
 define("DB_NAME", "pet-hero");
