@@ -19,6 +19,7 @@ model Keeper {
   phone     String
   Reviews   Review[]
   stay      Stay?
+  Reservation Reservation[]
 }
 
 model Owner {
@@ -44,6 +45,7 @@ model Pet {
   Owner       Owner    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId     Int
   Reviews     Review[]
+  Reservations Reservation[]
 }
 
 model Review {
@@ -64,4 +66,21 @@ model Stay {
   until DateTime
 
   Keeper Keeper @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+
+model Reservation {
+  id       Int      @id @default(autoincrement())
+  since    DateTime
+  until    DateTime
+  state    String
+  price    Float
+  createdAt DateTime @default(now()) 
+
+  //relations
+  Pet      Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+  petId    Int
+  Keeper   Keeper   @relation(fields: [keeperId], references: [id], onDelete: Cascade)
+  keeperId Int
+
 }
