@@ -1,8 +1,5 @@
 <?php
 
-use Utils\TempValues;
-
-TempValues::InitValues(["back-page" => FRONT_ROOT]);
 require_once(VIEWS_PATH . "back-nav.php");
 ?>
 <div class="container overflow-hidden">

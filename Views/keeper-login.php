@@ -2,7 +2,6 @@
 use Utils\TempValues;
 use Utils\Session;
 
-TempValues::InitValues(["back-page" => FRONT_ROOT]);
 require_once(VIEWS_PATH . "back-nav-no-logout.php");
 ?>
 <div class="main">

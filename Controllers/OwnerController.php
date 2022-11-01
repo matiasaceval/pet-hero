@@ -89,6 +89,7 @@ class OwnerController {
 
         $petList = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
 
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "pet-list.php");
     }
 
@@ -110,7 +111,7 @@ class OwnerController {
 
     public function AddPetView() {
         $this->VerifyIsLogged();
-
+        TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/Pets"]);
         require_once(VIEWS_PATH . "pet-add.php");
     }
 
@@ -123,6 +124,7 @@ class OwnerController {
             exit;
         }
 
+        TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/Pets"]);
         require_once(VIEWS_PATH . "pet-update.php");
     }
 
@@ -195,19 +197,33 @@ class OwnerController {
         header("location:" . FRONT_ROOT . "Owner/Pets");
     }
 
-    public function KeepersListView() {
+    public function KeepersListView($since = null, $until = null) {
         $this->VerifyIsLogged();
         $keeperList = $this->keeperDAO->GetAll();
-        $keepersFromToday = array_filter($keeperList, function ($keeper) {
-            $until = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getUntil());
-            $today = new \DateTime();
-            return $until >= $today;
-        });
+        if($since == null || $until == null) {
+            // only show those who are available
+            $keepersFromToday = array_filter($keeperList, function ($keeper) {
+                $until = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getUntil());
+                $today = new \DateTime();
+                return $until >= $today;
+            });
+        } else {
+            // show those who are available between the dates
+            $keepersFromToday = array_filter($keeperList, function ($keeper) use ($since, $until) {
+                $keeperSince = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getSince());
+                $keeperUntil = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getUntil());
+                $since = \DateTime::createFromFormat("m-d-Y", $since);
+                $until = \DateTime::createFromFormat("m-d-Y", $until);
+                return ($since >= $keeperSince) && ($until <= $keeperUntil);
+            });
+
+        }
         usort($keepersFromToday, function ($a, $b) {
             $aDate = \DateTime::createFromFormat("m-d-Y", $a->getStay()->getUntil());
             $bDate = \DateTime::createFromFormat("m-d-Y", $b->getStay()->getUntil());
             return $aDate <=> $bDate;
         });
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "owner-list-keepers.php");
     }
 
@@ -223,13 +239,28 @@ class OwnerController {
         require_once(VIEWS_PATH . "keeper-reviews.php");
     }
 
+    public function PlaceReservationView(int $id) {
+        $this->VerifyIsLogged();
+        $keeper = $this->keeperDAO->GetById($id);
+        if($keeper == null){
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+        $pets = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
+        TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/KeepersListView"]);
+        require_once(VIEWS_PATH . "owner-reservation.php");
+
+    }
+
     public function SignUpView() {
         $this->IfLoggedGoToIndex();
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "owner-signup.php");
     }
 
     public function LoginView() {
         $this->IfLoggedGoToIndex();
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "owner-login.php");
     }
 

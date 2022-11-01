@@ -1,9 +1,7 @@
 <?php
 
 use Utils\Session;
-use Utils\TempValues;
 
-TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/Pets"]);
 require_once(VIEWS_PATH . "back-nav.php");
 
 ?>
