@@ -18,9 +18,21 @@ require_once(VIEWS_PATH . "back-nav.php");
                         <?php
                         $rating = round($keeper->getReviewsAverage(), 1);
                         if ($rating == -1) {
-                        ?> <h4 class="text-center"><span style="color: #222;">Not reviewed</span></h4> <?php
-                                                                                                    } else {
-                                                                                                        ?>
+                        ?>
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-md-auto" style="padding-right: 4px">
+                                    <h4 class="text-center"><span style="color: #222;">Not reviewed</span></h4>
+                                </div>
+                                <div class="col-md-auto" style="">
+                                    <h4>|</h4>
+                                </div>
+                                <div class="col-md-auto" style="padding-left: 4px">
+                                    <h4><span style="color: #222;">daily fee: $<?php echo $keeper->getFee() ?></span></h4>
+                                </div>
+                            </div>
+                        <?php
+                        } else {
+                        ?>
                             <div class="row align-items-center justify-content-center">
                                 <div class="col-md-auto" style="padding-right: 4px">
                                     <h2><span style="color: #222; font-size: 24px"><?php echo $rating ?></span></h2>
@@ -28,13 +40,13 @@ require_once(VIEWS_PATH . "back-nav.php");
                                 <div class="col-md-auto" style="padding-left: 4px">
                                     <h4>
                                         <?php
-                                                                                                        for ($i = 1; $i <= 5; $i++) {
-                                                                                                            if ($i <= $rating) {
-                                                                                                                echo '<span class="light-text-color fa fa-star checked"></span>';
-                                                                                                            } else {
-                                                                                                                echo '<span class="light-text-color fa fa-star"></span>';
-                                                                                                            }
-                                                                                                        }
+                                        for ($i = 1; $i <= 5; $i++) {
+                                            if ($i <= $rating) {
+                                                echo '<span class="light-text-color fa fa-star checked"></span>';
+                                            } else {
+                                                echo '<span class="light-text-color fa fa-star"></span>';
+                                            }
+                                        }
                                         ?>
                                     </h4>
                                 </div>
