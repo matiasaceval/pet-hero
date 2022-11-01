@@ -5,6 +5,49 @@ use Utils\TempValues;
 TempValues::InitValues(["back-page" => FRONT_ROOT]);
 require_once(VIEWS_PATH . "back-nav.php");
 ?>
+
+<script>
+    function filterBtn() {
+        const url = window.location.pathname;
+        $('input[id="daterange"]').click();
+    }
+</script>
+<form id="filter-form" method="get" action="<?php echo FRONT_ROOT ?>Owner/KeepersListView">
+    <input type="hidden" id="since" name="since" />
+    <input type="hidden" id="until" name="until" />
+    <script>
+        $(function() {
+            const minDate = format(new Date());
+            const maxDate = format(new Date(), 1);
+            $('button[id="filter-btn"]').daterangepicker({
+                opens: 'center',
+                minDate: minDate,
+                maxDate: maxDate,
+            }, function(start, end, label) {
+                if (start == "" || end == "") {
+                    alert('Please select a valid range of days!');
+                } else {
+                    $('input[id="since"]').val(start.format('MM-DD-YYYY'));
+                    $('input[id="until"]').val(end.format('MM-DD-YYYY'));
+                    $('#filter-form').submit();
+                }
+            });
+
+            if (!since && !until) {
+                $('input[id="daterange"]').val('');
+                $('input[id="daterange"]').attr("placeholder", "Click to select a date range");
+            }
+        });
+
+        function format(date, extraYear = 0) {
+            return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear() + extraYear}`
+        }
+
+        function isDate(date) {
+            return (new Date(date) !== " Invalid Date") && !isNaN(new Date(date));
+        }
+    </script>
+</form>
 <div class="container overflow-hidden">
     <div class="centered-wrapper">
         <?php
@@ -22,11 +65,37 @@ require_once(VIEWS_PATH . "back-nav.php");
                 </div>
                 <div class="row mt-5 justify-content-center">
                     <div class="col-md-auto">
-                        <a href="<?php echo FRONT_ROOT ?>">
-                            <button class="btn btn-primary">Go back</button>
+                        <a href="<?php echo ($since && $until) ? FRONT_ROOT . "Owner/KeepersListView" : FRONT_ROOT ?>">
+                            <button class="btn btn-primary"><?php echo ($since && $until) ? "Clear filter" : "Go back" ?></button>
                         </a>
                     </div>
                 </div>
+            </div>
+        <?php } else { ?>
+            <div class="row justify-content-center" style="flex-direction: column">
+                <div class="row justify-content-center">
+                    <div class="col-md-auto" style="padding: 4px">
+                        <button class="btn btn-primary" type="button" id="filter-btn" onclick="filterBtn();">Filter</button>
+                    </div>
+                    <?php if ($since && $until) { ?>
+                        <div class="col-md-auto" style="padding: 4px">
+                            <a href="<?php echo FRONT_ROOT . "Owner/KeepersListView" ?>">
+                                <button class="btn btn-primary" type="button" title="Clear filter"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </a>
+                        </div>
+                    <?php } ?>
+                </div>
+                <?php if ($since || $until) { ?>
+                    <div class="row mt-1">
+                        <div class="col-md-auto">
+                            <?php if($since && $until) { ?>
+                                <p><span style="color: #fefcfd">Showing keepers available from <span style="font-weight:bold"><?php echo $since ?></span> to <span style="font-weight:bold"><?php echo $until ?></span></span></p>
+                            <?php } else { ?>
+                                <p><span style="color: #fefcfd">Please enter a full range of days to filter properly!</span></p>
+                            <?php } ?>
+                        </div>
+                    </div>
+                <?php }?>
             </div>
         <?php } ?>
     </div>
@@ -46,18 +115,18 @@ require_once(VIEWS_PATH . "back-nav.php");
                         <div class="row mt-2">
                             <?php
                             $rating = round($keeper->getReviewsAverage(), 1);
-                            if($rating == -1){
-                                ?> <p><span>Not reviewed</span></p> <?php
-                            } else {
-                                for ($i = 1; $i <= 5; $i++) {
-                                    if ($i <= $rating) {
-                                        echo '<span class="light-text-color fa fa-star checked"></span>';
-                                    } else {
-                                        echo '<span class="light-text-color fa fa-star"></span>';
-                                    }
-                                }
-                            }
-                            ?>
+                            if ($rating == -1) {
+                            ?> <p><span>Not reviewed</span></p> <?php
+                                                            } else {
+                                                                for ($i = 1; $i <= 5; $i++) {
+                                                                    if ($i <= $rating) {
+                                                                        echo '<span class="light-text-color fa fa-star checked"></span>';
+                                                                    } else {
+                                                                        echo '<span class="light-text-color fa fa-star"></span>';
+                                                                    }
+                                                                }
+                                                            }
+                                                                ?>
                         </div>
                         <div class="row mt-4">
                             <h2>fee per day: <span style="font-weight: bold">$<?php echo $keeper->getFee() ?><span></h2>

@@ -195,14 +195,27 @@ class OwnerController {
         header("location:" . FRONT_ROOT . "Owner/Pets");
     }
 
-    public function KeepersListView() {
+    public function KeepersListView($since = null, $until = null) {
         $this->VerifyIsLogged();
         $keeperList = $this->keeperDAO->GetAll();
-        $keepersFromToday = array_filter($keeperList, function ($keeper) {
-            $until = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getUntil());
-            $today = new \DateTime();
-            return $until >= $today;
-        });
+        if($since == null || $until == null) {
+            // only show those who are available
+            $keepersFromToday = array_filter($keeperList, function ($keeper) {
+                $until = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getUntil());
+                $today = new \DateTime();
+                return $until >= $today;
+            });
+        } else {
+            // show those who are available between the dates
+            $keepersFromToday = array_filter($keeperList, function ($keeper) use ($since, $until) {
+                $keeperSince = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getSince());
+                $keeperUntil = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getUntil());
+                $since = \DateTime::createFromFormat("m-d-Y", $since);
+                $until = \DateTime::createFromFormat("m-d-Y", $until);
+                return ($since >= $keeperSince) && ($until <= $keeperUntil);
+            });
+
+        }
         usort($keepersFromToday, function ($a, $b) {
             $aDate = \DateTime::createFromFormat("m-d-Y", $a->getStay()->getUntil());
             $bDate = \DateTime::createFromFormat("m-d-Y", $b->getStay()->getUntil());
