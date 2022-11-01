@@ -9,7 +9,7 @@ require_once(VIEWS_PATH . "back-nav.php");
             <div class="kr-card-box">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="text-center"><?php echo ucwords($keeper->getFirstname() . " " . $keeper->getLastname()) ?></h2>
+                        <h2 class="text-center"><?php echo ucwords($keeper->getFullname()) ?></h2>
                         <?php 
                             $rating = round($keeper->getReviewsAverage(), 1);
                             if($rating == -1){

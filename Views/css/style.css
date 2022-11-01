@@ -377,6 +377,65 @@ h1 {
     color: rgba(34, 34, 34, 0.3);
 }
 
+.opr-card-box {
+    background-color: #fefcfd;
+    border-radius: 10px;
+    margin: 0 auto;
+    padding: 64px 48px 64px 48px;
+    width: fit-content;
+    position: relative;
+}
+
+.opr-card-box h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.opr-card-box h3 {
+    font-size: 20px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.opr-card-box h4 {
+    font-size: 18px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.opr-card-box p {
+    font-size: 18px;
+    color: #222;
+    border: none;
+    background-color: none;
+    max-width: 600px;
+}
+
+.opr-card-box select {
+    font-size: 18px;
+    color: #222;
+    border:#222 1px solid;
+    border-radius: 10px;
+    background-color: none;
+    padding: 4px;
+    max-width: 600px;
+}
+
+.opr-card-box input {
+    font-size: 17px;
+    color: #222;
+    border:#222 1px solid;
+    border-radius: 10px;
+    background-color: none;
+    padding: 4px;
+    max-width: 600px;
+}
+
 /* Star icon */
 .checked {
   color: orange;

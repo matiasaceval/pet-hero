@@ -5,6 +5,7 @@ namespace Controllers;
 use DAO\KeeperDAOJson as KeeperDAO;
 use DAO\OwnerDAOJson as OwnerDAO;
 use DAO\PetDAOJson as PetDAO;
+use DAO\ReservationDAOJson as ReservationDAO;
 use Exception;
 use Models\Owner as Owner;
 use Models\Pet;
@@ -22,6 +23,7 @@ class OwnerController {
         $this->ownerDAO = new OwnerDAO();
         $this->petDAO = new PetDAO();
         $this->keeperDAO = new KeeperDAO();
+        $this->reservationDAO = new ReservationDAO();
     }
 
     public function Index() {
@@ -247,42 +249,14 @@ class OwnerController {
             exit;
         }
         $pets = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
+        $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
         TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/KeepersListView"]);
-        require_once(VIEWS_PATH . "owner-reservation.php");
+        require_once(VIEWS_PATH . "owner-place-reservation.php");
 
     }
 
-    public function SignUpView() {
-        $this->IfLoggedGoToIndex();
-        TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "owner-signup.php");
-    }
-
-    public function LoginView() {
-        $this->IfLoggedGoToIndex();
-        TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "owner-login.php");
-    }
-
-    private function IfLoggedGoToIndex() {
-        if (Session::VerifySession("owner")) {
-            header("Location: " . FRONT_ROOT . "Owner");
-            exit;
-        } else if (Session::VerifySession("keeper")) {
-            header("Location: " . FRONT_ROOT . "Keeper");
-            exit;
-        }
-    }
-
-    private function VerifyIsLogged() {
-        if (Session::VerifySession("owner") == false) {
-            Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LoginView");
-            exit;
-        }
-    }
-
-    public function PlaceReservation(int $petId, int $keeperId, string $since, string $until) {
+    public function PlaceReservation(int $petId, int $keeperId, string $since, string $until)
+    {
         $this->VerifyIsLogged();
 
         $pet = $this->petDAO->GetById($petId);
@@ -313,5 +287,35 @@ class OwnerController {
         $this->reservationDAO->Add($reservation);
 
         header("location:" . FRONT_ROOT . "Owner/Resservations");
+    }
+
+    public function SignUpView() {
+        $this->IfLoggedGoToIndex();
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "owner-signup.php");
+    }
+
+    public function LoginView() {
+        $this->IfLoggedGoToIndex();
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "owner-login.php");
+    }
+
+    private function IfLoggedGoToIndex() {
+        if (Session::VerifySession("owner")) {
+            header("Location: " . FRONT_ROOT . "Owner");
+            exit;
+        } else if (Session::VerifySession("keeper")) {
+            header("Location: " . FRONT_ROOT . "Keeper");
+            exit;
+        }
+    }
+
+    private function VerifyIsLogged() {
+        if (Session::VerifySession("owner") == false) {
+            Session::Set("error", "You must be logged in to access this page.");
+            header("location:" . FRONT_ROOT . "Owner/LoginView");
+            exit;
+        }
     }
 }

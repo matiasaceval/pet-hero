@@ -87,14 +87,14 @@ require_once(VIEWS_PATH . "back-nav.php");
                 <?php if ($since || $until) { ?>
                     <div class="row mt-1">
                         <div class="col-md-auto">
-                            <?php if($since && $until) { ?>
+                            <?php if ($since && $until) { ?>
                                 <p><span style="color: #fefcfd">Showing keepers available from <span style="font-weight:bold"><?php echo $since ?></span> to <span style="font-weight:bold"><?php echo $until ?></span></span></p>
                             <?php } else { ?>
                                 <p><span style="color: #fefcfd">Please enter a full range of days to filter properly!</span></p>
                             <?php } ?>
                         </div>
                     </div>
-                <?php }?>
+                <?php } ?>
             </div>
         <?php } ?>
     </div>
@@ -108,7 +108,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                     <div class="col-8">
                         <div class="row">
                             <!-- Name -->
-                            <?php $name = ucwords($keeper->getFirstname() . " " . $keeper->getLastname()); ?>
+                            <?php $name = ucwords($keeper->getFullname()); ?>
                             <h1 title="<?php echo $name ?>"><?php echo $name ?></h1>
                         </div>
                         <div class="row mt-2">
@@ -151,7 +151,9 @@ require_once(VIEWS_PATH . "back-nav.php");
                     <a href="<?php echo FRONT_ROOT ?>Owner/Reviews?id=<?php echo $keeper->getId() ?>">
                         <button class="btn btn-secondary" <?php if (empty($keeper->getReviews())) echo "disabled" ?>>See reviews</button>
                     </a>
-                    <button class="btn btn-secondary">Book</button>
+                    <a href="<?php echo FRONT_ROOT ?>Owner/PlaceReservationView?id=<?php echo $keeper->getId() ?>">
+                        <button class="btn btn-secondary">Book</button>
+                    </a>
                 </div>
             </div>
         <?php } ?>
