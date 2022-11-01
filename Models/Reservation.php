@@ -8,7 +8,7 @@ class Reservation {
     private string $since;
     private string $until;
     private string $state;
-    private int $price;
+    private float $price;
     private string $createdAt;
     private int $id;
 
@@ -85,14 +85,14 @@ class Reservation {
     /**
      * @return int
      */
-    public function getPrice(): int {
+    public function getPrice(): float {
         return $this->price;
     }
 
     /**
      * @param int $price
      */
-    public function setPrice(int $price): void {
+    public function setPrice(float $price): void {
         $this->price = $price;
     }
 
