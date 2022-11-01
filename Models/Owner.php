@@ -65,6 +65,9 @@ class Owner {
         $this->phone = $phone;
     }
 
+    public function getFullname(): string {
+        return $this->firstname . " " . $this->lastname;
+    }
 }
 
 ?>

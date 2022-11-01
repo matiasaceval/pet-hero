@@ -93,6 +93,10 @@ class Keeper {
         $this->stay = $stay;
     }
 
+    public function getFullname(): string {
+        return $this->firstname . " " . $this->lastname;
+    }
+
     public function isDateAvailable(string $since, string $until): bool {
         $staySince = \DateTime::createFromFormat("m-d-Y", $this->getStay()->getSince());
         $stayUntil = \DateTime::createFromFormat("m-d-Y", $this->getStay()->getUntil());
