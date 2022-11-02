@@ -203,7 +203,7 @@ class OwnerController {
     public function KeepersListView($since = null, $until = null) {
         $this->VerifyIsLogged();
         $keeperList = $this->keeperDAO->GetAll();
-        if($since == null || $until == null) {
+        if ($since == null || $until == null) {
             // only show those who are available
             $keepersFromToday = array_filter($keeperList, function ($keeper) {
                 $until = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getUntil());
@@ -221,6 +221,42 @@ class OwnerController {
             });
 
         }
+
+        $keepersFromToday = array_filter($keepersFromToday, function ($keeper) {
+            $stay = $keeper->getStay();
+            $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
+            // filter reservations that are in the same period of the stay
+            $reservations = array_filter($reservations, function ($reservation) use ($stay) {
+                return $reservation->getSince() >= $stay->getSince() && $reservation->getUntil() <= $stay->getUntil();
+            });
+            // sort reservations by since date
+            usort($reservations, function ($a, $b) {
+                return $a->getSince() <=> $b->getSince();
+            });
+            // check if there are available days between reservations
+            $availableDays = 0;
+            $lastUntil = $stay->getSince();
+            foreach ($reservations as $reservation) {
+
+                $lastUntil = \DateTime::createFromFormat("m-d-Y", $lastUntil);
+                $days = \DateTime::createFromFormat("m-d-Y", $reservation->getSince())->diff($lastUntil)->days;
+                $availableDays += $days;
+
+                $lastUntil->modify("+2 day");
+                if ($lastUntil->format("m-d-Y") == $reservation->getSince()) {
+                    $availableDays -= $days;
+                }
+
+                $availableDays = $availableDays <= 1 ? 0 : $availableDays;
+                $lastUntil = $reservation->getUntil();
+            }
+            $lastUntil = \DateTime::createFromFormat("m-d-Y", $lastUntil);
+            $availableDays += \DateTime::createFromFormat("m-d-Y", $stay->getUntil())->diff($lastUntil)->days;
+            $availableDays = $availableDays <= 1 ? 0 : $availableDays;
+            return $availableDays >= 1;
+            //
+        });
+
         usort($keepersFromToday, function ($a, $b) {
             $aDate = \DateTime::createFromFormat("m-d-Y", $a->getStay()->getUntil());
             $bDate = \DateTime::createFromFormat("m-d-Y", $b->getStay()->getUntil());
@@ -230,10 +266,10 @@ class OwnerController {
         require_once(VIEWS_PATH . "owner-list-keepers.php");
     }
 
-    public function Reviews($id){
+    public function Reviews($id) {
         $this->VerifyIsLogged();
         $keeper = $this->keeperDAO->GetById($id);
-        if($keeper == null){
+        if ($keeper == null) {
             header("location:" . FRONT_ROOT . "Home/NotFound");
             exit;
         }
@@ -245,7 +281,7 @@ class OwnerController {
     public function PlaceReservationView(int $id) {
         $this->VerifyIsLogged();
         $keeper = $this->keeperDAO->GetById($id);
-        if($keeper == null){
+        if ($keeper == null) {
             header("location:" . FRONT_ROOT . "Home/NotFound");
             exit;
         }
@@ -256,8 +292,7 @@ class OwnerController {
 
     }
 
-    public function PlaceReservation(int $petId, int $keeperId, string $since, string $until)
-    {
+    public function PlaceReservation(int $petId, int $keeperId, string $since, string $until) {
         $this->VerifyIsLogged();
 
         $pet = $this->petDAO->GetById($petId);
