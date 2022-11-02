@@ -1,5 +1,6 @@
 <?php
 
+use Utils\Session;
 use Utils\TempValues;
 
 require_once(VIEWS_PATH . "back-nav.php");
@@ -47,6 +48,19 @@ require_once(VIEWS_PATH . "back-nav.php");
         }
     </script>
 </form>
+<?php
+$err = Session::Get("error");
+$succ = Session::Get("success");
+if ($err || $succ) { ?>
+    <div class="row mt-1 justify-content-center">
+        <div class="col-md-auto">
+            <p><span style="color: #fefcfd"><?php echo $err ?? $succ ?></span></p>
+        </div>
+    </div>
+<?php
+    if($err) Session::Unset('error');
+    if($succ) Session::Unset('success');
+} ?>
 <div class="container overflow-hidden">
     <div class="centered-wrapper">
         <?php

@@ -1,7 +1,22 @@
 <?php
 
+use Utils\Session;
+
 require_once(VIEWS_PATH . "back-nav.php");
 ?>
+<?php
+$err = Session::Get("error");
+$succ = Session::Get("success");
+if ($err || $succ) { ?>
+    <div class="row mt-1 justify-content-center">
+        <div class="col-md-auto">
+            <p><span style="color: #fefcfd"><?php echo $err ?? $succ ?></span></p>
+        </div>
+    </div>
+<?php
+    if ($err) Session::Unset('error');
+    if ($succ) Session::Unset('success');
+} ?>
 <div class="container overflow-hidden">
     <div class="centered-wrapper">
         <?php
@@ -85,7 +100,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                     <div class="row mt-4">
                         <div class="col-md-auto">
                             <div class="row" style="padding: 0px 15px 0 15px">
-                                <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT.UPLOADS_PATH.$pet->getImage() ?>" width="200px" height="200px">
+                                <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() ?>" width="200px" height="200px">
                             </div>
                         </div>
                         <div class="col-3">
