@@ -3,19 +3,27 @@
 namespace Controllers;
 
 use DAO\KeeperDAOJson as KeeperDAO;
+use DAO\ReservationDAOJson as ReservationDAO;
 use Models\Keeper as Keeper;
 use Models\Stay as Stay;
+use Models\Reservation as Reservation;
+use Models\ReservationState as ReservationState;
 use Utils\Session;
 use Utils\TempValues;
 
-class KeeperController {
+class KeeperController
+{
     private KeeperDAO $keeperDAO;
+    private ReservationDAO $reservationDAO;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->keeperDAO = new KeeperDAO();
+        $this->reservationDAO = new ReservationDAO();
     }
 
-    public function Index() {
+    public function Index()
+    {
         $this->VerifyIsLogged();
         // TODO: Keeper home view
 
@@ -28,7 +36,8 @@ class KeeperController {
         echo "</pre>";
     }
 
-    public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
+    public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword)
+    {
         // if there's an keeper session already, redirect to home
         $this->IfLoggedGoToIndex();
 
@@ -60,38 +69,43 @@ class KeeperController {
         header("location:" . FRONT_ROOT . "Keeper/SetFeeStayView");
     }
 
-    public function Login(string $email, string $password) {
+    public function Login(string $email, string $password)
+    {
         $keeper = $this->keeperDAO->GetByEmail($email);
         if ($keeper != null && password_verify($password, $keeper->getPassword())) {
             Session::Set("keeper", $keeper);
             header("Location: " . FRONT_ROOT . "Keeper/Index");
             exit;
         }
-        
+
         TempValues::InitValues(["email" => $email]);
         Session::Set("error", "Invalid credentials");
         header("Location: " . FRONT_ROOT . "Keeper/LoginView");
     }
 
-    public function LogOut() {
+    public function LogOut()
+    {
         Session::Logout();
         header("Location: " . FRONT_ROOT);
         exit;
     }
 
-    public function SignUpView() {
+    public function SignUpView()
+    {
         $this->IfLoggedGoToIndex();
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "keeper-signup.php");
     }
 
-    public function LoginView() {
+    public function LoginView()
+    {
         $this->IfLoggedGoToIndex();
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "keeper-login.php");
     }
 
-    public function SetFeeStay($fee, $since, $until) {
+    public function SetFeeStay($fee, $since, $until)
+    {
         $tempKeeper = TempValues::GetValue("keeper-set-fee-stay");
 
         $keeper = $tempKeeper;
@@ -105,7 +119,7 @@ class KeeperController {
 
         $stay->setSince($since);
         $stay->setUntil($until);
-        
+
         $keeper->setFee($fee);
         $keeper->setStay($stay);
 
@@ -119,10 +133,11 @@ class KeeperController {
         header("Location: " . FRONT_ROOT . "Keeper/Index");
     }
 
-    public function Reviews($id = null) {
+    public function Reviews($id = null)
+    {
         $this->VerifyIsLogged();
         $keeper = $id ? $this->keeperDAO->GetById($id) : Session::Get("keeper");
-        if($keeper == null){
+        if ($keeper == null) {
             header("location:" . FRONT_ROOT . "Home/NotFound");
             exit;
         }
@@ -131,7 +146,8 @@ class KeeperController {
         require_once(VIEWS_PATH . "keeper-reviews.php");
     }
 
-    public function SetFeeStayView() {
+    public function SetFeeStayView()
+    {
         if (TempValues::ValueExist("keeper") == false) {
             $this->VerifyIsLogged();
         }
@@ -145,17 +161,35 @@ class KeeperController {
         include_once(VIEWS_PATH . "keeper-set-fee-stay.php");
     }
 
-    private function IfLoggedGoToIndex() {
+    public function ConfirmReservation(int $id)
+    {
+        $this->VerifyIsLogged();
+
+        $reservation = $this->reservationDAO->GetById($id);
+
+        if ($reservation == null) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+
+        $reservation->setState(ReservationState::ACCEPTED);
+        $this->reservationDAO->Update($reservation);
+        // header("location:" . FRONT_ROOT . "Keeper/Reservations");
+    }
+
+    private function IfLoggedGoToIndex()
+    {
         if (Session::VerifySession("owner")) {
             header("Location: " . FRONT_ROOT . "Owner");
-			exit;
+            exit;
         } else if (Session::VerifySession("keeper")) {
             header("Location: " . FRONT_ROOT . "Keeper");
             exit;
         }
     }
 
-    private function VerifyIsLogged() {
+    private function VerifyIsLogged()
+    {
         if (Session::VerifySession("keeper") == false) {
             Session::Set("error", "You must be logged in to access this page.");
             header("location:" . FRONT_ROOT . "Keeper/LoginView");
