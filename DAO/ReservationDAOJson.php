@@ -24,7 +24,7 @@ class ReservationDAOJson implements IReservationDAOJson
 
     private function RetrieveData()
     {
-        $arrayToDecode = array();
+        $this->reservationList = array();
         if (file_exists($this->fileName)) {
             $jsonContent = file_get_contents($this->fileName);
             $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
@@ -74,6 +74,7 @@ class ReservationDAOJson implements IReservationDAOJson
     {
         $this->RetrieveData();
         $reservation->setId($this->GetNextId());
+        $reservation->setCreatedAt(date("Y-m-d H:i:s"));
         array_push($this->reservationList, $reservation);
         $this->SaveData();
     }

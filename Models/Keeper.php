@@ -103,12 +103,9 @@ class Keeper {
 
         $sinceDate = \DateTime::createFromFormat("m-d-Y", $since);
         $untilDate = \DateTime::createFromFormat("m-d-Y", $until);
-
+        
         // sinceDate must be before untilDate and there must be at least a day between them
-        if ($sinceDate > $untilDate || $sinceDate == $untilDate) {
-            return false;
-        }
-        return $sinceDate >= $staySince && $untilDate <= $stayUntil;
+        return $sinceDate < $untilDate && $sinceDate >= $staySince && $untilDate <= $stayUntil;
     }
 
     public function calculatePrice(string $since, string $until): int {

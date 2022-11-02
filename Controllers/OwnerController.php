@@ -18,6 +18,7 @@ class OwnerController {
     private OwnerDAO $ownerDAO;
     private PetDAO $petDAO;
     private KeeperDAO $keeperDAO;
+    private ReservationDAO $reservationDAO;
 
     public function __construct() {
         $this->ownerDAO = new OwnerDAO();
@@ -262,13 +263,12 @@ class OwnerController {
         $pet = $this->petDAO->GetById($petId);
         $keeper = $this->keeperDAO->GetById($keeperId);
 
-
         if (!$pet || !$keeper) {
             Session::Set("error", "Invalid data");
             header("location:" . FRONT_ROOT . "Owner/KeepersListView");
             exit;
         }
-        if ($keeper->isDateAvailable($since, $until)) {
+        if (!$keeper->isDateAvailable($since, $until)) {
             Session::Set("error", "The keeper is not available in that date");
             header("location:" . FRONT_ROOT . "Owner/KeepersListView");
             exit;
@@ -286,7 +286,9 @@ class OwnerController {
         // TODO: ReservationDAO
         $this->reservationDAO->Add($reservation);
 
-        header("location:" . FRONT_ROOT . "Owner/Resservations");
+        Session::Set("success", "Reservation placed successfully");
+
+        header("location:" . FRONT_ROOT . "Owner/KeepersListView");
     }
 
     public function SignUpView() {
