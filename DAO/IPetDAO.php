@@ -2,11 +2,9 @@
 
 namespace DAO;
 
-use Models\Owner;
 use Models\Pet as Pet;
 
-interface IPetDAO
-{
+interface IPetDAO {
     public function Add(Pet $pet, $image);
 
     public function GetAll(): array;

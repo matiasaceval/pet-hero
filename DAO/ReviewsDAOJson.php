@@ -5,8 +5,7 @@ namespace DAO;
 use DAO\PetDAOJson as PetDAO;
 use Models\Reviews;
 
-class ReviewsDAOJson implements IReviewsDAO
-{
+class ReviewsDAOJson implements IReviewsDAO {
     /**
      * @var Reviews[]
      */
@@ -14,14 +13,12 @@ class ReviewsDAOJson implements IReviewsDAO
     private string $fileName;
     private PetDAO $petDAO;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->fileName = ROOT . "/Data/reviews.json";
         $this->petDAO = new PetDAO();
     }
 
-    function Add(Reviews $review)
-    {
+    function Add(Reviews $review) {
         $this->RetrieveData();
 
         $review->setId($this->GetNextId());
@@ -31,8 +28,7 @@ class ReviewsDAOJson implements IReviewsDAO
         $this->SaveData();
     }
 
-    private function RetrieveData()
-    {
+    private function RetrieveData() {
         $this->reviewList = array();
 
         if (file_exists($this->fileName)) {
@@ -52,15 +48,21 @@ class ReviewsDAOJson implements IReviewsDAO
         }
     }
 
-    private function GetNextId()
-    {
+    function GetById(int $id): ?Reviews {
+        $this->RetrieveData();
+
+        $review = array_filter($this->reviewList, fn($review) => $review->getId() == $id);
+
+        return array_shift($review);
+    }
+
+    private function GetNextId() {
         $this->RetrieveData();
         $lastReviews = end($this->reviewList);
         return $lastReviews === false ? 0 : $lastReviews->getId() + 1;
     }
 
-    private function SaveData()
-    {
+    private function SaveData() {
         $arrayToEncode = array();
 
         foreach ($this->reviewList as $review) {
@@ -78,24 +80,13 @@ class ReviewsDAOJson implements IReviewsDAO
         file_put_contents($this->fileName, $jsonContent);
     }
 
-    function GetAll(): array
-    {
+    function GetAll(): array {
         $this->RetrieveData();
 
         return $this->reviewList;
     }
 
-    function GetById(int $id): ?Reviews
-    {
-        $this->RetrieveData();
-
-        $review = array_filter($this->reviewList, fn($review) => $review->getId() == $id);
-
-        return array_shift($review);
-    }
-
-    function RemoveById(int $id): bool
-    {
+    function RemoveById(int $id): bool {
         $this->RetrieveData();
 
         $cleanedArray = array_filter($this->reviewList, fn($review) => $review->getId() != $id);
@@ -104,8 +95,7 @@ class ReviewsDAOJson implements IReviewsDAO
         return count($cleanedArray) < count($this->reviewList);
     }
 
-    function Update(Reviews $review): bool
-    {
+    function Update(Reviews $review): bool {
         $this->RetrieveData();
         foreach ($this->reviewList as $key => $reviewOfList) {
             if ($reviewOfList->getId() == $review->getId()) {
@@ -117,8 +107,7 @@ class ReviewsDAOJson implements IReviewsDAO
         return false;
     }
 
-    public function GetByArrIds(array $arrIds): array
-    {
+    public function GetByArrIds(array $arrIds): array {
         $this->RetrieveData();
 
         $reviews = array_filter($this->reviewList, fn($review) => in_array($review->getId(), $arrIds));

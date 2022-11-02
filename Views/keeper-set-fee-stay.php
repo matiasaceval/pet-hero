@@ -40,21 +40,25 @@ if (Session::VerifySession("keeper")) {
                                         $
                                     </span>
                                 </div>
-                                <input required type="number" name="fee" class="input-box" style="text-align:center" id=" fee" placeholder="Insert fee" value="<?php echo $fee ?>" min="0" max="999999" />
+                                <input required type="number" name="fee" class="input-box" style="text-align:center"
+                                       id=" fee" placeholder="Insert fee" value="<?php echo $fee ?>" min="0"
+                                       max="999999"/>
                             </div>
                         </div>
                         <div class="row mt-5 justify-content-center">
                             <div class="col-md-auto">
-                                <p><span style="font-size:18px; text-align: center">Set the range of days that you're available</span></p>
+                                <p><span style="font-size:18px; text-align: center">Set the range of days that you're available</span>
+                                </p>
                             </div>
                         </div>
                         <div class="row mt-3 justify-content-center">
                             <div class="input-group mb-3 input-underline">
-                                <input required type="text" id="daterange" class="input-box" style="text-align: center; " />
-                                <input type="hidden" id="since" value="<?php echo $since ?>" name="since" />
-                                <input type="hidden" id="until" value="<?php echo $until ?>" name="until" />
+                                <input required type="text" id="daterange" class="input-box"
+                                       style="text-align: center; "/>
+                                <input type="hidden" id="since" value="<?php echo $since ?>" name="since"/>
+                                <input type="hidden" id="until" value="<?php echo $until ?>" name="until"/>
                                 <script>
-                                    $(function() {
+                                    $(function () {
                                         const since = '<?php echo $since ?>';
                                         const until = '<?php echo $until ?>';
                                         const startDate = since ? format(new Date(since)) : format(new Date());
@@ -67,7 +71,7 @@ if (Session::VerifySession("keeper")) {
                                             endDate: endDate,
                                             minDate: minDate,
                                             maxDate: maxDate,
-                                        }, function(start, end, label) {
+                                        }, function (start, end, label) {
                                             $('input[name="since"]').val(start.format('MM-DD-YYYY'));
                                             $('input[name="until"]').val(end.format('MM-DD-YYYY'));
                                             console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));

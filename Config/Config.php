@@ -5,8 +5,8 @@ define("ROOT", dirname(__DIR__) . "/");
 define("FRONT_ROOT", "/pet-hero/");
 define("VIEWS_PATH", "Views/");
 define("UPLOADS_PATH", "Uploads/");
-define("CSS_PATH", FRONT_ROOT.VIEWS_PATH . "css/");
-define("JS_PATH", FRONT_ROOT.VIEWS_PATH . "js/");
+define("CSS_PATH", FRONT_ROOT . VIEWS_PATH . "css/");
+define("JS_PATH", FRONT_ROOT . VIEWS_PATH . "js/");
 define("FONTS_PATH", FRONT_ROOT . VIEWS_PATH . "fonts/");
 
 define("DB_HOST", "localhost");

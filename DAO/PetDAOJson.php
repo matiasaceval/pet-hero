@@ -7,8 +7,7 @@ use Exception;
 use Models\Pet;
 use Utils\Session;
 
-class PetDAOJson implements IPetDAO
-{
+class PetDAOJson implements IPetDAO {
     /**
      * @var Pet[]
      */
@@ -17,14 +16,50 @@ class PetDAOJson implements IPetDAO
     private string $fileName;
     private OwnerDAO $ownerDAO;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->fileName = ROOT . "/Data/pets.json";
         $this->ownerDAO = new OwnerDAO();
     }
 
-    private function RetrieveData()
-    {
+    public function Add(Pet $pet, $image) {
+        $this->RetrieveData();
+
+        $pet->setId($this->GetNextId());
+
+        try {
+            $fileExt = explode(".", $image["name"]);
+            $fileType = strtolower(end($fileExt));
+            $filePreName = "photo-pet-" . $pet->getId();
+            $fileName = $filePreName . "." . $fileType;
+            $tempFileName = $image["tmp_name"];
+            $filePath = UPLOADS_PATH . basename($fileName);
+            $imageSize = getimagesize($tempFileName);
+
+            if ($imageSize !== false) {
+                $files = glob(UPLOADS_PATH . $filePreName . ".*");
+                foreach ($files as $file) {
+                    chmod($file, 0755); //Change the file permissions if allowed
+                    unlink($file); //remove the file
+                }
+
+                if (move_uploaded_file($tempFileName, $filePath)) {
+                    $pet->setImage($fileName);
+                } else {
+                    Session::Set("error", "Error uploading image");
+                }
+            } else {
+                Session::Set("error", "File is not an image");
+            }
+        } catch (Exception $ex) {
+            Session::Set("error", $ex->getMessage());
+        }
+
+        array_push($this->petList, $pet);
+
+        $this->SaveData();
+    }
+
+    private function RetrieveData() {
         $this->petList = array();
 
         if (file_exists($this->fileName)) {
@@ -49,8 +84,21 @@ class PetDAOJson implements IPetDAO
 
     }
 
-    private function SaveData()
-    {
+    public function GetById(int $id): ?Pet {
+        $this->RetrieveData();
+
+        $owner = array_filter($this->petList, fn($pet) => $pet->getId() == $id);
+
+        return array_shift($owner);
+    }
+
+    private function GetNextId() {
+        $this->RetrieveData();
+        $lastPet = end($this->petList);
+        return $lastPet === false ? 0 : $lastPet->getId() + 1;
+    }
+
+    private function SaveData() {
         $arrayToEncode = array();
         /**
          * @var Pet $pet
@@ -73,70 +121,13 @@ class PetDAOJson implements IPetDAO
         file_put_contents($this->fileName, $jsonContent);
     }
 
-    private function GetNextId()
-    {
-        $this->RetrieveData();
-        $lastPet = end($this->petList);
-        return $lastPet === false ? 0 : $lastPet->getId() + 1;
-    }
-
-    public function Add(Pet $pet, $image)
-    {
-        $this->RetrieveData();
-
-        $pet->setId($this->GetNextId());
-
-        try {
-            $fileExt = explode(".", $image["name"]);
-            $fileType = strtolower(end($fileExt));
-            $filePreName =  "photo-pet-" . $pet->getId();
-            $fileName = $filePreName . "." . $fileType;
-            $tempFileName = $image["tmp_name"];
-            $filePath = UPLOADS_PATH . basename($fileName);
-            $imageSize = getimagesize($tempFileName);
-
-            if ($imageSize !== false) {
-                $files = glob(UPLOADS_PATH . $filePreName . ".*");
-                    foreach ($files as $file) {
-                        chmod($file, 0755); //Change the file permissions if allowed
-                        unlink($file); //remove the file
-                    }
-
-                if (move_uploaded_file($tempFileName, $filePath)) {
-                    $pet->setImage($fileName);
-                } else {
-                    Session::Set("error", "Error uploading image");
-                }
-            } else {
-                Session::Set("error", "File is not an image");
-            }
-        } catch (Exception $ex) {
-            Session::Set("error", $ex->getMessage());
-        }
-
-        array_push($this->petList, $pet);
-
-        $this->SaveData();
-    }
-
-    public function GetAll(): array
-    {
+    public function GetAll(): array {
         $this->RetrieveData();
 
         return $this->petList;
     }
 
-    public function GetById(int $id): ?Pet
-    {
-        $this->RetrieveData();
-
-        $owner = array_filter($this->petList, fn($pet) => $pet->getId() == $id);
-
-        return array_shift($owner);
-    }
-
-    public function RemoveById(int $id): bool
-    {
+    public function RemoveById(int $id): bool {
         $this->RetrieveData();
 
         $newList = array_filter($this->petList, fn($pet) => $pet->getId() != $id);
@@ -151,8 +142,7 @@ class PetDAOJson implements IPetDAO
 
     }
 
-    public function Update(Pet $pet): bool
-    {
+    public function Update(Pet $pet): bool {
         $this->RetrieveData();
 
         foreach ($this->petList as $key => $value) {
@@ -165,8 +155,7 @@ class PetDAOJson implements IPetDAO
         return false;
     }
 
-    public function GetOwnerId(int $petId): ?int
-    {
+    public function GetOwnerId(int $petId): ?int {
         $this->petList = array();
 
         if (file_exists($this->fileName)) {
@@ -184,8 +173,7 @@ class PetDAOJson implements IPetDAO
 
     }
 
-    public function GetPetsByOwnerId(int $ownerId): ?array
-    {
+    public function GetPetsByOwnerId(int $ownerId): ?array {
         $this->RetrieveData();
 
         $petListByOwnerId = array_filter($this->petList, fn($pet) => $pet->getOwner()->getId() == $ownerId);

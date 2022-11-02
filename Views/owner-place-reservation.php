@@ -18,7 +18,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                         <?php
                         $rating = round($keeper->getReviewsAverage(), 1);
                         if ($rating == -1) {
-                        ?>
+                            ?>
                             <div class="row align-items-center justify-content-center">
                                 <div class="col-md-auto" style="padding-right: 4px">
                                     <h4 class="text-center"><span style="color: #222;">Not reviewed</span></h4>
@@ -27,12 +27,13 @@ require_once(VIEWS_PATH . "back-nav.php");
                                     <h4>|</h4>
                                 </div>
                                 <div class="col-md-auto" style="padding-left: 4px">
-                                    <h4><span style="color: #222;">daily fee: $<?php echo $keeper->getFee() ?></span></h4>
+                                    <h4><span style="color: #222;">daily fee: $<?php echo $keeper->getFee() ?></span>
+                                    </h4>
                                 </div>
                             </div>
-                        <?php
+                            <?php
                         } else {
-                        ?>
+                            ?>
                             <div class="row align-items-center justify-content-center">
                                 <div class="col-md-auto" style="padding-right: 4px">
                                     <h2><span style="color: #222; font-size: 24px"><?php echo $rating ?></span></h2>
@@ -54,7 +55,8 @@ require_once(VIEWS_PATH . "back-nav.php");
                                     <h4>|</h4>
                                 </div>
                                 <div class="col-md-auto" style="padding-left: 4px">
-                                    <h4><span style="color: #222;">daily fee: $<?php echo $keeper->getFee() ?></span></h4>
+                                    <h4><span style="color: #222;">daily fee: $<?php echo $keeper->getFee() ?></span>
+                                    </h4>
                                 </div>
                             </div>
                         <?php } ?>
@@ -69,11 +71,11 @@ require_once(VIEWS_PATH . "back-nav.php");
                             <select id="pet-select" name="petId">
                                 <?php
                                 foreach ($pets as $pet) {
-                                ?>
+                                    ?>
                                     <option value="<?php echo $pet->getId() ?>">
                                         <?php echo $pet->getName() ?>
                                     </option>
-                                <?php
+                                    <?php
                                 }
                                 ?>
                             </select>
@@ -88,11 +90,11 @@ require_once(VIEWS_PATH . "back-nav.php");
                             <h3 class="text-center">In what range of days do you want to host it</h3>
                         </div>
                         <div class="row">
-                            <input required readonly type="text" id="daterange" class="input-box" />
-                            <input type="hidden" id="since" value="<?php echo $since ?>" name="since" />
-                            <input type="hidden" id="until" value="<?php echo $until ?>" name="until" />
+                            <input required readonly type="text" id="daterange" class="input-box"/>
+                            <input type="hidden" id="since" name="since"/>
+                            <input type="hidden" id="until" name="until"/>
                             <script>
-                                $(function() {
+                                $(function () {
                                     const since = '<?php echo $keeper->getStay()->getSince() ?>';
                                     const until = '<?php echo $keeper->getStay()->getUntil() ?>';
                                     const minDate = format(new Date(since));
@@ -111,13 +113,13 @@ require_once(VIEWS_PATH . "back-nav.php");
                                     ];
 
                                     <?php foreach ($reservations as $reservation) {
-                                        echo "console.log('" . $reservation->getSince() . "');";
-                                    } ?>
+                                    echo "console.log('" . $reservation->getSince() . "');";
+                                } ?>
                                     $('input[id="daterange"]').daterangepicker({
                                         opens: 'center',
                                         minDate: minDate,
                                         maxDate: maxDate,
-                                        isInvalidDate: function(date) {
+                                        isInvalidDate: function (date) {
                                             for (const reservation of reservations) {
                                                 if (date._d >= reservation.since && date._d <= reservation.until) {
                                                     return true;
@@ -128,7 +130,7 @@ require_once(VIEWS_PATH . "back-nav.php");
 
                                     clearInputs();
 
-                                    $('#daterange').on('apply.daterangepicker', function(ev, picker) {
+                                    $('#daterange').on('apply.daterangepicker', function (ev, picker) {
                                         console.log("apply", {
                                             isValid
                                         });
@@ -167,7 +169,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                                         $('h4[id="cost"]').text('Total cost for ' + diffDays + ' ' + dayOrDays + ': $' + diffDays * <?php echo $keeper->getFee() ?>);
                                     });
 
-                                    $('#daterange').on('cancel.daterangepicker', function(ev, picker) {
+                                    $('#daterange').on('cancel.daterangepicker', function (ev, picker) {
                                         console.log("cancel", {
                                             isValid
                                         });
@@ -206,7 +208,9 @@ require_once(VIEWS_PATH . "back-nav.php");
             <!-- Submit -->
             <div class="row mt-4 justify-content-center">
                 <div class="col-md-auto">
-                    <button onclick="document.getElementById('back-btn').click(); return false;" class="btn btn-primary">Cancel</button>
+                    <button onclick="document.getElementById('back-btn').click(); return false;"
+                            class="btn btn-primary">Cancel
+                    </button>
                 </div>
                 <div class="col-md-auto">
                     <button type="submit" class="btn btn-primary">Book</button>

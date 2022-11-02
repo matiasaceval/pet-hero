@@ -17,11 +17,11 @@ body {
 .glitch-bg {
     background: url(../img/background-glitch.png) no-repeat center center fixed;
     background-size: cover;
-    position:fixed;
-    padding:0;
-    margin:0;
-    top:0;
-    left:0;
+    position: fixed;
+    padding: 0;
+    margin: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
 }
@@ -100,7 +100,7 @@ a:hover {
 .back-btn {
     position: relative;
     left: 0;
-    transition: left  0.5s;
+    transition: left 0.5s;
     animation-duration: 1s;
     -webkit-animation-duration: 1s;
     animation-iteration-count: infinite;
@@ -108,16 +108,16 @@ a:hover {
 }
 
 @keyframes bounce {
-	0%, 100%{
-		-webkit-transform: translateX(0);
-		-ms-transform:     translateX(0);
-		transform:         translateX(0)
-	}
-	50% {
-		-webkit-transform: translateX(-10px);
-		-ms-transform:     translateX(-10px);
-		transform:         translateX(-10px)
-	}
+    0%, 100% {
+        -webkit-transform: translateX(0);
+        -ms-transform: translateX(0);
+        transform: translateX(0)
+    }
+    50% {
+        -webkit-transform: translateX(-10px);
+        -ms-transform: translateX(-10px);
+        transform: translateX(-10px)
+    }
 }
 
 .back-btn:hover {
@@ -144,8 +144,11 @@ select {
     background-color: rgba(0, 0, 0, 0) !important;
 }
 
-.invert { filter: invert(100%); }
-.cover { 
+.invert {
+    filter: invert(100%);
+}
+
+.cover {
     object-fit: cover;
     background-size: cover;
     background-position: center;
@@ -218,7 +221,7 @@ select {
 
 .card-update-delete {
     padding-left: 24px;
-    margin-left: auto; 
+    margin-left: auto;
     margin-right: 0;
 }
 
@@ -264,7 +267,7 @@ select {
     font-size: 18px;
 }
 
-.input-box:focus, input:focus{
+.input-box:focus, input:focus {
     outline: none;
 }
 
@@ -273,13 +276,13 @@ select {
     -webkit-appearance: none;
     margin: 0;
 }
-  
+
 .input-box[type=number] {
     -moz-appearance: textfield;
 }
 
 .input-box:focus {
-  background-color: yellow;
+    background-color: yellow;
 }
 
 .calendar-table {
@@ -325,7 +328,7 @@ h1 {
     margin: 12px 12px 12px;
     width: 500px;
     position: relative;
-} 
+}
 
 /* kr = keeper reviews */
 .kr-card-box {
@@ -419,7 +422,7 @@ h1 {
 .opr-card-box select {
     font-size: 18px;
     color: #222;
-    border:#222 1px solid;
+    border: #222 1px solid;
     border-radius: 10px;
     background-color: none;
     padding: 4px;
@@ -429,7 +432,7 @@ h1 {
 .opr-card-box input {
     font-size: 17px;
     color: #222;
-    border:#222 1px solid;
+    border: #222 1px solid;
     border-radius: 10px;
     background-color: none;
     padding: 4px;
@@ -438,7 +441,7 @@ h1 {
 
 /* Star icon */
 .checked {
-  color: orange;
+    color: orange;
 }
 
 /* Overwriting Bootstrap */
@@ -458,12 +461,12 @@ h1 {
 
 .nav-text {
     color: #fefcfd !important;
-    font-size: 24px; 
+    font-size: 24px;
     padding: 32px !important;
 }
 
 .navbar-brand {
-    padding: 32px !important;    
+    padding: 32px !important;
 }
 
 .btn-primary {

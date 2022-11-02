@@ -16,6 +16,14 @@ class ReservationDAOJson implements IReservationDAOJson {
         $this->fileName = ROOT . "/Data/reservations.json";
     }
 
+    public function Add(Reservation $reservation) {
+        $this->RetrieveData();
+        $reservation->setId($this->GetNextId());
+        $reservation->setCreatedAt(date("Y-m-d H:i:s"));
+        array_push($this->reservationList, $reservation);
+        $this->SaveData();
+    }
+
     private function RetrieveData() {
         $this->reservationList = array();
         if (file_exists($this->fileName)) {
@@ -38,6 +46,18 @@ class ReservationDAOJson implements IReservationDAOJson {
 
     }
 
+    public function GetById(int $id): ?Reservation {
+        $this->RetrieveData();
+        $reservation = array_filter($this->reservationList, fn($reservation) => $reservation->getId() == $id);
+        return array_shift($reservation);
+    }
+
+    private function GetNextId() {
+        $this->RetrieveData();
+        $lastReservation = end($this->reservationList);
+        return $lastReservation == false ? 0 : $lastReservation->getId() + 1;
+    }
+
     private function SaveData() {
         $arrayToEncode = array();
         foreach ($this->reservationList as $reservation) {
@@ -55,30 +75,9 @@ class ReservationDAOJson implements IReservationDAOJson {
         file_put_contents($this->fileName, $jsonContent);
     }
 
-    private function GetNextId() {
-        $this->RetrieveData();
-        $lastReservation = end($this->reservationList);
-        return $lastReservation == false ? 0 : $lastReservation->getId() + 1;
-    }
-
-    public function Add(Reservation $reservation) {
-        $this->RetrieveData();
-        $reservation->setId($this->GetNextId());
-        $reservation->setCreatedAt(date("Y-m-d H:i:s"));
-        array_push($this->reservationList, $reservation);
-        $this->SaveData();
-    }
-
-
     public function GetAll(): array {
         $this->RetrieveData();
         return $this->reservationList;
-    }
-
-    public function GetById(int $id): ?Reservation {
-        $this->RetrieveData();
-        $reservation = array_filter($this->reservationList, fn($reservation) => $reservation->getId() == $id);
-        return array_shift($reservation);
     }
 
     public function GetByKeeperId(int $id): array {

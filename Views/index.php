@@ -6,7 +6,8 @@
 
         <div class="row">
             <div class="col-md-6">
-                <div class="card-box card-box-animation" style="height: fit-content; width: fit-content; max-width: 400px; max-height: 800px;">
+                <div class="card-box card-box-animation"
+                     style="height: fit-content; width: fit-content; max-width: 400px; max-height: 800px;">
                     <a href="<?php echo FRONT_ROOT ?>Owner/LoginView">
                         <img src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/cat.png">
                         <p class="user-type">I'm Owner</p>
@@ -14,7 +15,8 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card-box card-box-animation" style="height: fit-content; width: fit-content; max-width: 400px; max-height: 800px;">
+                <div class="card-box card-box-animation"
+                     style="height: fit-content; width: fit-content; max-width: 400px; max-height: 800px;">
                     <a href="<?php echo FRONT_ROOT ?>Keeper/LoginView">
                         <img src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/keeper.png">
                         <p class="user-type">I'm Keeper</p>

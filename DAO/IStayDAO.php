@@ -4,8 +4,7 @@ namespace DAO;
 
 use Models\Stay;
 
-interface IStayDAO
-{
+interface IStayDAO {
     public function Add(Stay $stay);
 
     public function GetAll(): array;

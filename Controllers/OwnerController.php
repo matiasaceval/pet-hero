@@ -6,6 +6,7 @@ use DAO\KeeperDAOJson as KeeperDAO;
 use DAO\OwnerDAOJson as OwnerDAO;
 use DAO\PetDAOJson as PetDAO;
 use DAO\ReservationDAOJson as ReservationDAO;
+use DateTime;
 use Exception;
 use Models\Owner as Owner;
 use Models\Pet;
@@ -32,6 +33,14 @@ class OwnerController {
 
         $owner = Session::Get("owner");
         require_once(VIEWS_PATH . "owner-home.php");
+    }
+
+    private function VerifyIsLogged() {
+        if (Session::VerifySession("owner") == false) {
+            Session::Set("error", "You must be logged in to access this page.");
+            header("location:" . FRONT_ROOT . "Owner/LoginView");
+            exit;
+        }
     }
 
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
@@ -66,6 +75,16 @@ class OwnerController {
         TempValues::UnsetValues();
         Session::Set("owner", $owner);
         header("location:" . FRONT_ROOT . "Owner");
+    }
+
+    private function IfLoggedGoToIndex() {
+        if (Session::VerifySession("owner")) {
+            header("Location: " . FRONT_ROOT . "Owner");
+            exit;
+        } else if (Session::VerifySession("keeper")) {
+            header("Location: " . FRONT_ROOT . "Keeper");
+            exit;
+        }
     }
 
     public function Login(string $email, string $password) {
@@ -116,19 +135,6 @@ class OwnerController {
         $this->VerifyIsLogged();
         TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/Pets"]);
         require_once(VIEWS_PATH . "pet-add.php");
-    }
-
-    public function Update($id) {
-        $this->VerifyIsLogged();
-
-        $pet = $this->petDAO->GetById($id);
-        if (!$pet || $pet->getOwner()->getId() != Session::Get("owner")->getId()) {
-            header("location:" . FRONT_ROOT . "Owner/Pets");
-            exit;
-        }
-
-        TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/Pets"]);
-        require_once(VIEWS_PATH . "pet-update.php");
     }
 
     public function EditPet($id, $name, $species, $breed, $age, $sex, $image, $vaccine) {
@@ -188,6 +194,19 @@ class OwnerController {
         header("location:" . FRONT_ROOT . "Owner/Pets#id-" . $id);
     }
 
+    public function Update($id) {
+        $this->VerifyIsLogged();
+
+        $pet = $this->petDAO->GetById($id);
+        if (!$pet || $pet->getOwner()->getId() != Session::Get("owner")->getId()) {
+            header("location:" . FRONT_ROOT . "Owner/Pets");
+            exit;
+        }
+
+        TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/Pets"]);
+        require_once(VIEWS_PATH . "pet-update.php");
+    }
+
     public function RemovePet($id) {
         $this->VerifyIsLogged();
 
@@ -206,17 +225,17 @@ class OwnerController {
         if ($since == null || $until == null) {
             // only show those who are available
             $keepersFromToday = array_filter($keeperList, function ($keeper) {
-                $until = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getUntil());
-                $today = new \DateTime();
+                $until = DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getUntil());
+                $today = new DateTime();
                 return $until >= $today;
             });
         } else {
             // show those who are available between the dates
             $keepersFromToday = array_filter($keeperList, function ($keeper) use ($since, $until) {
-                $keeperSince = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getSince());
-                $keeperUntil = \DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getUntil());
-                $since = \DateTime::createFromFormat("m-d-Y", $since);
-                $until = \DateTime::createFromFormat("m-d-Y", $until);
+                $keeperSince = DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getSince());
+                $keeperUntil = DateTime::createFromFormat("m-d-Y", $keeper->getStay()->getUntil());
+                $since = DateTime::createFromFormat("m-d-Y", $since);
+                $until = DateTime::createFromFormat("m-d-Y", $until);
                 return ($since >= $keeperSince) && ($until <= $keeperUntil);
             });
 
@@ -238,8 +257,8 @@ class OwnerController {
             $lastUntil = $stay->getSince();
             foreach ($reservations as $reservation) {
 
-                $lastUntil = \DateTime::createFromFormat("m-d-Y", $lastUntil);
-                $days = \DateTime::createFromFormat("m-d-Y", $reservation->getSince())->diff($lastUntil)->days;
+                $lastUntil = DateTime::createFromFormat("m-d-Y", $lastUntil);
+                $days = DateTime::createFromFormat("m-d-Y", $reservation->getSince())->diff($lastUntil)->days;
                 $availableDays += $days;
 
                 $lastUntil->modify("+2 day");
@@ -250,16 +269,16 @@ class OwnerController {
                 $availableDays = $availableDays <= 1 ? 0 : $availableDays;
                 $lastUntil = $reservation->getUntil();
             }
-            $lastUntil = \DateTime::createFromFormat("m-d-Y", $lastUntil);
-            $availableDays += \DateTime::createFromFormat("m-d-Y", $stay->getUntil())->diff($lastUntil)->days;
+            $lastUntil = DateTime::createFromFormat("m-d-Y", $lastUntil);
+            $availableDays += DateTime::createFromFormat("m-d-Y", $stay->getUntil())->diff($lastUntil)->days;
             $availableDays = $availableDays <= 1 ? 0 : $availableDays;
             return $availableDays >= 1;
             //
         });
 
         usort($keepersFromToday, function ($a, $b) {
-            $aDate = \DateTime::createFromFormat("m-d-Y", $a->getStay()->getUntil());
-            $bDate = \DateTime::createFromFormat("m-d-Y", $b->getStay()->getUntil());
+            $aDate = DateTime::createFromFormat("m-d-Y", $a->getStay()->getUntil());
+            $bDate = DateTime::createFromFormat("m-d-Y", $b->getStay()->getUntil());
             return $aDate <=> $bDate;
         });
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
@@ -336,23 +355,5 @@ class OwnerController {
         $this->IfLoggedGoToIndex();
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "owner-login.php");
-    }
-
-    private function IfLoggedGoToIndex() {
-        if (Session::VerifySession("owner")) {
-            header("Location: " . FRONT_ROOT . "Owner");
-            exit;
-        } else if (Session::VerifySession("keeper")) {
-            header("Location: " . FRONT_ROOT . "Keeper");
-            exit;
-        }
-    }
-
-    private function VerifyIsLogged() {
-        if (Session::VerifySession("owner") == false) {
-            Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LoginView");
-            exit;
-        }
     }
 }

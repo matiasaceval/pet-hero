@@ -4,8 +4,7 @@ namespace DAO;
 
 use Models\Reviews;
 
-interface IReviewsDAO
-{
+interface IReviewsDAO {
     public function Add(Reviews $reviews);
 
     public function GetAll(): array;

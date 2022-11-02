@@ -2,6 +2,8 @@
 
 namespace Models;
 
+use DateTime;
+
 class Keeper {
     private int $id;
     private string $firstname;
@@ -65,24 +67,19 @@ class Keeper {
         $this->phone = $phone;
     }
 
-    public function getFee(): int {
-        return $this->fee;
+    public function getFullname(): string {
+        return $this->firstname . " " . $this->lastname;
     }
 
-    public function setFee(int $fee): void {
-        $this->fee = $fee;
-    }
+    public function isDateAvailable(string $since, string $until): bool {
+        $staySince = DateTime::createFromFormat("m-d-Y", $this->getStay()->getSince());
+        $stayUntil = DateTime::createFromFormat("m-d-Y", $this->getStay()->getUntil());
 
-    public function getReviews(): array {
-        return $this->reviews;
-    }
+        $sinceDate = DateTime::createFromFormat("m-d-Y", $since);
+        $untilDate = DateTime::createFromFormat("m-d-Y", $until);
 
-    /**
-     * @param Reviews[] $reviews
-     * @return void
-     */
-    public function setReviews(array $reviews): void {
-        $this->reviews = $reviews;
+        // sinceDate must be before untilDate and there must be at least a day between them
+        return $sinceDate < $untilDate && $sinceDate >= $staySince && $untilDate <= $stayUntil;
     }
 
     public function getStay(): Stay {
@@ -93,28 +90,13 @@ class Keeper {
         $this->stay = $stay;
     }
 
-    public function getFullname(): string {
-        return $this->firstname . " " . $this->lastname;
-    }
-
-    public function isDateAvailable(string $since, string $until): bool {
-        $staySince = \DateTime::createFromFormat("m-d-Y", $this->getStay()->getSince());
-        $stayUntil = \DateTime::createFromFormat("m-d-Y", $this->getStay()->getUntil());
-
-        $sinceDate = \DateTime::createFromFormat("m-d-Y", $since);
-        $untilDate = \DateTime::createFromFormat("m-d-Y", $until);
-        
-        // sinceDate must be before untilDate and there must be at least a day between them
-        return $sinceDate < $untilDate && $sinceDate >= $staySince && $untilDate <= $stayUntil;
-    }
-
     public function calculatePrice(string $since, string $until): int {
         /*
         * Check more about createFromFormat method
         * https://www.php.net/manual/en/datetime.createfromformat.php
         */
-        $sinceDate = \DateTime::createFromFormat("m-d-Y", $since);
-        $untilDate = \DateTime::createFromFormat("m-d-Y", $until);
+        $sinceDate = DateTime::createFromFormat("m-d-Y", $since);
+        $untilDate = DateTime::createFromFormat("m-d-Y", $until);
 
         /* Whole price calculation
         *
@@ -134,15 +116,35 @@ class Keeper {
         return $days * $this->getFee();
     }
 
-    public function getReviewsAverage(){
-        if(count($this->getReviews()) == 0){
+    public function getFee(): int {
+        return $this->fee;
+    }
+
+    public function setFee(int $fee): void {
+        $this->fee = $fee;
+    }
+
+    public function getReviewsAverage() {
+        if (count($this->getReviews()) == 0) {
             return -1;
         }
 
         $total = 0;
-        foreach($this->reviews as $review){
+        foreach ($this->reviews as $review) {
             $total += $review->getRating();
         }
         return $total / count($this->reviews);
+    }
+
+    public function getReviews(): array {
+        return $this->reviews;
+    }
+
+    /**
+     * @param Reviews[] $reviews
+     * @return void
+     */
+    public function setReviews(array $reviews): void {
+        $this->reviews = $reviews;
     }
 }
