@@ -3,27 +3,20 @@
 namespace DAO;
 
 use Models\Reservation;
-use Models\ReservationState;
-use DAO\IReservationDAOJson;
-use DAO\PetDAOJson;
-use DAO\KeeperDAOJson;
 
-class ReservationDAOJson implements IReservationDAOJson
-{
+class ReservationDAOJson implements IReservationDAOJson {
     private $reservationList = array();
     private $fileName;
     private $petDAO;
     private $keeperDAO;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->petDAO = new PetDAOJson();
         $this->keeperDAO = new KeeperDAOJson();
         $this->fileName = ROOT . "/Data/reservations.json";
     }
 
-    private function RetrieveData()
-    {
+    private function RetrieveData() {
         $this->reservationList = array();
         if (file_exists($this->fileName)) {
             $jsonContent = file_get_contents($this->fileName);
@@ -45,8 +38,7 @@ class ReservationDAOJson implements IReservationDAOJson
 
     }
 
-    private function SaveData()
-    {
+    private function SaveData() {
         $arrayToEncode = array();
         foreach ($this->reservationList as $reservation) {
             $valuesArray["id"] = $reservation->getId();
@@ -63,15 +55,13 @@ class ReservationDAOJson implements IReservationDAOJson
         file_put_contents($this->fileName, $jsonContent);
     }
 
-    private function GetNextId()
-    {
+    private function GetNextId() {
         $this->RetrieveData();
         $lastReservation = end($this->reservationList);
-        return $lastReservation->getId() + 1;
+        return $lastReservation == false ? 0 : $lastReservation->getId() + 1;
     }
 
-    public function Add(Reservation $reservation)
-    {
+    public function Add(Reservation $reservation) {
         $this->RetrieveData();
         $reservation->setId($this->GetNextId());
         $reservation->setCreatedAt(date("Y-m-d H:i:s"));
@@ -80,46 +70,39 @@ class ReservationDAOJson implements IReservationDAOJson
     }
 
 
-    public function GetAll(): array
-    {
+    public function GetAll(): array {
         $this->RetrieveData();
         return $this->reservationList;
     }
 
-    public function GetById(int $id): ?Reservation
-    {
+    public function GetById(int $id): ?Reservation {
         $this->RetrieveData();
         $reservation = array_filter($this->reservationList, fn($reservation) => $reservation->getId() == $id);
         return array_shift($reservation);
     }
 
-    public function GetByKeeperId(int $id): array
-    {
+    public function GetByKeeperId(int $id): array {
         $this->RetrieveData();
         return array_filter($this->reservationList, fn($reservation) => $reservation->getKeeper()->getId() == $id);
     }
 
-    public function GetByPetId(int $id): array
-    {
+    public function GetByPetId(int $id): array {
         $this->RetrieveData();
         return array_filter($this->reservationList, fn($reservation) => $reservation->getPet()->getId() == $id);
     }
 
-    public function GetByOwnerId(int $id): array
-    {
+    public function GetByOwnerId(int $id): array {
         $this->RetrieveData();
         return array_filter($this->reservationList, fn($reservation) => $reservation->getPet()->getOwner()->getId() == $id);
     }
 
-    public function GetByState(string $state): array
-    {
+    public function GetByState(string $state): array {
         $this->RetrieveData();
         return array_filter($this->reservationList, fn($reservation) => $reservation->getState() == $state);
     }
 
 
-    public function Update(Reservation $reservation): bool
-    {
+    public function Update(Reservation $reservation): bool {
         $this->RetrieveData();
         foreach ($this->reservationList as $key => $value) {
             if ($value->getId() == $reservation->getId()) {
@@ -131,8 +114,7 @@ class ReservationDAOJson implements IReservationDAOJson
         return false;
     }
 
-    public function RemoveById(int $id): bool
-    {
+    public function RemoveById(int $id): bool {
         $this->RetrieveData();
 
         $cleanedArray = array_filter($this->reservationList, fn($reservation) => $reservation->getId() != $id);
