@@ -305,6 +305,24 @@ class OwnerController {
             exit;
         }
         $pets = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
+        $reservationsOfOwner = $this->reservationDAO->GetByOwnerId(Session::Get("owner")->getId());
+        $reservationsOfOwner = array_filter($reservationsOfOwner, function (Reservation $reservation) {
+            $state = $reservation->getState();
+            return
+                $state == ReservationState::ACCEPTED ||
+                $state == ReservationState::PENDING ||
+                $state == ReservationState::PAID ||
+                $state == ReservationState::IN_PROGRESS;
+
+        });
+
+        foreach ($pets as $key => $pet) {
+            foreach ($reservationsOfOwner as $reservation) {
+                if ($reservation->getPet()->getId() == $pet->getId()) {
+                    unset($pets[$key]);
+                }
+            }
+        }
         $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
         TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/KeepersListView"]);
         require_once(VIEWS_PATH . "owner-place-reservation.php");
