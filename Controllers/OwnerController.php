@@ -304,16 +304,22 @@ class OwnerController {
             header("location:" . FRONT_ROOT . "Home/NotFound");
             exit;
         }
+        $pets = $this->AvailablePets();
+        $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
+        TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/KeepersListView"]);
+        require_once(VIEWS_PATH . "owner-place-reservation.php");
+
+    }
+
+    private function AvailablePets(): null|array {
         $pets = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
         $reservationsOfOwner = $this->reservationDAO->GetByOwnerId(Session::Get("owner")->getId());
+        if ($pets == null && $reservationsOfOwner == null) {
+            return null;
+        }
         $reservationsOfOwner = array_filter($reservationsOfOwner, function (Reservation $reservation) {
-            $state = $reservation->getState();
-            return
-                $state == ReservationState::ACCEPTED ||
-                $state == ReservationState::PENDING ||
-                $state == ReservationState::PAID ||
-                $state == ReservationState::IN_PROGRESS;
-
+            $state = [ReservationState::ACCEPTED, ReservationState::PENDING, ReservationState::PAID, ReservationState::IN_PROGRESS];
+            return in_array($reservation->getState(), $state);
         });
 
         foreach ($pets as $key => $pet) {
@@ -323,10 +329,7 @@ class OwnerController {
                 }
             }
         }
-        $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
-        TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/KeepersListView"]);
-        require_once(VIEWS_PATH . "owner-place-reservation.php");
-
+        return $pets;
     }
 
     public function PlaceReservation(int $petId, int $keeperId, string $since, string $until) {

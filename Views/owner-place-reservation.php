@@ -213,7 +213,8 @@ require_once(VIEWS_PATH . "back-nav.php");
                     </button>
                 </div>
                 <div class="col-md-auto">
-                    <button type="submit" class="btn btn-primary">Book</button>
+                    <button type="submit" class="btn btn-primary" <?php if ($pets == null) echo "disabled" ?>>Book
+                    </button>
                 </div>
             </div>
         </form>
