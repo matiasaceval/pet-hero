@@ -91,3 +91,19 @@ INSERT INTO reservation (petId,keeperId,state, since, until, price) VALUES (petI
 END$$
 DELIMITER ;
 
+DELIMITER $$
+create procedure `verifyReservation`()
+BEGIN
+
+SET @date = CURDATE();
+UPDATE reservation r
+
+SET r.state = CASE
+                  WHEN r.state = 'PENDING' AND r.since < @date THEN 'CANCELED'
+                  WHEN r.state = 'CONFIRMED' AND r.since < @date THEN 'CANCELED'
+                  WHEN r.state = 'PAID' AND r.since = @date THEN 'IN_PROGRESS'
+                  WHEN r.state = 'IN_PROGRESS' AND r.until < @date THEN 'FINISHED'
+                  ELSE r.state
+    END;
+END$$
+DELIMITER ;
