@@ -85,6 +85,11 @@ class ReservationDAOJson implements IReservationDAOJson {
         return array_filter($this->reservationList, fn($reservation) => $reservation->getKeeper()->getId() == $id);
     }
 
+    public function GetByKeeperIdAndState(int $id, string $state): array {
+        $this->RetrieveData();
+        return array_filter($this->reservationList, fn($reservation) => $reservation->getKeeper()->getId() == $id && $reservation->getState() == $state);
+    }
+
     public function GetByPetId(int $id): array {
         $this->RetrieveData();
         return array_filter($this->reservationList, fn($reservation) => $reservation->getPet()->getId() == $id);
