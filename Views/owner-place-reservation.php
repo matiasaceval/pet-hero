@@ -5,7 +5,7 @@ require_once(VIEWS_PATH . "back-nav.php");
 ?>
 <div class="container overflow-hidden">
     <div class="centered-element">
-        <form method="post" enctype='multipart/form-data' action="<?php echo FRONT_ROOT ?>Owner/PlaceReservation">
+        <form id="book-form" method="post" enctype='multipart/form-data' action="<?php echo FRONT_ROOT ?>Owner/PlaceReservation">
             <input readonly style="display: none" type="text" name="keeperId" value="<?php echo $keeper->getId() ?>">
             <div class="opr-card-box" style="padding: 48px 48px 32px 48px;">
                 <!-- Head -->
@@ -18,7 +18,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                         <?php
                         $rating = round($keeper->getReviewsAverage(), 1);
                         if ($rating == -1) {
-                            ?>
+                        ?>
                             <div class="row align-items-center justify-content-center">
                                 <div class="col-md-auto" style="padding-right: 4px">
                                     <h4 class="text-center"><span style="color: #222;">Not reviewed</span></h4>
@@ -31,9 +31,9 @@ require_once(VIEWS_PATH . "back-nav.php");
                                     </h4>
                                 </div>
                             </div>
-                            <?php
+                        <?php
                         } else {
-                            ?>
+                        ?>
                             <div class="row align-items-center justify-content-center">
                                 <div class="col-md-auto" style="padding-right: 4px">
                                     <h2><span style="color: #222; font-size: 24px"><?php echo $rating ?></span></h2>
@@ -68,17 +68,21 @@ require_once(VIEWS_PATH . "back-nav.php");
                             <h3 class="text-center">What pet do you want to host?</h3>
                         </div>
                         <div class="row">
-                            <select id="pet-select" name="petId">
-                                <?php
-                                foreach ($pets as $pet) {
-                                    ?>
-                                    <option value="<?php echo $pet->getId() ?>">
-                                        <?php echo $pet->getName() ?>
-                                    </option>
+                            <?php if (!$pets) { ?>
+                                <input readonly id="pet-select" value="You don't have any pets to host.">
+                            <?php } else { ?>
+                                <select id="pet-select" name="petId">
                                     <?php
-                                }
-                                ?>
-                            </select>
+                                    foreach ($pets as $pet) {
+                                    ?>
+                                        <option value="<?php echo $pet->getId() ?>">
+                                            <?php echo $pet->getName() ?>
+                                        </option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            <?php } ?>
 
                             <script>
                                 $('#pet-select').width($('#pet-row').width() - 8);
@@ -90,17 +94,25 @@ require_once(VIEWS_PATH . "back-nav.php");
                             <h3 class="text-center">In what range of days do you want to host it</h3>
                         </div>
                         <div class="row">
-                            <input required readonly type="text" id="daterange" class="input-box"/>
-                            <input type="hidden" id="since" name="since"/>
-                            <input type="hidden" id="until" name="until"/>
+                            <input required readonly type="text" id="daterange" class="input-box" />
+                            <input type="hidden" id="since" name="since" />
+                            <input type="hidden" id="until" name="until" />
                             <script>
-                                $(function () {
+                                let isValid = false;
+                                $(function() {
+                                    Date.prototype.addDays = function(days) {
+                                        var date = new Date(this.valueOf());
+                                        date.setDate(date.getDate() + days);
+                                        return date;
+                                    }
+
                                     const since = '<?php echo $keeper->getStay()->getSince() ?>';
                                     const until = '<?php echo $keeper->getStay()->getUntil() ?>';
-                                    const minDate = format(new Date(since));
-                                    const maxDate = format(new Date(until));
-
-                                    let isValid = false;
+                                    const sinceDate = new Date(since);
+                                    const untilDate = new Date(until);
+                                    const todayPlus1 = (new Date()).addDays(1);
+                                    const minDate = format(sinceDate > todayPlus1 ? sinceDate : todayPlus1);
+                                    const maxDate = format(untilDate);
 
                                     const reservations = [
                                         <?php
@@ -112,16 +124,15 @@ require_once(VIEWS_PATH . "back-nav.php");
                                         } ?>
                                     ];
 
-                                    <?php foreach ($reservations as $reservation) {
-                                    echo "console.log('" . $reservation->getSince() . "');";
-                                } ?>
                                     $('input[id="daterange"]').daterangepicker({
                                         opens: 'center',
                                         minDate: minDate,
                                         maxDate: maxDate,
-                                        isInvalidDate: function (date) {
+                                        startDate: minDate,
+                                        isInvalidDate: function(date) {
+                                            const d = date._d;
                                             for (const reservation of reservations) {
-                                                if (date._d >= reservation.since && date._d <= reservation.until) {
+                                                if (d >= reservation.since && d <= reservation.until) {
                                                     return true;
                                                 }
                                             }
@@ -130,7 +141,7 @@ require_once(VIEWS_PATH . "back-nav.php");
 
                                     clearInputs();
 
-                                    $('#daterange').on('apply.daterangepicker', function (ev, picker) {
+                                    $('#daterange').on('apply.daterangepicker', function(ev, picker) {
                                         console.log("apply", {
                                             isValid
                                         });
@@ -168,15 +179,6 @@ require_once(VIEWS_PATH . "back-nav.php");
                                         const dayOrDays = diffDays > 1 ? 'days' : 'day';
                                         $('h4[id="cost"]').text('Total cost for ' + diffDays + ' ' + dayOrDays + ': $' + diffDays * <?php echo $keeper->getFee() ?>);
                                     });
-
-                                    $('#daterange').on('cancel.daterangepicker', function (ev, picker) {
-                                        console.log("cancel", {
-                                            isValid
-                                        });
-                                        if (!isValid) {
-                                            clearInputs();
-                                        }
-                                    })
                                 });
 
                                 function clearInputs() {
@@ -190,8 +192,16 @@ require_once(VIEWS_PATH . "back-nav.php");
                                 }
 
                                 function isDate(date) {
-                                    return (new Date(date) !== " Invalid Date") && !isNaN(new Date(date));
+                                    return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
                                 }
+
+                                document.getElementById('book-form').addEventListener('submit', function(e) {
+                                    if (!isValid) {
+                                        e.preventDefault();
+                                        clearInputs();
+                                        alert('You must select a valid date range');
+                                    }
+                                });
                             </script>
                             <script>
                                 $('#daterange').width($('#range-row').width() - 8);
@@ -208,8 +218,7 @@ require_once(VIEWS_PATH . "back-nav.php");
             <!-- Submit -->
             <div class="row mt-4 justify-content-center">
                 <div class="col-md-auto">
-                    <button onclick="document.getElementById('back-btn').click(); return false;"
-                            class="btn btn-primary">Cancel
+                    <button onclick="document.getElementById('back-btn').click(); return false;" class="btn btn-primary">Cancel
                     </button>
                 </div>
                 <div class="col-md-auto">

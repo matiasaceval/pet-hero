@@ -254,7 +254,17 @@ class OwnerController {
             });
             // check if there are available days between reservations
             $availableDays = 0;
-            $lastUntil = $stay->getSince();
+
+            // this array will contain the date of today and the date of the specified 'since'
+            $dates = [0 => $stay->getSince(), 1 => date("m-d-Y")];
+            // then we sort them
+            usort($dates, function ($a, $b) {
+                return $a <=> $b;
+            });
+
+            // and we choose the 'max' one of them. This will be the date from which we will start counting the available days
+            // with this comparison we avoid counting the days that have already passed
+            $lastUntil = $dates[count($dates) - 1];
             foreach ($reservations as $reservation) {
 
                 $lastUntil = DateTime::createFromFormat("m-d-Y", $lastUntil);
