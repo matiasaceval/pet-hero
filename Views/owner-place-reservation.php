@@ -1,5 +1,7 @@
 <?php
 
+use Utils\ReviewsAverage;
+
 require_once(VIEWS_PATH . "back-nav.php");
 
 ?>
@@ -16,7 +18,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                     <div class="col-12">
                         <h2 class="text-center"><?php echo ucwords($keeper->getFullname()) ?>!</h2>
                         <?php
-                        $rating = round($keeper->getReviewsAverage(), 1);
+                        $rating = round(ReviewsAverage::getReviewsAverage($reviews), 1);
                         if ($rating == -1) {
                         ?>
                             <div class="row align-items-center justify-content-center">

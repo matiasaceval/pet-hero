@@ -281,6 +281,7 @@ class OwnerController {
         }
         $pets = $this->AvailablePets();
         $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
+        $reviews = $this->reviewsDAO->GetByKeeperId($keeper->getId());
         TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/KeepersListView"]);
         require_once(VIEWS_PATH . "owner-place-reservation.php");
 
