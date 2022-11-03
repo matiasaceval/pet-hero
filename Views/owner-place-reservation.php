@@ -23,7 +23,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                                 <div class="col-md-auto" style="padding-right: 4px">
                                     <h4 class="text-center"><span style="color: #222;">Not reviewed</span></h4>
                                 </div>
-                                <div class="col-md-auto" style="">
+                                <div class="col-md-auto">
                                     <h4>|</h4>
                                 </div>
                                 <div class="col-md-auto" style="padding-left: 4px">
