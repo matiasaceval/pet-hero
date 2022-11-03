@@ -14,9 +14,6 @@ class Keeper {
 
     private int $fee;
 
-    /** @var Reviews[] */
-    private array $reviews;
-
     private Stay $stay;
 
     public function getId(): int {
@@ -124,6 +121,7 @@ class Keeper {
         $this->fee = $fee;
     }
 
+    // TODO: move out
     public function getReviewsAverage() {
         if (count($this->getReviews()) == 0) {
             return -1;
@@ -136,15 +134,4 @@ class Keeper {
         return $total / count($this->reviews);
     }
 
-    public function getReviews(): array {
-        return $this->reviews;
-    }
-
-    /**
-     * @param Reviews[] $reviews
-     * @return void
-     */
-    public function setReviews(array $reviews): void {
-        $this->reviews = $reviews;
-    }
 }

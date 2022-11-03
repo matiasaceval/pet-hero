@@ -4,6 +4,7 @@ namespace Controllers;
 
 use DAO\KeeperDAOJson as KeeperDAO;
 use DAO\ReservationDAOJson as ReservationDAO;
+use DAO\ReviewsDAOJson as ReviewsDAO;
 use Models\Keeper as Keeper;
 use Models\ReservationState as ReservationState;
 use Models\Stay as Stay;
@@ -13,10 +14,12 @@ use Utils\TempValues;
 class KeeperController {
     private KeeperDAO $keeperDAO;
     private ReservationDAO $reservationDAO;
+    private ReviewsDAO $reviewsDAO;
 
     public function __construct() {
         $this->keeperDAO = new KeeperDAO();
         $this->reservationDAO = new ReservationDAO();
+        $this->reviewsDAO = new ReviewsDAO();
     }
 
     public function Index() {
@@ -28,7 +31,7 @@ class KeeperController {
 
         echo "<pre>";
         var_dump($keeper->getStay());
-        var_dump($keeper->getReviews());
+        var_dump($this->reviewsDAO->GetByKeeperId($keeper->getId()));
         echo "</pre>";
     }
 

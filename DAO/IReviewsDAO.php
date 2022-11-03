@@ -15,5 +15,5 @@ interface IReviewsDAO {
 
     public function Update(Reviews $reviews): bool;
 
-    public function GetByArrIds(array $arrIds): array;
+    public function GetByKeeperId(int $id): array;
 }

@@ -2,10 +2,8 @@
 
 namespace DAO;
 
-use DAO\ReviewsDAOJson as ReviewsDAO;
 use DAO\StayDAOJson as StayDAO;
 use Models\Keeper;
-use Models\Reviews as Reviews;
 use Models\Stay;
 
 class KeeperDAOJson implements IKeeperDAO {
@@ -15,12 +13,10 @@ class KeeperDAOJson implements IKeeperDAO {
     private array $keeperList = array();
     private string $fileName;
     private StayDAO $stayDAO;
-    private ReviewsDAO $reviewsDAO;
 
     public function __construct() {
         $this->fileName = ROOT . "/Data/keepers.json";
         $this->stayDAO = new StayDAO();
-        $this->reviewsDAO = new ReviewsDAO();
     }
 
     function Add(Keeper $keeper, Stay $stay) {
@@ -58,7 +54,6 @@ class KeeperDAOJson implements IKeeperDAO {
                 $keeper->setPhone($valuesArray["phone"]);
                 $keeper->setFee($valuesArray["fee"]);
                 $keeper->setStay($this->stayDAO->GetById($valuesArray["id"])); // because StayId is the same as KeeperId
-                $keeper->setReviews($this->reviewsDAO->GetByArrIds($valuesArray["reviews"]));
                 array_push($this->keeperList, $keeper);
             }
         }
@@ -89,7 +84,6 @@ class KeeperDAOJson implements IKeeperDAO {
             $valuesArray["password"] = $keeper->getPassword();
             $valuesArray["phone"] = $keeper->getPhone();
             $valuesArray["fee"] = $keeper->getFee();
-            $valuesArray["reviews"] = $this->ReviewsAsId($keeper->getReviews());
             $valuesArray["stay"] = $keeper->getStay()->getId();
 
             array_push($arrayToEncode, $valuesArray);
@@ -100,11 +94,6 @@ class KeeperDAOJson implements IKeeperDAO {
         file_put_contents($this->fileName, $jsonContent);
     }
 
-    private function ReviewsAsId(array $reviews) {
-        return array_map(function (Reviews $review) {
-            return $review->getId();
-        }, $reviews);
-    }
 
     function GetAll(): array {
         $this->RetrieveData();

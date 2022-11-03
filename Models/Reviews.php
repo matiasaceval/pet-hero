@@ -9,6 +9,7 @@ class Reviews {
     private float $rating;
     private string $date;
     private Pet $pet;
+    private Keeper $keeper;
 
 
     public function getId(): int {
@@ -50,5 +51,20 @@ class Reviews {
     public function setPet(Pet $pet): void {
         $this->pet = $pet;
     }
+
+    /**
+     * @return Keeper
+     */
+    public function getKeeper(): Keeper {
+        return $this->keeper;
+    }
+
+    /**
+     * @param Keeper $keeper
+     */
+    public function setKeeper(Keeper $keeper): void {
+        $this->keeper = $keeper;
+    }
+
 
 }

@@ -12,6 +12,7 @@ class ReviewsDAOJson implements IReviewsDAO {
     private array $reviewList = array();
     private string $fileName;
     private PetDAO $petDAO;
+    private KeeperDAOJson $keeperDAO;
 
     public function __construct() {
         $this->fileName = ROOT . "/Data/reviews.json";
@@ -43,6 +44,7 @@ class ReviewsDAOJson implements IReviewsDAO {
                 $review->setRating($valuesArray["rating"]);
                 $review->setDate($valuesArray["date"]);
                 $review->setPet($this->petDAO->GetById($valuesArray["pet"]));
+                $review->setKeeper($this->keeperDAO->GetById($valuesArray["keeper"]));
                 array_push($this->reviewList, $review);
             }
         }
@@ -71,6 +73,7 @@ class ReviewsDAOJson implements IReviewsDAO {
             $valuesArray["rating"] = $review->getRating();
             $valuesArray["date"] = $review->getDate();
             $valuesArray["pet"] = $review->getPet()->getId();
+            $valuesArray["keeper"] = $review->getKeeper()->getId();
 
             array_push($arrayToEncode, $valuesArray);
         }
@@ -107,11 +110,9 @@ class ReviewsDAOJson implements IReviewsDAO {
         return false;
     }
 
-    public function GetByArrIds(array $arrIds): array {
+    public function GetByKeeperId(int $id): array {
         $this->RetrieveData();
 
-        $reviews = array_filter($this->reviewList, fn($review) => in_array($review->getId(), $arrIds));
-
-        return $reviews;
+        return array_filter($this->reviewList, fn($review) => $review->getKeeper()->getId() == $id);
     }
 }
