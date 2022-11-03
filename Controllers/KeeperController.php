@@ -8,6 +8,7 @@ use DAO\ReviewsDAOJson as ReviewsDAO;
 use Models\Keeper as Keeper;
 use Models\ReservationState as ReservationState;
 use Models\Stay as Stay;
+use Utils\ReviewsAverage;
 use Utils\Session;
 use Utils\TempValues;
 
@@ -65,7 +66,6 @@ class KeeperController {
         $keeper->setPhone($phone);
         $keeper->setPassword(password_hash($password, PASSWORD_DEFAULT));
         $keeper->setFee(-1);
-        $keeper->setReviews([]);
 
         TempValues::UnsetValues();
         TempValues::InitValues(["keeper" => $keeper]);
@@ -148,7 +148,7 @@ class KeeperController {
             header("location:" . FRONT_ROOT . "Home/NotFound");
             exit;
         }
-        $reviews = $keeper->getReviews();
+        $reviews = $this->reviewsDAO->GetByKeeperId($keeper->getId());
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "keeper-reviews.php");
     }

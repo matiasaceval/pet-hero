@@ -1,5 +1,6 @@
 <?php
 
+use Utils\ReviewsAverage;
 use Utils\Session;
 
 require_once(VIEWS_PATH . "back-nav.php");
@@ -132,7 +133,8 @@ if ($err || $succ) { ?>
                         </div>
                         <div class="row mt-2">
                             <?php
-                            $rating = round($keeper->getReviewsAverage(), 1);
+                            $reviews = $this->reviewsDAO->GetByKeeperId($keeper->getId());
+                            $rating = round(ReviewsAverage::getReviewsAverage($reviews), 1);
                             if ($rating == -1) {
                                 ?> <p><span>Not reviewed</span></p> <?php
                             } else {
@@ -168,7 +170,7 @@ if ($err || $succ) { ?>
                 </div>
                 <div class="row mt-3 justify-content-between align-self-end" style="padding: 0px 15px 0 15px">
                     <a href="<?php echo FRONT_ROOT ?>Owner/Reviews?id=<?php echo $keeper->getId() ?>">
-                        <button class="btn btn-secondary" <?php if (empty($keeper->getReviews())) echo "disabled" ?>>See
+                        <button class="btn btn-secondary" <?php if (empty($reviews)) echo "disabled" ?>>See
                             reviews
                         </button>
                     </a>

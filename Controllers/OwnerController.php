@@ -6,12 +6,14 @@ use DAO\KeeperDAOJson as KeeperDAO;
 use DAO\OwnerDAOJson as OwnerDAO;
 use DAO\PetDAOJson as PetDAO;
 use DAO\ReservationDAOJson as ReservationDAO;
+use DAO\ReviewsDAOJson as ReviewsDAO;
 use DateTime;
 use Exception;
 use Models\Owner as Owner;
 use Models\Pet;
 use Models\Reservation;
 use Models\ReservationState;
+use Utils\ReviewsAverage;
 use Utils\Session;
 use Utils\TempValues;
 
@@ -20,12 +22,14 @@ class OwnerController {
     private PetDAO $petDAO;
     private KeeperDAO $keeperDAO;
     private ReservationDAO $reservationDAO;
+    private ReviewsDAO $reviewsDAO;
 
     public function __construct() {
         $this->ownerDAO = new OwnerDAO();
         $this->petDAO = new PetDAO();
         $this->keeperDAO = new KeeperDAO();
         $this->reservationDAO = new ReservationDAO();
+        $this->reviewsDAO = new ReviewsDAO();
     }
 
     public function Index() {
@@ -242,48 +246,9 @@ class OwnerController {
         }
 
         $keepersFromToday = array_filter($keepersFromToday, function ($keeper) {
-            $stay = $keeper->getStay();
             $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
-            // filter reservations that are in the same period of the stay
-            $reservations = array_filter($reservations, function ($reservation) use ($stay) {
-                return $reservation->getSince() >= $stay->getSince() && $reservation->getUntil() <= $stay->getUntil();
-            });
-            // sort reservations by since date
-            usort($reservations, function ($a, $b) {
-                return $a->getSince() <=> $b->getSince();
-            });
-            // check if there are available days between reservations
-            $availableDays = 0;
-
-            // this array will contain the date of today and the date of the specified 'since'
-            $dates = [0 => $stay->getSince(), 1 => date("m-d-Y")];
-            // then we sort them
-            usort($dates, function ($a, $b) {
-                return $a <=> $b;
-            });
-
-            // and we choose the 'max' one of them. This will be the date from which we will start counting the available days
-            // with this comparison we avoid counting the days that have already passed
-            $lastUntil = $dates[count($dates) - 1];
-            foreach ($reservations as $reservation) {
-
-                $lastUntil = DateTime::createFromFormat("m-d-Y", $lastUntil);
-                $days = DateTime::createFromFormat("m-d-Y", $reservation->getSince())->diff($lastUntil)->days;
-                $availableDays += $days;
-
-                $lastUntil->modify("+2 day");
-                if ($lastUntil->format("m-d-Y") == $reservation->getSince()) {
-                    $availableDays -= $days;
-                }
-
-                $availableDays = $availableDays <= 1 ? 0 : $availableDays;
-                $lastUntil = $reservation->getUntil();
-            }
-            $lastUntil = DateTime::createFromFormat("m-d-Y", $lastUntil);
-            $availableDays += DateTime::createFromFormat("m-d-Y", $stay->getUntil())->diff($lastUntil)->days;
-            $availableDays = $availableDays <= 1 ? 0 : $availableDays;
+            $availableDays = $keeper->getAvailableDays($reservations);
             return $availableDays >= 1;
-            //
         });
 
         usort($keepersFromToday, function ($a, $b) {
@@ -302,7 +267,7 @@ class OwnerController {
             header("location:" . FRONT_ROOT . "Home/NotFound");
             exit;
         }
-        $reviews = $keeper->getReviews();
+        $reviews = $this->reviewsDAO->GetByKeeperId($id);
         TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/KeepersListView"]);
         require_once(VIEWS_PATH . "keeper-reviews.php");
     }

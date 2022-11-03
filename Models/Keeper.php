@@ -121,17 +121,46 @@ class Keeper {
         $this->fee = $fee;
     }
 
-    // TODO: move out
-    public function getReviewsAverage() {
-        if (count($this->getReviews()) == 0) {
-            return -1;
-        }
+    public function getAvailableDays(array $reservations): int {
+        $stay = $this->getStay();
+        // filter reservations that are in the same period of the stay
+        $reservations = array_filter($reservations, function ($reservation) use ($stay) {
+            return $reservation->getSince() >= $stay->getSince() && $reservation->getUntil() <= $stay->getUntil();
+        });
+        // sort reservations by since date
+        usort($reservations, function ($a, $b) {
+            return $a->getSince() <=> $b->getSince();
+        });
+        // check if there are available days between reservations
+        $availableDays = 0;
 
-        $total = 0;
-        foreach ($this->reviews as $review) {
-            $total += $review->getRating();
+        // this array will contain the date of today and the date of the specified 'since'
+        $dates = [0 => $stay->getSince(), 1 => date("m-d-Y")];
+        // then we sort them
+        usort($dates, function ($a, $b) {
+            return $a <=> $b;
+        });
+
+        // and we choose the 'max' one of them. This will be the date from which we will start counting the available days
+        // with this comparison we avoid counting the days that have already passed
+        $lastUntil = $dates[count($dates) - 1];
+        foreach ($reservations as $reservation) {
+
+            $lastUntil = DateTime::createFromFormat("m-d-Y", $lastUntil);
+            $days = DateTime::createFromFormat("m-d-Y", $reservation->getSince())->diff($lastUntil)->days;
+            $availableDays += $days;
+
+            $lastUntil->modify("+2 day");
+            if ($lastUntil->format("m-d-Y") == $reservation->getSince()) {
+                $availableDays -= $days;
+            }
+
+            $availableDays = $availableDays <= 1 ? 0 : $availableDays;
+            $lastUntil = $reservation->getUntil();
         }
-        return $total / count($this->reviews);
+        $lastUntil = DateTime::createFromFormat("m-d-Y", $lastUntil);
+        $availableDays += DateTime::createFromFormat("m-d-Y", $stay->getUntil())->diff($lastUntil)->days;
+        $availableDays = $availableDays <= 1 ? 0 : $availableDays;
+        return $availableDays;
     }
-
 }

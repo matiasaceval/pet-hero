@@ -1,5 +1,7 @@
 <?php
 
+use Utils\ReviewsAverage;
+
 require_once(VIEWS_PATH . "back-nav.php");
 ?>
 
@@ -11,7 +13,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                     <div class="col-12">
                         <h2 class="text-center"><?php echo ucwords($keeper->getFullname()) ?></h2>
                         <?php
-                        $rating = round($keeper->getReviewsAverage(), 1);
+                        $rating = round(ReviewsAverage::getReviewsAverage($reviews), 1);
                         if ($rating == -1) {
                             ?> <h1 class="text-center"><span style="color: #222;">Not reviewed</span></h1> <?php
                         } else {
@@ -34,7 +36,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                                         ?>
                                     </h4>
                                     <h4>
-                                        <span style="color: #222;"><?php echo count($keeper->getReviews()) ?> reviews</span>
+                                        <span style="color: #222;"><?php echo count($reviews) ?> reviews</span>
                                     </h4>
                                 </div>
                             </div>

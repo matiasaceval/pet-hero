@@ -3,6 +3,7 @@
 namespace DAO;
 
 use DAO\PetDAOJson as PetDAO;
+use DAO\KeeperDAOJson as KeeperDAO;
 use Models\Reviews;
 
 class ReviewsDAOJson implements IReviewsDAO {
@@ -17,6 +18,7 @@ class ReviewsDAOJson implements IReviewsDAO {
     public function __construct() {
         $this->fileName = ROOT . "/Data/reviews.json";
         $this->petDAO = new PetDAO();
+        $this->keeperDAO = new KeeperDAO();
     }
 
     function Add(Reviews $review) {
@@ -44,7 +46,7 @@ class ReviewsDAOJson implements IReviewsDAO {
                 $review->setRating($valuesArray["rating"]);
                 $review->setDate($valuesArray["date"]);
                 $review->setPet($this->petDAO->GetById($valuesArray["pet"]));
-                $review->setKeeper($this->keeperDAO->GetById($valuesArray["keeper"]));
+                $review->setKeeper($this->keeperDAO->GetById($valuesArray["keeperId"]));
                 array_push($this->reviewList, $review);
             }
         }
@@ -73,7 +75,7 @@ class ReviewsDAOJson implements IReviewsDAO {
             $valuesArray["rating"] = $review->getRating();
             $valuesArray["date"] = $review->getDate();
             $valuesArray["pet"] = $review->getPet()->getId();
-            $valuesArray["keeper"] = $review->getKeeper()->getId();
+            $valuesArray["keeperId"] = $review->getKeeper()->getId();
 
             array_push($arrayToEncode, $valuesArray);
         }
