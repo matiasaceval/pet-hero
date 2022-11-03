@@ -1,4 +1,7 @@
 <?php
+
+use Models\ReservationState;
+
 require_once(VIEWS_PATH . "home-nav.php");
 ?>
 <div class="container overflow-hidden">
@@ -8,7 +11,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                 <div class="col-7">
                     <span class="title">Hi <?php echo $keeper->getFirstname(); ?>!</span><br>
                     <?php $count = count($reservationsOngoing) ?>
-                    <span class="description">You have currently <?php echo $count." reservation".($count == 1 ? "" : "s") ?> and <?php echo $availableDays ?> days available<?php if ($availableDays === 0) echo "!!! you're a BEAST ON FIRE 😜🔥🔥🔥" ?></span>
+                    <span class="description">You have currently <?php echo $count . " reservation" . ($count == 1 ? "" : "s") ?> and <?php echo $availableDays ?> days available<?php if ($availableDays === 0) echo "!!! you're a BEAST ON FIRE 😜🔥🔥🔥" ?></span>
                 </div>
             </div>
 
@@ -16,9 +19,11 @@ require_once(VIEWS_PATH . "home-nav.php");
                 <div class="col-3">
                     <!-- Pending books -->
                     <a href="">
-                        <div class="card-box card-box-border">
-                            <span class="title">Pending books</span><br>
-                            <span class="description">List all pending books</span>
+                        <div class=" card-box card-box-border">
+                            <?php $pending = $this->reservationDAO->GetByKeeperIdAndState($keeper->getId(), ReservationState::PENDING); ?>
+                            <?php if(count($pending) > 0) {?><div class="circle" style="position: absolute; transform: translateX(270%) translateY(-40%);"><?php echo count($pending) ?></div><?php } ?>
+                            <span class="title" style="text-align:left; position: absolute;">Pending books</span><br>
+                            <span class="description" style="text-align:left; position: absolute; transform: translateY(89%);">List all pending reservation</span>
                         </div>
                     </a>
                 </div>
@@ -36,7 +41,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                     <a href="">
                         <div class="card-box card-box-border">
                             <span class="title">Bookings</span><br>
-                            <span class="description">List all reservations made including past ones.</span>
+                            <span class="description">List all reservations including past ones.</span>
                         </div>
                     </a>
                 </div>
