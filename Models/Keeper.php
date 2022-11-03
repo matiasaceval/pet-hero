@@ -144,11 +144,18 @@ class Keeper {
         // and we choose the 'max' one of them. This will be the date from which we will start counting the available days
         // with this comparison we avoid counting the days that have already passed
         $lastUntil = $dates[count($dates) - 1];
-        foreach ($reservations as $reservation) {
+        foreach ($reservations as $i => $reservation) {
+
 
             $lastUntil = DateTime::createFromFormat("m-d-Y", $lastUntil);
+
             $days = DateTime::createFromFormat("m-d-Y", $reservation->getSince())->diff($lastUntil)->days;
             $availableDays += $days;
+            // verifying available days in the first iteration
+            if ($i == 0 && $availableDays > 2) {
+                $lastUntil = $reservation->getUntil();
+                continue;
+            }
 
             $lastUntil->modify("+2 day");
             if ($lastUntil->format("m-d-Y") == $reservation->getSince()) {
