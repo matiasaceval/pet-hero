@@ -24,15 +24,12 @@ class KeeperController {
 
     public function Index() {
         $this->VerifyIsLogged();
-        // TODO: Keeper home view
 
         $keeper = Session::Get("keeper");
-        echo "¡Hola " . $keeper->getFirstname() . "!";
-
-        echo "<pre>";
-        var_dump($keeper->getStay());
-        var_dump($this->reviewsDAO->GetByKeeperId($keeper->getId()));
-        echo "</pre>";
+        $reservationsOngoing = $this->reservationDAO->GetByKeeperId($keeper->getId());
+        $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
+        $availableDays = $keeper->getAvailableDays($reservations);
+        require_once(VIEWS_PATH . "keeper-home.php");
     }
 
     private function VerifyIsLogged() {
@@ -89,7 +86,7 @@ class KeeperController {
         $keeper = $this->keeperDAO->GetByEmail($email);
         if ($keeper != null && password_verify($password, $keeper->getPassword())) {
             Session::Set("keeper", $keeper);
-            header("Location: " . FRONT_ROOT . "Keeper/Index");
+            header("Location: " . FRONT_ROOT . "Keeper");
             exit;
         }
 
@@ -141,7 +138,7 @@ class KeeperController {
         }
 
         Session::Set("keeper", $keeper);
-        header("Location: " . FRONT_ROOT . "Keeper/Index");
+        header("Location: " . FRONT_ROOT . "Keeper");
     }
 
     public function Reviews($id = null) {
