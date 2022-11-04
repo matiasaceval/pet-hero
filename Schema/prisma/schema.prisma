@@ -17,6 +17,7 @@ model Keeper {
   email     String   @unique
   password  String
   phone     String
+  fee       Int
   Reviews  Review[]
   stay      Stay?
   Reservation Reservation[]

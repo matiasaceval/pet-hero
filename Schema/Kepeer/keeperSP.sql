@@ -35,10 +35,10 @@ DELIMITER
 $$
 CREATE PROCEDURE addKeeper(IN firstname VARCHAR (191), IN lastname VARCHAR (191),
                            IN email VARCHAR (191) COLLATE utf8_unicode_ci, IN password VARCHAR (191),
-                           IN phone VARCHAR (191), IN since DATE, IN until DATE)
+                           IN phone VARCHAR (191), IN fee INT, IN since DATE, IN until DATE)
 BEGIN
-INSERT INTO keeper (firstname, lastname, email, password, phone)
-VALUES (firstname, lastname, email, password, phone);
+INSERT INTO keeper (firstname, lastname, email, password, phone, fee)
+VALUES (firstname, lastname, email, password, phone, fee);
 INSERT INTO stay (id, since, until)
 VALUES ((SELECT k.id FROM keeper k WHERE k.email = email), since, until);
 END $$
@@ -48,10 +48,10 @@ DELIMITER
 $$
 CREATE PROCEDURE updateKeeper(IN id INT, IN firstname VARCHAR (191), IN lastname VARCHAR (191),
                               IN email VARCHAR (191) COLLATE utf8_unicode_ci, IN password VARCHAR (191),
-                              IN phone VARCHAR (191), IN since DATE, IN until DATE)
+                              IN phone VARCHAR (191), IN fee INT, IN since DATE, IN until DATE)
 BEGIN
 UPDATE keeper k , stay s
-SET k.firstname = firstname, k.lastname = lastname, k.email = email, k.password = password, k.phone = phone, s.since = since, s.until = until
+SET k.firstname = firstname, k.lastname = lastname, k.email = email, k.password = password, k.phone = phone, k.fee = fee, s.since = since, s.until = until
 WHERE k.id = id AND s.id = id;
 END $$
 ELECT ROW_COUNT();
@@ -64,7 +64,8 @@ BEGIN
 DELETE
 k FROM keeper k
 WHERE id = k.id;
-ELECT ROW_COUNT();
+ELECT
+ROW_COUNT();
 END $$
 DELIMITER ;
 
