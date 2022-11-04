@@ -13,7 +13,6 @@ use Models\Owner as Owner;
 use Models\Pet;
 use Models\Reservation;
 use Models\ReservationState;
-use Utils\ReviewsAverage;
 use Utils\Session;
 use Utils\TempValues;
 
@@ -281,6 +280,12 @@ class OwnerController {
         }
         $pets = $this->AvailablePets();
         $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
+
+        // filter reservations that are cancelled or rejected by the keeper, so they can be reused
+        $reservations = array_filter($reservations, function (Reservation $reservation) {
+            return $reservation->getState() != ReservationState::CANCELED && $reservation->getState() != ReservationState::REJECTED;
+        });
+
         $reviews = $this->reviewsDAO->GetByKeeperId($keeper->getId());
         TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/KeepersListView"]);
         require_once(VIEWS_PATH . "owner-place-reservation.php");
