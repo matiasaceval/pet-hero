@@ -42,18 +42,18 @@ require_once(VIEWS_PATH . "back-nav.php");
     ?>
         <div class="row mt-4 justify-content-center">
             <div class="kpr-card-box">
-                <div class="row justify-content-center" style="padding: 0px 28px 0px 28px; width: fit-content; min-width: 44em">
+                <div class="row justify-content-center">
+                    <div class="col-md-auto">
+                        <div class="input-underline">
+                            <p><span style="font-weight:bold; font-size: 24px"><?php echo $reservation->getState() ?></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4 justify-content-center" style="padding: 0px 28px 0px 28px; width: fit-content; min-width: 44em">
                     <!-- Photo -->
                     <div class="col-md-auto">
                         <div class="row justify-content-center" style="margin-top: 4px; padding-right: 14px; padding-bottom: 14px;">
                             <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() ?>" width="200px" height="200px">
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-md-auto">
-                                <div class="input-underline" style="margin-right: 12px">
-                                    <p>State: <span style="font-weight:bold"><?php echo $reservation->getState() ?></span></p>
-                                </div>
-                            </div>
                         </div>
                     </div>
 

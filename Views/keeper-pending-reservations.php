@@ -41,19 +41,12 @@ require_once(VIEWS_PATH . "back-nav.php");
         $owner = $pet->getOwner();
     ?>
         <div class="row mt-4 justify-content-center">
-            <div class="kpr-card-box">
-                <div class="row justify-content-center" style="padding: 0px 28px 0px 28px; width: fit-content; min-width: 44em">
+            <div class="kpr-card-box" style="padding-top: 48px; padding-bottom: 48px">
+                <div class="row justify-content-center" style="width: fit-content; min-width: 44em">
                     <!-- Photo -->
                     <div class="col-md-auto">
                         <div class="row justify-content-center" style="margin-top: 4px; padding-right: 14px; padding-bottom: 14px;">
                             <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() ?>" width="200px" height="200px">
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-md-auto">
-                                <div class="input-underline" style="margin-right: 12px">
-                                    <p>State: <span style="font-weight:bold"><?php echo $reservation->getState() ?></span></p>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -125,19 +118,19 @@ require_once(VIEWS_PATH . "back-nav.php");
                 <div class="row mt-2 justify-content-between" style="padding-left: 16px;">
                     <div class="col-md-auto">
                         <?php $owner = $reservation->getPet()->getOwner(); ?>
-                        <div class="row mt-3">
+                        <div class="row mt-1">
                             <div class="col-md-auto wrap-text" style="max-width: 20em">
                                 <p>Owner: <span class="pet-data"><?php echo $owner->getFullname(); ?></span></p>
                             </div>
                         </div>
-                        <div class="row mt-1">
+                        <div class="row mt-2">
                             <div class="col-md-auto wrap-text" style="max-width: 50em">
                                 <a href="mailto:<?php echo $owner->getEmail(); ?>">
                                     <p>Email: <span class="pet-data"><?php echo $owner->getEmail() ?></span></p>
                                 </a>
                             </div>
                         </div>
-                        <div class="row mt-1">
+                        <div class="row mt-2">
                             <div class="col-md-auto wrap-text" style="max-width: 20em">
                                 <p>Phone: <span class="pet-data"><?php echo $owner->getPhone() ?></span></p>
                             </div>
