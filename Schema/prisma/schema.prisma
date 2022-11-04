@@ -29,6 +29,7 @@ model Owner {
   email    String @unique
   password String
   phone    String
+  fee      Int
   Pets     Pet[]
 }
 
