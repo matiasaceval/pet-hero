@@ -289,14 +289,10 @@ class OwnerController {
 
     private function AvailablePets(): null|array {
         $pets = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
-        $reservationsOfOwner = $this->reservationDAO->GetByOwnerId(Session::Get("owner")->getId());
+        $reservationsOfOwner = $this->reservationDAO->GetByOwnerIdAndStates(Session::Get("owner")->getId(), ReservationState::GetDisablingStates());
         if ($pets == null && $reservationsOfOwner == null) {
             return null;
         }
-        $reservationsOfOwner = array_filter($reservationsOfOwner, function (Reservation $reservation) {
-            $state = [ReservationState::ACCEPTED, ReservationState::PENDING, ReservationState::PAID, ReservationState::IN_PROGRESS];
-            return in_array($reservation->getState(), $state);
-        });
 
         foreach ($pets as $key => $pet) {
             foreach ($reservationsOfOwner as $reservation) {
