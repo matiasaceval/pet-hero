@@ -6,7 +6,7 @@ use Models\Keeper;
 use Models\Stay;
 
 interface IKeeperDAO {
-    public function Add(Keeper $keeper, Stay $stay);
+    public function Add(Keeper $keeper);
 
     public function GetAll(): array;
 
@@ -14,7 +14,7 @@ interface IKeeperDAO {
 
     public function RemoveById(int $id): bool;
 
-    public function Update(Keeper $keeper, Stay $stay): bool;
+    public function Update(Keeper $keeper): bool;
 
     public function GetByEmail(string $email): ?Keeper;
 }

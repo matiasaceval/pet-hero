@@ -133,9 +133,9 @@ class KeeperController {
         $keeper->setStay($stay);
 
         if ($tempKeeper) {
-            $this->keeperDAO->Add($keeper, $stay);
+            $this->keeperDAO->Add($keeper);
         } else {
-            $this->keeperDAO->Update($keeper, $stay);
+            $this->keeperDAO->Update($keeper);
         }
 
         Session::Set("keeper", $keeper);

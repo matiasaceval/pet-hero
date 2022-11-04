@@ -54,6 +54,7 @@ UPDATE keeper k , stay s
 SET k.firstname = firstname, k.lastname = lastname, k.email = email, k.password = password, k.phone = phone, s.since = since, s.until = until
 WHERE k.id = id AND s.id = id;
 END $$
+ELECT ROW_COUNT();
 DELIMITER ;
 
 DELIMITER
@@ -63,15 +64,7 @@ BEGIN
 DELETE
 k FROM keeper k
 WHERE id = k.id;
+ELECT ROW_COUNT();
 END $$
 DELIMITER ;
 
-DELIMITER
-$$
-CREATE PROCEDURE getReviewByKeeperId(IN id INT)
-BEGIN
-SELECT *
-FROM review r
-WHERE r.keeperId = id;
-END $$
-DELIMITER ;

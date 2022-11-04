@@ -44,6 +44,7 @@ CREATE PROCEDURE addPet(IN name VARCHAR (191), IN species VARCHAR (191), IN bree
 BEGIN
 INSERT INTO pet (name, species, breed, sex, age, image, vaccines, ownerId)
 VALUES (name, species, breed, sex, age, image, vaccine, ownerId);
+ELECT ROW_COUNT();
 END $$
 DELIMITER ;
 
@@ -63,6 +64,7 @@ SET p.name     = name,
     p.vaccines = vaccine,
     p.ownerId  = ownerId
 WHERE p.id = id;
+ELECT ROW_COUNT();
 END $$
 DELIMITER ;
 
@@ -73,5 +75,6 @@ BEGIN
 DELETE
 p FROM pet p
 WHERE id = p.id;
+ELECT ROW_COUNT();
 END $$
 DELIMITER ;
