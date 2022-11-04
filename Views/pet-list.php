@@ -88,11 +88,11 @@ if ($err || $succ) { ?>
                                         <a class="dropdown-item"
                                            href="<?php echo FRONT_ROOT ?>Owner/Update?id=<?php echo $pet->GetId() ?>">Update</a>
                                         <a class="dropdown-item" href="" onclick="
-                                                const petName = <?php echo $pet->GetName() ?>;
+                                                const petName = '<?php echo $pet->GetName() ?>';
                                                 const petId = <?php echo $pet->GetId() ?>;
                                                 const msg = `Are you sure you want to delete ${petName} (id: ${petId})?`;
                                                 if(confirm(msg)){
-                                                window.location.href = `<?php echo FRONT_ROOT ?>Owner/RemovePet?id=${petId}`;
+                                                    window.location.href = `<?php echo FRONT_ROOT ?>Owner/RemovePet?id=${petId}`;
                                                 }
                                                 ">Delete</a>
                                     </div>
@@ -111,51 +111,51 @@ if ($err || $succ) { ?>
                             </div>
                         </div>
                         <div class="col-3">
-                            <div class="row">
+                            <div class="row small-card-box-overwrapped" style="width: 10em">
                                 <div class="col-md-auto">
                                     <p>Name</p>
-                                    <p><span class="pet-data"><?php echo $pet->getName() ?></span></p>
+                                    <p><span class="pet-data small-card-box-overwrapped"><?php echo $pet->getName() ?></span></p>
                                 </div>
                             </div>
-                            <div class="row mt-2">
+                            <div class="row mt-2 small-card-box-overwrapped">
                                 <div class="col-md-auto">
                                     <p>Species</p>
-                                    <p><span class="pet-data"><?php echo $pet->getSpecies() ?></span></p>
+                                    <p><span class="pet-data small-card-box-overwrapped"><?php echo $pet->getSpecies() ?></span></p>
                                 </div>
                             </div>
-                            <div class="row mt-2">
+                            <div class="row mt-2 small-card-box-overwrapped">
                                 <div class="col-md-auto">
                                     <p>Breed</p>
-                                    <p><span class="pet-data"><?php echo $pet->getBreed() ?></span></p>
+                                    <p><span class="pet-data small-card-box-overwrapped"><?php echo $pet->getBreed() ?></span></p>
                                 </div>
                             </div>
-                            <div class="row mt-2">
+                            <div class="row mt-2 small-card-box-overwrapped">
                                 <div class="col-md-auto">
                                     <p>Identifier</p>
-                                    <p><span class="pet-data"><?php echo $pet->getId() ?></span></p>
+                                    <p><span class="pet-data small-card-box-overwrapped"><?php echo $pet->getId() ?></span></p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-2">
-                            <div class="row mt">
+                            <div class="row">
                                 <div class="col-md-auto">
                                     <p>Sex</p>
                                     <p>
-                                        <span class="pet-data"><?php echo $pet->getSex() == 'F' ? "Female" : "Male" ?></span>
+                                        <span class="pet-data small-card-box-overwrapped"><?php echo $pet->getSex() == 'F' ? "Female" : "Male" ?></span>
                                     </p>
                                 </div>
                             </div>
                             <div class="row mt-2">
                                 <div class="col-md-auto no-arrow">
                                     <p>Age</p>
-                                    <p><span class="pet-data"><?php echo $pet->getAge() ?></span></p>
+                                    <p><span class="pet-data small-card-box-overwrapped"><?php echo $pet->getAge() ?></span></p>
                                 </div>
                             </div>
                             <div class="row mt-2">
                                 <div class="col-md-auto">
                                     <p>Vaccines</p>
                                     <a href="<?php echo $pet->getVaccine() ?>">
-                                        <p><span class=" pet-data">Click to see</span></p>
+                                        <p><span class=" pet-data small-card-box-overwrapped">Click to see</span></p>
                                     </a>
                                 </div>
                             </div>
