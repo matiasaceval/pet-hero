@@ -193,6 +193,9 @@ select {
     width: fit-content;
     width: 100%;
     position: relative;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .small-card-box .pet-data {
@@ -201,6 +204,13 @@ select {
 
 .small-card-box p {
     font-size: 12px;
+}
+
+.small-card-box-overwrapped {
+    max-width: 8em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .small-card-container {
@@ -296,7 +306,7 @@ h1 {
     text-align: center;
 }
 
-/* kl = keeper list */
+/* kl = owner keeper list */
 .kl h1 {
     font-size: 24px;
     font-weight: bold;
@@ -441,13 +451,83 @@ h1 {
 
 .circle {
   border-radius: 50%;
-  width: 1.5em;
-  height: 1.5em;
+  width: 1.7em;
+  height: 1.7em;
+  aspect-ratio: 1/1;
   background: rgb(255, 67, 67);
   color: #fefcfd;
   text-align: center;
   font-size: 24px;
   font-family: 'Outfit';
+  border: 2px solid #fefcfd; 
+  outline: 1px solid #463ac5;
+}
+
+/** kpr = keeper pending reservations */
+.kpr-card-box {
+    background-color: #fefcfd;
+    border-radius: 10px;
+    margin: 0 auto;
+    padding: 64px 48px 64px 48px;
+    width: fit-content;
+    position: relative;
+}
+
+.kpr-card-box h1 {
+    font-size: 26px;
+    font-weight: bold;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kpr-card-box h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kpr-card-box h3 {
+    font-size: 20px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kpr-card-box h4 {
+    font-size: 18px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kpr-card-box p {
+    font-size: 18px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.wrap-text-max-width {
+    width: 9em;
+}
+
+.wrap-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.item{
+    background-color:#ccc;
+    display:block;
+}
+
+.carousel-caption{
+    color:#000;
+    position:static;
 }
 
 /* Star icon */

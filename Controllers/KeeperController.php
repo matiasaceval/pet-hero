@@ -6,6 +6,7 @@ use DAO\KeeperDAOJson as KeeperDAO;
 use DAO\ReservationDAOJson as ReservationDAO;
 use DAO\ReviewsDAOJson as ReviewsDAO;
 use Models\Keeper as Keeper;
+use Models\Reservation;
 use Models\ReservationState as ReservationState;
 use Models\Stay as Stay;
 use Utils\ReviewsAverage;
@@ -167,18 +168,57 @@ class KeeperController {
         include_once(VIEWS_PATH . "keeper-set-fee-stay.php");
     }
 
+    public function PendingReservationsView() {
+        $this->VerifyIsLogged();
+        $keeper = Session::Get("keeper");
+        $reservations = $this->reservationDAO->GetByKeeperIdAndState($keeper->getId(), ReservationState::PENDING);
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "keeper-pending-reservations.php");
+    }
+
+    public function Reservations() {
+        $this->VerifyIsLogged();
+        $keeper = Session::Get("keeper");
+        $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "keeper-reservations.php");
+    }
+
+    public function OngoingReservations() {
+        $this->VerifyIsLogged();
+        $keeper = Session::Get("keeper");
+        $reservations = $this->reservationDAO->GetByKeeperIdAndStates($keeper->getId(), [ReservationState::ACCEPTED, ReservationState::PAID, ReservationState::IN_PROGRESS]);
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "keeper-reservations.php");
+    }
+
     public function ConfirmReservation(int $id) {
         $this->VerifyIsLogged();
 
         $reservation = $this->reservationDAO->GetById($id);
 
-        if ($reservation == null) {
+        if ($reservation == null || $reservation->getKeeper()->getId() != Session::Get("keeper")->getId()) {
             header("location:" . FRONT_ROOT . "Home/NotFound");
             exit;
         }
 
         $reservation->setState(ReservationState::ACCEPTED);
         $this->reservationDAO->Update($reservation);
-        // header("location:" . FRONT_ROOT . "Keeper/Reservations");
+        header("location:" . FRONT_ROOT . "Keeper/PendingReservationsView");
+    }
+
+    public function RejectReservation(int $id) {
+        $this->VerifyIsLogged();
+
+        $reservation = $this->reservationDAO->GetById($id);
+
+        if ($reservation ==null || $reservation->getKeeper()->getId() != Session::Get("keeper")->getId()) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+
+        $reservation->setState(ReservationState::REJECTED);
+        $this->reservationDAO->Update($reservation);
+        header("location:" . FRONT_ROOT . "Keeper/PendingReservationsView");
     }
 }
