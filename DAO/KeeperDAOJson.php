@@ -19,17 +19,15 @@ class KeeperDAOJson implements IKeeperDAO {
         $this->stayDAO = new StayDAO();
     }
 
-    function Add(Keeper $keeper, Stay $stay) {
+    function Add(Keeper $keeper) {
         $this->RetrieveData();
 
         $id = $this->GetNextId();
         $keeper->setId($id);
 
-        $stay->setId($id);
+        $keeper->getStay()->setId($id);
 
-        $keeper->setStay($stay);
-
-        $this->stayDAO->Add($stay);
+        $this->stayDAO->Add($keeper->getStay());
 
         array_push($this->keeperList, $keeper);
 
@@ -112,12 +110,12 @@ class KeeperDAOJson implements IKeeperDAO {
         return count($cleanedArray) < count($this->keeperList);
     }
 
-    function Update(Keeper $keeper, Stay $stay): bool {
+    function Update(Keeper $keeper): bool {
         $this->RetrieveData();
         foreach ($this->keeperList as $key => $keeperOfList) {
             if ($keeperOfList->getId() == $keeper->getId()) {
                 $this->keeperList[$key] = $keeper;
-                $this->stayDAO->Update($stay);
+                $this->stayDAO->Update($keeper->getStay());
                 $this->SaveData();
                 return true;
             }
