@@ -520,14 +520,28 @@ h1 {
     white-space: nowrap;
 }
 
-.item{
-    background-color:#ccc;
-    display:block;
+input[type='checkbox'] {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    padding: 12px !important;
 }
 
-.carousel-caption{
-    color:#000;
-    position:static;
+input[type='checkbox']:checked {
+    background-color: #463ac5;
+}
+
+.state-filter {
+    font-size: 18px;
+    color: #fefcfd;
+    border: none;
+    background-color: none;
+    padding: 0 18px 0 4px;
 }
 
 /* Star icon */

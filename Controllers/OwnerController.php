@@ -330,12 +330,84 @@ class OwnerController {
 
         $reservation->setPrice($keeper->calculatePrice($since, $until));
 
-        // TODO: ReservationDAO
         $this->reservationDAO->Add($reservation);
 
         Session::Set("success", "Reservation placed successfully");
 
         header("location:" . FRONT_ROOT . "Owner/KeepersListView");
+    }
+
+    public function Reservations(array $states = array()) {
+        $this->VerifyIsLogged();
+        $reservations = array();
+        if (!empty($states)) {
+            if($states == ReservationState::GetStates()){
+                // avoiding big URL when filtering by all states
+                header("location:" . FRONT_ROOT . "Owner/Reservations");
+                exit;
+            }
+            $reservations = $this->reservationDAO->GetByOwnerIdAndStates(Session::Get("owner")->getId(), $states);
+        } else {
+            $states = ReservationState::GetStates();
+            $reservations = $this->reservationDAO->GetByOwnerId(Session::Get("owner")->getId());
+        }
+
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "owner-reservations.php");
+    }
+
+    public function UploadPayment(int $id, array $image) {
+        $this->VerifyIsLogged();
+
+        $reservation = $this->reservationDAO->GetById($id);
+        if ($reservation == null) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+
+        if ($reservation->getPet()->getOwner()->getId() != Session::Get("owner")->getId()) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+
+        if ($reservation->getState() != ReservationState::ACCEPTED) {
+            Session::Set("error", "The reservation is not in a valid state");
+            header("location:" . FRONT_ROOT . "Owner/Reservations");
+            exit;
+        }
+
+        try {
+            $fileExt = explode(".", $image["name"]);
+            $fileType = strtolower(end($fileExt));
+            $filePreName = "reservation-" . $reservation->getId() . "-payment";
+            $fileName = $filePreName . "." . $fileType;
+            $tempFileName = $image["tmp_name"];
+            $filePath = UPLOADS_PATH . basename($fileName);
+
+            $imageSize = getimagesize($tempFileName);
+
+            if ($imageSize !== false) {
+                $files = glob(UPLOADS_PATH . $filePreName . ".*");
+                foreach ($files as $file) {
+                    chmod($file, 0755); //Change the file permissions if allowed
+                    unlink($file); //remove the file
+                }
+
+                if (move_uploaded_file($tempFileName, $filePath)) {
+                    $reservation->setPayment($fileName);
+                    $reservation->setState(ReservationState::PAID);
+                    $this->reservationDAO->Update($reservation);
+                } else {
+                    Session::Set("error", "Error uploading image");
+                }
+            } else {
+                Session::Set("error", "File is not an image");
+            }
+        } catch (Exception $ex) {
+            Session::Set("error", $ex->getMessage());
+        }
+
+        header("location:" . FRONT_ROOT . "Owner/Reservations?states[]=" . ReservationState::ACCEPTED);
     }
 
     public function SignUpView() {
