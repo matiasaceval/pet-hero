@@ -71,7 +71,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                     </div>
                     <?php if (!in_array($reservation->getState(), array(ReservationState::PENDING, ReservationState::REJECTED))) { ?>
                         <div class="col justify-content-end" style="position:absolute; display:flex; padding-right: 24px">
-                            <a href="<?php echo FRONT_ROOT ?>Owner/GenerateReservationBill?id=<?php echo $reservation->getId() ?>" target="_blank">
+                            <a href="<?php echo FRONT_ROOT ?>Owner/GenerateReservationBill?id=<?php echo $reservation->getId() ?>" target="_blank" onclick="window.open('#','_blank');window.open(this.href,'_self');">
                                 <button class="btn btn-secondary" style="font-size: 16px;">Invoice <i style="font-size: 18px; padding-left: 8px" class="fa fa-download" aria-hidden="true"></i></button>
                             </a>
                         </div>
