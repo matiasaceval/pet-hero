@@ -18,7 +18,6 @@ model Keeper {
   password  String
   phone     String
   fee       Int
-  Reviews  Review[]
   stay      Stay?
   Reservation Reservation[]
 }
@@ -45,7 +44,6 @@ model Pet {
   //relations
   Owner       Owner    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId     Int
-  Reviews     Review[]
   Reservations Reservation[]
 }
 
@@ -55,35 +53,30 @@ model Review {
   rating   Int
   date     DateTime @default(now())
   //relations
-  Keeper   Keeper   @relation(fields: [keeperId], references: [id], onDelete: Cascade)
-  keeperId Int     
-  Pet      Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
-  petId    Int
+  Reservation Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  reservationId Int @unique
 }
 
 model Stay {
   id    Int      @id @unique
   since DateTime
   until DateTime
-
   Keeper Keeper @relation(fields: [id], references: [id], onDelete: Cascade)
 }
 
 
 model Reservation {
   id       Int      @id @default(autoincrement())
-  id_user  Int
   since    DateTime
   until    DateTime
   state    String
   price    Float
   payment  String
   createdAt DateTime @default(now()) 
-
   //relations
   Pet      Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
   petId    Int
   Keeper   Keeper   @relation(fields: [keeperId], references: [id], onDelete: Cascade)
   keeperId Int
-
+  Review   Review?
 }
