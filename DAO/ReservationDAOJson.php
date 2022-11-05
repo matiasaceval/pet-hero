@@ -20,6 +20,7 @@ class ReservationDAOJson implements IReservationDAOJson {
         $this->RetrieveData();
         $reservation->setId($this->GetNextId());
         $reservation->setCreatedAt(date("Y-m-d H:i:s"));
+        $reservation->setPayment("pending");
         array_push($this->reservationList, $reservation);
         $this->SaveData();
     }
@@ -40,6 +41,7 @@ class ReservationDAOJson implements IReservationDAOJson {
                 $reservation->setKeeper($this->keeperDAO->GetById($valuesArray["keeperId"]));
                 $reservation->setPrice($valuesArray["price"]);
                 $reservation->setCreatedAt($valuesArray["createdAt"]);
+                $reservation->setPayment($valuesArray["payment"]);
                 array_push($this->reservationList, $reservation);
             }
         }
@@ -69,6 +71,7 @@ class ReservationDAOJson implements IReservationDAOJson {
             $valuesArray["keeperId"] = $reservation->getKeeper()->getId();
             $valuesArray["price"] = $reservation->getPrice();
             $valuesArray["createdAt"] = $reservation->getCreatedAt();
+            $valuesArray["payment"] = $reservation->getPayment();
             array_push($arrayToEncode, $valuesArray);
         }
         $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);

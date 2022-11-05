@@ -1,4 +1,7 @@
 <?php
+
+use Models\ReservationState;
+
 require_once(VIEWS_PATH . "home-nav.php");
 ?>
 <div class="container overflow-hidden">
@@ -20,7 +23,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                     <a href="<?php echo FRONT_ROOT ?>Owner/Pets">
                         <div class="card-box card-box-border">
                             <span class="title">Pets</span><br>
-                            <span class="description">List my pets and add new ones.</span>
+                            <span class="description">List my pets and add new ones</span>
                         </div>
                     </a>
                 </div>
@@ -29,16 +32,21 @@ require_once(VIEWS_PATH . "home-nav.php");
                     <a href="<?php echo FRONT_ROOT ?>Owner/KeepersListView">
                         <div class="card-box card-box-border">
                             <span class="title">Keepers</span><br>
-                            <span class="description">List all keepers availables to book.</span>
+                            <span class="description">List all keepers availables to book</span>
                         </div>
                     </a>
                 </div>
                 <div class="col-3">
                     <!-- Bookings -->
-                    <a href="">
-                        <div class="card-box card-box-border">
-                            <span class="title">Bookings</span><br>
-                            <span class="description">List all bookings made.</span>
+                    <?php 
+                        $pendingR = $this->reservationDAO->GetByOwnerIdAndState($owner->getId(), ReservationState::ACCEPTED); 
+                        $pending = count($pendingR) > 0;
+                    ?>
+                    <a href="<?php echo FRONT_ROOT ?>Owner/Reservations<?php if($pending) echo "?states[]=" . ReservationState::ACCEPTED ?>">
+                        <div class=" card-box card-box-border">
+                            <?php if ($pending) { ?><div title="You have reservations accepted!" class="circle" style="position: absolute; transform: translateX(280%) translateY(-100%);"><?php echo count($pendingR) ?></div><?php } ?>
+                            <span class="title" style="text-align:left; position: absolute;">Bookings</span><br>
+                            <span class="description" style="text-align:left; position: absolute; transform: translateY(22%);">List all bookings made</span>
                         </div>
                     </a>
                 </div>
@@ -47,7 +55,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                     <a href="">
                         <div class="card-box card-box-border">
                             <span class="title">Reviews</span><br>
-                            <span class="description">List all reviews made.</span>
+                            <span class="description">List all reviews made</span>
                         </div>
                     </a>
                 </div>

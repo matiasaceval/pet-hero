@@ -24,6 +24,19 @@ class ReservationState {
             ReservationState::CONFIRMED
         ];
     }
+
+    public static function GetStates(): array {
+        return [
+            ReservationState::PENDING,
+            ReservationState::ACCEPTED,
+            ReservationState::REJECTED,
+            ReservationState::CANCELED,
+            ReservationState::PAID,
+            ReservationState::CONFIRMED,
+            ReservationState::IN_PROGRESS,
+            ReservationState::FINISHED
+        ];
+    }
 }
 
 /**     

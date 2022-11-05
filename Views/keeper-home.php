@@ -21,7 +21,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                     <a href="<?php echo FRONT_ROOT ?>Keeper/PendingReservationsView">
                         <div class=" card-box card-box-border">
                             <?php $pending = $this->reservationDAO->GetByKeeperIdAndState($keeper->getId(), ReservationState::PENDING); ?>
-                            <?php if (count($pending) > 0) { ?><div class="circle" style="position: absolute; transform: translateX(280%) translateY(-100%);"><?php echo count($pending) ?></div><?php } ?>
+                            <?php if (count($pending) > 0) { ?><div title="You have pending reservations!" class="circle" style="position: absolute; transform: translateX(280%) translateY(-100%);"><?php echo count($pending) ?></div><?php } ?>
                             <span class="title" style="text-align:left; position: absolute;">Pending books</span><br>
                             <span class="description" style="text-align:left; position: absolute; transform: translateY(89%);">List all pending reservation</span>
                         </div>
@@ -41,7 +41,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                     <a href="<?php echo FRONT_ROOT ?>Keeper/Reservations">
                         <div class="card-box card-box-border">
                             <span class="title">Bookings</span><br>
-                            <span class="description">List all reservations including past ones.</span>
+                            <span class="description">List all reservations including past ones</span>
                         </div>
                     </a>
                 </div>

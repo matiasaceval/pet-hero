@@ -11,6 +11,7 @@ class Reservation {
     private int $price;
     private string $createdAt;
     private int $id;
+    private string $payment;
 
     /**
      * @return Keeper
@@ -124,5 +125,18 @@ class Reservation {
         $this->id = $id;
     }
 
+    /**
+     * @return string
+     */
+    public function getPayment(): string {
+        return $this->payment;
+    }
+
+    /**
+     * @param string $payment
+     */
+    public function setPayment(string $payment): void {
+        $this->payment = $payment;
+    }
 
 }
