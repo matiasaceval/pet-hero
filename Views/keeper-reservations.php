@@ -120,6 +120,10 @@ require_once(VIEWS_PATH . "back-nav.php");
                                 <p><?php echo $reservation->getUntil() ?></p>
                             </div>
                         </div>
+                        <div class="row justify-content-center">
+                            <!-- Price -->
+                            <p>$<?php echo $reservation->getPrice() ?></p>
+                        </div>
                     </div>
                 </div>
                 <div class="row mt-2 justify-content-between" style="padding-left: 16px;">
