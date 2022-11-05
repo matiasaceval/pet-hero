@@ -131,10 +131,10 @@ DELIMITER ;
 
 DELIMITER
 $$
-CREATE PROCEDURE `updateReservationState`(IN reservationId INT, IN state VARCHAR (191))
+CREATE PROCEDURE `updateReservationState`(IN reservationId INT, IN state VARCHAR (191), IN payment VARCHAR (191))
 BEGIN
 UPDATE reservation r
-SET r.state = state
+SET r.state = state, r.payment = payment;
 WHERE r.id = reservationId;
 ELECT ROW_COUNT();
 END$$
@@ -144,10 +144,10 @@ DELIMITER ;
 DELIMITER
 $$
 CREATE PROCEDURE `addReservation`(IN petId INT, IN keeperId INT, IN state VARCHAR (191), IN since DATE, IN until DATE,
-                                  price FLOAT (10))
+                                  price FLOAT (10), IN payment VARCHAR (191))
 BEGIN
-INSERT INTO reservation (petId, keeperId, state, since, until, price)
-VALUES (petId, keeperId, state, since, until, price);
+INSERT INTO reservation (petId, keeperId, state, since, until, price, payment)
+VALUES (petId, keeperId, state, since, until, price, payment);
 ELECT ROW_COUNT();
 END$$
 DELIMITER ;
