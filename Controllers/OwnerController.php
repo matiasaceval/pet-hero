@@ -416,6 +416,23 @@ class OwnerController {
         header("location:" . FRONT_ROOT . "Owner/Reservations?states[]=" . ReservationState::ACCEPTED);
     }
 
+    public function GenerateReservationBill(int $id) {
+        $this->VerifyIsLogged(); 
+
+        $reservation = $this->reservationDAO->GetById($id);
+        if ($reservation == null) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+
+        if ($reservation->getPet()->getOwner()->getId() != Session::Get("owner")->getId()) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+
+        require_once(VIEWS_PATH . "bill-imprint.php");
+    }
+
     public function SignUpView() {
         $this->IfLoggedGoToIndex();
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
