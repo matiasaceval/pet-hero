@@ -1,9 +1,9 @@
 DELIMITER
 $$
-CREATE PROCEDURE `addReview`(IN comment VARCHAR (191), IN rating INT, IN `date` DATE, IN petId INT, IN keeperId INT)
+CREATE PROCEDURE `addReview`(IN comment VARCHAR (191), IN rating INT, IN `date` DATE, IN reservationId INT)
 BEGIN
-INSERT INTO review (comment, rating, `date`, petId, keeperId)
-VALUES (comment, rating, `date`, petId, keeperId);
+INSERT INTO review (comment, rating, `date`, reservationId)
+VALUES (comment, rating, `date`, reservationId);
 ELECT ROW_COUNT();
 END $$
 DELIMITER ;
@@ -12,21 +12,13 @@ DELIMITER
 $$
 CREATE PROCEDURE `getAllReviews`()
 BEGIN
-SELECT r.*,
-       k.firstname,
-       k.lastname,
-       k.email,
-       k.phone,
-       p.name,
-       p.species,
-       p.breed,
-       p.sex,
-       p.age,
-       p.image,
-       p.vaccines
+SELECT r.*, k.*, p.*, o.* , s.*, re.*
 FROM review r
-         INNER JOIN keeper k ON r.keeperId = k.id
-         INNER JOIN pet p ON r.petId = p.id;
+        INNER JOIN reservation re ON re.id = r.reservationId 
+        INNER JOIN keeper k ON k.id = re.keeperId
+        LEFT JOIN pet p ON p.id = re.petId
+        INNER JOIN owner o ON o.id = p.ownerId
+        INNER JOIN stay s ON s.id = k.id
 END$$
 DELIMITER ;
 
@@ -34,11 +26,30 @@ DELIMITER
 $$
 CREATE PROCEDURE getReviewByKeeperId(IN id INT)
 BEGIN
-SELECT *
+SELECT r.*, k.*, p.* , o.* , s.*, re.*
 FROM review r
-WHERE r.keeperId = id;
+        INNER JOIN reservation re ON re.id = r.reservationId 
+        INNER JOIN keeper k ON k.id = re.keeperId
+        LEFT JOIN pet p ON p.id = re.petId
+        INNER JOIN owner o ON o.id = p.ownerId
+        INNER JOIN stay s ON s.id = k.id
+    WHERE r.keeperId = id;
 END $$
 DELIMITER ;
+
+DELIMITER 
+$$
+CREATE PROCEDURE getReviewById(IN id INT)
+BEGIN
+SELECT r.*, k.*, p.* , o.* , s.*, re.*
+FROM review r
+        INNER JOIN reservation re ON re.id = r.reservationId 
+        INNER JOIN keeper k ON k.id = re.keeperId
+        LEFT JOIN pet p ON p.id = re.petId
+        INNER JOIN owner o ON o.id = p.ownerId
+        INNER JOIN stay s ON s.id = k.id
+    WHERE r.id = id;
+END $$
 
 DELIMITER
 $$
