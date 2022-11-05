@@ -8,8 +8,21 @@ class Reviews {
     private string $comment;
     private float $rating;
     private string $date;
-    private Pet $pet;
-    private Keeper $keeper;
+    private Reservation $reservation;
+
+    /**
+     * @return Reservation
+     */
+    public function getReservation(): Reservation {
+        return $this->reservation;
+    }
+
+    /**
+     * @param Reservation $reservation
+     */
+    public function setReservation(Reservation $reservation): void {
+        $this->reservation = $reservation;
+    }
 
 
     public function getId(): int {
@@ -43,28 +56,5 @@ class Reviews {
     public function setDate(string $date): void {
         $this->date = $date;
     }
-
-    public function getPet(): Pet {
-        return $this->pet;
-    }
-
-    public function setPet(Pet $pet): void {
-        $this->pet = $pet;
-    }
-
-    /**
-     * @return Keeper
-     */
-    public function getKeeper(): Keeper {
-        return $this->keeper;
-    }
-
-    /**
-     * @param Keeper $keeper
-     */
-    public function setKeeper(Keeper $keeper): void {
-        $this->keeper = $keeper;
-    }
-
 
 }

@@ -16,4 +16,6 @@ interface IReviewsDAO {
     public function Update(Reviews $reviews): bool;
 
     public function GetByKeeperId(int $id): array;
+
+    public function GetByReservationId(int $id): Reviews|null;
 }

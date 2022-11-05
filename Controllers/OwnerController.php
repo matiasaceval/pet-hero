@@ -13,6 +13,7 @@ use Models\Owner as Owner;
 use Models\Pet;
 use Models\Reservation;
 use Models\ReservationState;
+use Models\Reviews;
 use Utils\Session;
 use Utils\TempValues;
 
@@ -346,7 +347,7 @@ class OwnerController {
         $this->VerifyIsLogged();
         $reservations = array();
         if (!empty($states)) {
-            if($states == ReservationState::GetStates()){
+            if ($states == ReservationState::GetStates()) {
                 // avoiding big URL when filtering by all states
                 header("location:" . FRONT_ROOT . "Owner/Reservations");
                 exit;
@@ -425,5 +426,41 @@ class OwnerController {
         $this->IfLoggedGoToIndex();
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "owner-login.php");
+    }
+
+    public function PlaceReview(string $comment, float $rating, int $reservationId) {
+        $this->VerifyIsLogged();
+        $reservation = $this->reservationDAO->GetById($reservationId);
+        if ($reservation == null) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+        if ($reservation->getPet()->getOwner()->getId() != Session::Get("owner")->getId()) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+
+        if ($reservation->getState() != ReservationState::FINISHED) {
+            Session::Set("error", "The reservation is not in a valid state");
+            header("location:" . FRONT_ROOT . "Owner/Reservations");
+            exit;
+        }
+        if ($this->reviewsDAO->GetByReservationId($reservationId) != null) {
+            Session::Set("error", "You already placed a review for this reservation");
+            header("location:" . FRONT_ROOT . "Owner/Reservations");
+            exit;
+        }
+
+        $review = new Reviews();
+        $review->setComment($comment);
+        $review->setRating($rating);
+        $review->setReservation($reservation);
+        $review->setDate(date("Y-m-d"));
+
+        $this->reviewsDAO->Add($review);
+
+        Session::Set("success", "Review placed successfully");
+
+        header("location:" . FRONT_ROOT . "Owner/Reservations");
     }
 }

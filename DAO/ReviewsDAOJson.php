@@ -2,8 +2,6 @@
 
 namespace DAO;
 
-use DAO\PetDAOJson as PetDAO;
-use DAO\KeeperDAOJson as KeeperDAO;
 use Models\Reviews;
 
 class ReviewsDAOJson implements IReviewsDAO {
@@ -12,13 +10,11 @@ class ReviewsDAOJson implements IReviewsDAO {
      */
     private array $reviewList = array();
     private string $fileName;
-    private PetDAO $petDAO;
-    private KeeperDAOJson $keeperDAO;
+    private ReservationDAOJson $reservationDAO;
 
     public function __construct() {
         $this->fileName = ROOT . "/Data/reviews.json";
-        $this->petDAO = new PetDAO();
-        $this->keeperDAO = new KeeperDAO();
+        $this->reservationDAO = new ReservationDAOJson();
     }
 
     function Add(Reviews $review) {
@@ -45,8 +41,7 @@ class ReviewsDAOJson implements IReviewsDAO {
                 $review->setComment($valuesArray["comment"]);
                 $review->setRating($valuesArray["rating"]);
                 $review->setDate($valuesArray["date"]);
-                $review->setPet($this->petDAO->GetById($valuesArray["pet"]));
-                $review->setKeeper($this->keeperDAO->GetById($valuesArray["keeperId"]));
+                $review->setReservation($this->reservationDAO->GetById($valuesArray["reservation"]));
                 array_push($this->reviewList, $review);
             }
         }
@@ -74,8 +69,7 @@ class ReviewsDAOJson implements IReviewsDAO {
             $valuesArray["comment"] = $review->getComment();
             $valuesArray["rating"] = $review->getRating();
             $valuesArray["date"] = $review->getDate();
-            $valuesArray["pet"] = $review->getPet()->getId();
-            $valuesArray["keeperId"] = $review->getKeeper()->getId();
+            $valuesArray["reservation"] = $review->getReservation()->getId();
 
             array_push($arrayToEncode, $valuesArray);
         }
@@ -115,6 +109,14 @@ class ReviewsDAOJson implements IReviewsDAO {
     public function GetByKeeperId(int $id): array {
         $this->RetrieveData();
 
-        return array_filter($this->reviewList, fn($review) => $review->getKeeper()->getId() == $id);
+        return array_filter($this->reviewList, fn($review) => $review->getReservation()->getKeeper()->getId() == $id);
+    }
+
+    public function GetByReservationId(int $id): Reviews|null {
+        $this->RetrieveData();
+
+        $review = array_filter($this->reviewList, fn($review) => $review->getReservation()->getId() == $id);
+
+        return array_shift($review);
     }
 }

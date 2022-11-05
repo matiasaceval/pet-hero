@@ -50,7 +50,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                     return $bDate <=> $aDate;
                 });
                 foreach ($reviews as $key => $review) {
-                    $pet = $review->getPet();
+                    $pet = $review->getReservation()->getPet();
                     $owner = $pet->getOwner();
                     if ($key != 0) echo '<hr style="background-color: rgba(34, 34, 34, 0.3)">'
                     ?>
