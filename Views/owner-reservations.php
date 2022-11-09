@@ -204,7 +204,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                             <div class="row justify-content-center">
                                 <div class="col-md-auto align-self-center">
                                     <div class="row mt-1 justify-content-center">
-                                        <a href="<?php echo FRONT_ROOT ?>Owner/Review?id=<?php echo $reservation->getId() ?>">
+                                        <a href="<?php echo FRONT_ROOT ?>Review/Review?id=<?php echo $reservation->getId() ?>">
                                             <button class="btn btn-secondary" style="font-size: 22px; min-width: 150px;">Review</button>
                                         </a>
                                     </div>

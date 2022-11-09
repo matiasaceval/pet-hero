@@ -169,7 +169,7 @@ if ($err || $succ) { ?>
                     </div>
                 </div>
                 <div class="row mt-3 justify-content-between align-self-end" style="padding: 0px 15px 0 15px">
-                    <a href="<?php echo FRONT_ROOT ?>Owner/Reviews?id=<?php echo $keeper->getId() ?>">
+                    <a href="<?php echo FRONT_ROOT ?>Review/ListKeeperReviews?id=<?php echo $keeper->getId() ?>">
                         <button class="btn btn-secondary" <?php if (empty($reviews)) echo "disabled" ?>>See
                             reviews
                         </button>
