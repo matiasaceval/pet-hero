@@ -6,10 +6,9 @@ use DAO\KeeperDAOJson as KeeperDAO;
 use DAO\ReservationDAOJson as ReservationDAO;
 use DAO\ReviewsDAOJson as ReviewsDAO;
 use Models\Keeper as Keeper;
-use Models\Reservation;
 use Models\ReservationState as ReservationState;
 use Models\Stay as Stay;
-use Utils\ReviewsAverage;
+use Utils\LoginMiddleware;
 use Utils\Session;
 use Utils\TempValues;
 
@@ -25,7 +24,7 @@ class KeeperController {
     }
 
     public function Index() {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyKeeper();
 
         $keeper = Session::Get("keeper");
         $reservationsOngoing = $this->reservationDAO->GetByKeeperId($keeper->getId());
@@ -33,15 +32,7 @@ class KeeperController {
         $availableDays = $keeper->getAvailableDays($reservations);
         require_once(VIEWS_PATH . "keeper-home.php");
     }
-
-    private function VerifyIsLogged() {
-        if (Session::VerifySession("keeper") == false) {
-            Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Keeper/LoginView");
-            exit;
-        }
-    }
-
+    
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
         // if there's an keeper session already, redirect to home
         $this->IfLoggedGoToIndex();
@@ -120,7 +111,7 @@ class KeeperController {
         $keeper = $tempKeeper;
         $stay = new Stay();
         if ($tempKeeper == null) {
-            $this->VerifyIsLogged();
+            LoginMiddleware::VerifyKeeper();
 
             $keeper = Session::Get("keeper");
             $stay = $keeper->getStay();
@@ -143,7 +134,7 @@ class KeeperController {
     }
 
     public function Reviews($id = null) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyKeeper();
         $keeper = $id ? $this->keeperDAO->GetById($id) : Session::Get("keeper");
         if ($keeper == null) {
             header("location:" . FRONT_ROOT . "Home/NotFound");
@@ -156,7 +147,7 @@ class KeeperController {
 
     public function SetFeeStayView() {
         if (TempValues::ValueExist("keeper") == false) {
-            $this->VerifyIsLogged();
+            LoginMiddleware::VerifyKeeper();
         }
         $tempKeeper = TempValues::GetValue("keeper");
         $keeper = $tempKeeper ?? Session::Get("keeper");
@@ -169,7 +160,7 @@ class KeeperController {
     }
 
     public function PendingReservationsView() {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyKeeper();
         $keeper = Session::Get("keeper");
         $reservations = $this->reservationDAO->GetByKeeperIdAndState($keeper->getId(), ReservationState::PENDING);
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
@@ -177,7 +168,7 @@ class KeeperController {
     }
 
     public function Reservations() {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyKeeper();
         $keeper = Session::Get("keeper");
         $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
@@ -185,7 +176,7 @@ class KeeperController {
     }
 
     public function OngoingReservations() {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyKeeper();
         $keeper = Session::Get("keeper");
         $reservations = $this->reservationDAO->GetByKeeperIdAndStates($keeper->getId(), [ReservationState::ACCEPTED, ReservationState::PAID, ReservationState::IN_PROGRESS]);
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
@@ -193,7 +184,7 @@ class KeeperController {
     }
 
     public function ConfirmReservation(int $id) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyKeeper();
 
         $reservation = $this->reservationDAO->GetById($id);
 
@@ -208,11 +199,11 @@ class KeeperController {
     }
 
     public function RejectReservation(int $id) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyKeeper();
 
         $reservation = $this->reservationDAO->GetById($id);
 
-        if ($reservation ==null || $reservation->getKeeper()->getId() != Session::Get("keeper")->getId()) {
+        if ($reservation == null || $reservation->getKeeper()->getId() != Session::Get("keeper")->getId()) {
             header("location:" . FRONT_ROOT . "Home/NotFound");
             exit;
         }

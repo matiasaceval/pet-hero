@@ -14,6 +14,7 @@ use Models\Pet;
 use Models\Reservation;
 use Models\ReservationState;
 use Models\Reviews;
+use Utils\LoginMiddleware;
 use Utils\Session;
 use Utils\TempValues;
 
@@ -33,23 +34,15 @@ class OwnerController {
     }
 
     public function Index() {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
 
         $owner = Session::Get("owner");
         require_once(VIEWS_PATH . "owner-home.php");
     }
 
-    private function VerifyIsLogged() {
-        if (Session::VerifySession("owner") == false) {
-            Session::Set("error", "You must be logged in to access this page.");
-            header("location:" . FRONT_ROOT . "Owner/LoginView");
-            exit;
-        }
-    }
-
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
         // if there's an owner session already, redirect to home
-        $this->IfLoggedGoToIndex();
+        LoginMiddleware::IfLoggedGoToIndex();
 
         TempValues::InitValues(["firstname" => $firstname, "lastname" => $lastname, "email" => $email, "phone" => $phone]);
 
@@ -81,15 +74,6 @@ class OwnerController {
         header("location:" . FRONT_ROOT . "Owner");
     }
 
-    private function IfLoggedGoToIndex() {
-        if (Session::VerifySession("owner")) {
-            header("Location: " . FRONT_ROOT . "Owner");
-            exit;
-        } else if (Session::VerifySession("keeper")) {
-            header("Location: " . FRONT_ROOT . "Keeper");
-            exit;
-        }
-    }
 
     public function Login(string $email, string $password) {
         $owner = $this->ownerDAO->GetByEmail($email);
@@ -111,7 +95,7 @@ class OwnerController {
     }
 
     public function Pets() {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
 
         $petList = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
 
@@ -120,7 +104,7 @@ class OwnerController {
     }
 
     public function AddPet($name, $species, $breed, $age, $sex, $image, $vaccine) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
 
         $pet = new Pet();
         $pet->setName($name);
@@ -136,13 +120,13 @@ class OwnerController {
     }
 
     public function AddPetView() {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
         TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/Pets"]);
         require_once(VIEWS_PATH . "pet-add.php");
     }
 
     public function EditPet($id, $name, $species, $breed, $age, $sex, $image, $vaccine) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
 
         $getPet = $this->petDAO->GetById($id);
         if ($getPet->getOwner()->getId() != Session::Get("owner")->getId()) {
@@ -199,7 +183,7 @@ class OwnerController {
     }
 
     public function Update($id) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
 
         $pet = $this->petDAO->GetById($id);
         if (!$pet || $pet->getOwner()->getId() != Session::Get("owner")->getId()) {
@@ -212,7 +196,7 @@ class OwnerController {
     }
 
     public function RemovePet($id) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
 
         $pet = $this->petDAO->GetById($id);
         if ($pet && $pet->getOwner()->getId() == Session::Get("owner")->getId()) {
@@ -224,7 +208,7 @@ class OwnerController {
     }
 
     public function KeepersListView($since = null, $until = null) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
         $keeperList = $this->keeperDAO->GetAll();
         if ($since == null || $until == null) {
             // only show those who are available
@@ -261,7 +245,7 @@ class OwnerController {
     }
 
     public function Reviews($id) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
         $keeper = $this->keeperDAO->GetById($id);
         if ($keeper == null) {
             header("location:" . FRONT_ROOT . "Home/NotFound");
@@ -275,7 +259,7 @@ class OwnerController {
     }
 
     public function PlaceReservationView(int $id) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
         $keeper = $this->keeperDAO->GetById($id);
         if ($keeper == null) {
             header("location:" . FRONT_ROOT . "Home/NotFound");
@@ -313,7 +297,7 @@ class OwnerController {
     }
 
     public function PlaceReservation(int $petId, int $keeperId, string $since, string $until) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
 
         $pet = $this->petDAO->GetById($petId);
         $keeper = $this->keeperDAO->GetById($keeperId);
@@ -346,7 +330,7 @@ class OwnerController {
     }
 
     public function Reservations(array $states = array()) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
         $reservations = array();
         if (!empty($states)) {
             if ($states == ReservationState::GetStates()) {
@@ -365,7 +349,7 @@ class OwnerController {
     }
 
     public function UploadPayment(int $id, array $image) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
 
         $reservation = $this->reservationDAO->GetById($id);
         if ($reservation == null) {
@@ -419,7 +403,7 @@ class OwnerController {
     }
 
     public function GenerateReservationBill(int $id) {
-        $this->VerifyIsLogged(); 
+        LoginMiddleware::VerifyOwner();
 
         $reservation = $this->reservationDAO->GetById($id);
         if ($reservation == null) {
@@ -436,20 +420,20 @@ class OwnerController {
     }
 
     public function SignUpView() {
-        $this->IfLoggedGoToIndex();
+        LoginMiddleware::IfLoggedGoToIndex();
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "owner-signup.php");
     }
 
     public function LoginView() {
-        $this->IfLoggedGoToIndex();
+        LoginMiddleware::IfLoggedGoToIndex();
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "owner-login.php");
     }
 
     // TODO: Display Review errors on Reservations
     public function PlaceReview(string $comment, int $rating, int $reservationId) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
         $reservation = $this->reservationDAO->GetById($reservationId);
         if ($reservation == null) {
             header("location:" . FRONT_ROOT . "Home/NotFound");
@@ -486,7 +470,7 @@ class OwnerController {
 
     // TODO: Display Review errors on Reservations
     public function Review(int $id) {
-        $this->VerifyIsLogged();
+        LoginMiddleware::VerifyOwner();
         $reservation = $this->reservationDAO->GetById($id);
         if ($reservation == null) {
             header("location:" . FRONT_ROOT . "Home/NotFound");
