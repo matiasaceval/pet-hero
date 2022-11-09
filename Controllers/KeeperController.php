@@ -33,9 +33,11 @@ class KeeperController {
         require_once(VIEWS_PATH . "keeper-home.php");
     }
 
+    /* Keeper Sign Up */
+    /* -------------------------------------------------------------------------- */
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
         // if there's an keeper session already, redirect to home
-        $this->IfLoggedGoToIndex();
+        LoginMiddleware::IfLoggedGoToIndex();
 
         TempValues::InitValues(["firstname" => $firstname, "lastname" => $lastname, "email" => $email, "phone" => $phone]);
 
@@ -64,15 +66,17 @@ class KeeperController {
         header("location:" . FRONT_ROOT . "Keeper/SetFeeStayView");
     }
 
-    private function IfLoggedGoToIndex() {
-        if (Session::VerifySession("owner")) {
-            header("Location: " . FRONT_ROOT . "Owner");
-            exit;
-        } else if (Session::VerifySession("keeper")) {
-            header("Location: " . FRONT_ROOT . "Keeper");
-            exit;
-        }
+    public function SignUpView() {
+        LoginMiddleware::IfLoggedGoToIndex();
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "keeper-signup.php");
     }
+
+    /* -------------------------------------------------------------------------- */
+
+
+    /* Keeper Login */
+    /* -------------------------------------------------------------------------- */
 
     public function Login(string $email, string $password) {
         $keeper = $this->keeperDAO->GetByEmail($email);
@@ -87,18 +91,13 @@ class KeeperController {
         header("Location: " . FRONT_ROOT . "Keeper/LoginView");
     }
 
-
-    public function SignUpView() {
-        $this->IfLoggedGoToIndex();
-        TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "keeper-signup.php");
-    }
-
     public function LoginView() {
-        $this->IfLoggedGoToIndex();
+        LoginMiddleware::IfLoggedGoToIndex();
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "keeper-login.php");
     }
+
+    /* -------------------------------------------------------------------------- */
 
     public function SetFeeStay($fee, $since, $until) {
         $tempKeeper = TempValues::GetValue("keeper-set-fee-stay");
