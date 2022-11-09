@@ -96,6 +96,12 @@ class OwnerController {
     public function KeepersListView($since = null, $until = null) {
         LoginMiddleware::VerifyOwner();
         $keeperList = $this->keeperDAO->GetAll();
+        $keepersFromToday = $this->SanitizeKeepers($keeperList, $since, $until);
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "owner-list-keepers.php");
+    }
+
+    private function SanitizeKeepers(array $keeperList, $since, $until): array {
         if ($since == null || $until == null) {
             // only show those who are available
             $keepersFromToday = array_filter($keeperList, function ($keeper) {
@@ -126,10 +132,9 @@ class OwnerController {
             $bDate = DateTime::createFromFormat("m-d-Y", $b->getStay()->getUntil());
             return $aDate <=> $bDate;
         });
-        TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "owner-list-keepers.php");
-    }
 
+        return $keepersFromToday;
+    }
 
 
     public function PlaceReservationView(int $id) {
