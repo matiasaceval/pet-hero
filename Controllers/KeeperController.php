@@ -32,7 +32,7 @@ class KeeperController {
         $availableDays = $keeper->getAvailableDays($reservations);
         require_once(VIEWS_PATH . "keeper-home.php");
     }
-    
+
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
         // if there's an keeper session already, redirect to home
         $this->IfLoggedGoToIndex();

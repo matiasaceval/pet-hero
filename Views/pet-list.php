@@ -34,7 +34,7 @@ if ($err || $succ) { ?>
                 </div>
                 <div class="row mt-5 justify-content-center">
                     <div class="col-md-auto">
-                        <a href="<?php echo FRONT_ROOT ?>Owner/AddPetView">
+                        <a href="<?php echo FRONT_ROOT ?>Pet/AddPetView">
                             <button class="btn btn-primary">Add pet</button>
                         </a>
                     </div>
@@ -43,7 +43,7 @@ if ($err || $succ) { ?>
         <?php } else { ?>
             <div class="row mt-5 justify-content-center">
                 <div class="col-md-auto">
-                    <a href="<?php echo FRONT_ROOT ?>Owner/AddPetView">
+                    <a href="<?php echo FRONT_ROOT ?>Pet/AddPetView">
                         <button class="btn btn-primary">Add pet</button>
                     </a>
                 </div>
@@ -86,13 +86,13 @@ if ($err || $succ) { ?>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <a class="dropdown-item"
-                                           href="<?php echo FRONT_ROOT ?>Owner/Update?id=<?php echo $pet->GetId() ?>">Update</a>
+                                           href="<?php echo FRONT_ROOT ?>Pet/Update?id=<?php echo $pet->GetId() ?>">Update</a>
                                         <a class="dropdown-item" href="" onclick="
                                                 const petName = '<?php echo $pet->GetName() ?>';
                                                 const petId = <?php echo $pet->GetId() ?>;
                                                 const msg = `Are you sure you want to delete ${petName} (id: ${petId})?`;
                                                 if(confirm(msg)){
-                                                    window.location.href = `<?php echo FRONT_ROOT ?>Owner/RemovePet?id=${petId}`;
+                                                    window.location.href = `<?php echo FRONT_ROOT ?>Pet/RemovePet?id=${petId}`;
                                                 }
                                                 ">Delete</a>
                                     </div>

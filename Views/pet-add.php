@@ -5,7 +5,7 @@ require_once(VIEWS_PATH . "back-nav.php");
 ?>
 <div class="container overflow-hidden">
     <div class="centered-element">
-        <form method="post" enctype='multipart/form-data' action="<?php echo FRONT_ROOT ?>Owner/AddPet">
+        <form method="post" enctype='multipart/form-data' action="<?php echo FRONT_ROOT ?>Pet/AddPet">
             <div class="card-box pet-card-background" width="fit-content" style="padding: 32px 48px 32px 48px;">
                 <!-- Head -->
                 <div class=" row">

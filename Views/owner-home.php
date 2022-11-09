@@ -20,7 +20,7 @@ require_once(VIEWS_PATH . "home-nav.php");
             <div class="row gy-5">
                 <div class="col-3">
                     <!-- Pets -->
-                    <a href="<?php echo FRONT_ROOT ?>Owner/Pets">
+                    <a href="<?php echo FRONT_ROOT ?>Pet/ListPets">
                         <div class="card-box card-box-border">
                             <span class="title">Pets</span><br>
                             <span class="description">List my pets and add new ones</span>
