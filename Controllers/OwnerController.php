@@ -268,7 +268,9 @@ class OwnerController {
             exit;
         }
         $reviews = $this->reviewsDAO->GetByKeeperId($id);
-        TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/KeepersListView"]);
+
+        // because it can came from reservations view or from keepers list view
+        if(!TempValues::ValueExist("back-page")) TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/KeepersListView"]);
         require_once(VIEWS_PATH . "keeper-reviews.php");
     }
 
@@ -445,7 +447,8 @@ class OwnerController {
         require_once(VIEWS_PATH . "owner-login.php");
     }
 
-    public function PlaceReview(string $comment, float $rating, int $reservationId) {
+    // TODO: Display Review errors on Reservations
+    public function PlaceReview(string $comment, int $rating, int $reservationId) {
         $this->VerifyIsLogged();
         $reservation = $this->reservationDAO->GetById($reservationId);
         if ($reservation == null) {
@@ -472,12 +475,45 @@ class OwnerController {
         $review->setComment($comment);
         $review->setRating($rating);
         $review->setReservation($reservation);
-        $review->setDate(date("Y-m-d"));
+        $review->setDate(date("m-d-Y"));
 
         $this->reviewsDAO->Add($review);
 
         Session::Set("success", "Review placed successfully");
 
         header("location:" . FRONT_ROOT . "Owner/Reservations");
+    }
+
+    // TODO: Display Review errors on Reservations
+    public function Review(int $id) {
+        $this->VerifyIsLogged();
+        $reservation = $this->reservationDAO->GetById($id);
+        if ($reservation == null) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+
+        if ($reservation->getPet()->getOwner()->getId() != Session::Get("owner")->getId()) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+
+        if ($reservation->getState() != ReservationState::FINISHED) {
+            Session::Set("error", "The reservation is not in a valid state");
+            header("location:" . FRONT_ROOT . "Owner/Reservations");
+            exit;
+        }
+
+        $review = $this->reviewsDAO->GetByReservationId($id);
+        if ($review != null) {
+            TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/Reservations"]);
+            header("location:" . FRONT_ROOT . "Owner/Reviews?id=" . $reservation->getKeeper()->getId() . "#review-" . $review->getId());
+            exit;
+        }
+
+        $keeper = $reservation->getKeeper();
+        $reviews = $this->reviewsDAO->GetByKeeperId($keeper->getId());
+        TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/Reservations"]);
+        require_once(VIEWS_PATH . "owner-review.php");
     }
 }

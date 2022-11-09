@@ -176,7 +176,8 @@ require_once(VIEWS_PATH . "back-nav.php");
                         </div>
                     </div>
                     <?php
-                    if ($reservation->getState() == ReservationState::ACCEPTED) { ?>
+                    $state = $reservation->getState();
+                    if ($state == ReservationState::ACCEPTED) { ?>
                         <div class="col-md-auto align-self-end">
                             <div class="row justify-content-center">
                                 <div class="col-md-auto align-self-center">
@@ -195,6 +196,18 @@ require_once(VIEWS_PATH . "back-nav.php");
                                             <button id="payment-submit" class="btn btn-secondary" type="submit" style="font-size: 22px; min-width: 150px; display:none">Submit</button>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } else if ($state == ReservationState::FINISHED) { ?>
+                        <div class="col-md-auto align-self-end">
+                            <div class="row justify-content-center">
+                                <div class="col-md-auto align-self-center">
+                                    <div class="row mt-1 justify-content-center">
+                                        <a href="<?php echo FRONT_ROOT ?>Owner/Review?id=<?php echo $reservation->getId() ?>">
+                                            <button class="btn btn-secondary" style="font-size: 22px; min-width: 150px;">Review</button>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
