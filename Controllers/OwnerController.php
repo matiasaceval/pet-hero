@@ -38,6 +38,8 @@ class OwnerController {
         require_once(VIEWS_PATH . "owner-home.php");
     }
 
+    /* Owner Sign Up */
+    /* -------------------------------------------------------------------------- */
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
         // if there's an owner session already, redirect to home
         LoginMiddleware::IfLoggedGoToIndex();
@@ -72,7 +74,15 @@ class OwnerController {
         header("location:" . FRONT_ROOT . "Owner");
     }
 
+    public function SignUpView() {
+        LoginMiddleware::IfLoggedGoToIndex();
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "owner-signup.php");
+    }
 
+
+    /* Owner Login */
+    /* -------------------------------------------------------------------------- */
     public function Login(string $email, string $password) {
         $owner = $this->ownerDAO->GetByEmail($email);
         if ($owner != null && password_verify($password, $owner->getPassword())) {
@@ -84,6 +94,12 @@ class OwnerController {
         TempValues::InitValues(["email" => $email]);
         Session::Set("error", "Invalid credentials");
         header("Location: " . FRONT_ROOT . "Owner/LoginView");
+    }
+
+    public function LoginView() {
+        LoginMiddleware::IfLoggedGoToIndex();
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "owner-login.php");
     }
 
     public function LogOut() {
@@ -297,18 +313,5 @@ class OwnerController {
 
         require_once(VIEWS_PATH . "bill-imprint.php");
     }
-
-    public function SignUpView() {
-        LoginMiddleware::IfLoggedGoToIndex();
-        TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "owner-signup.php");
-    }
-
-    public function LoginView() {
-        LoginMiddleware::IfLoggedGoToIndex();
-        TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "owner-login.php");
-    }
-
 
 }
