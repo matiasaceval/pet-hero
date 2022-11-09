@@ -5,7 +5,7 @@
     </a>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="nav-link nav-text" href="<?php echo FRONT_ROOT ?>Owner/Logout">
+            <a class="nav-link nav-text" href="<?php echo FRONT_ROOT ?>Home/Logout">
                 <button class="btn btn-primary" type="submit">Logout</button>
             </a>
         </li>

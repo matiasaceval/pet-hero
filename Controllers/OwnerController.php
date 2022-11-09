@@ -102,11 +102,7 @@ class OwnerController {
         require_once(VIEWS_PATH . "owner-login.php");
     }
 
-    public function LogOut() {
-        Session::Logout();
-        header("Location: " . FRONT_ROOT);
-        exit;
-    }
+
 
 
     public function KeepersListView($since = null, $until = null) {

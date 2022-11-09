@@ -20,6 +20,12 @@ class HomeController {
     public function NotFound() {
         require_once(VIEWS_PATH . "404.php");
     }
+
+    public function LogOut() {
+        Session::Logout();
+        header("Location: " . FRONT_ROOT);
+        exit;
+    }
 }
 
 ?>
