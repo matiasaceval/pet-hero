@@ -7,7 +7,7 @@ require_once(VIEWS_PATH . "back-nav.php");
 ?>
 <div class="container overflow-hidden">
     <div class="centered-element">
-        <form id="book-form" method="post" enctype='multipart/form-data' action="<?php echo FRONT_ROOT ?>Owner/PlaceReservation">
+        <form id="book-form" method="post" enctype='multipart/form-data' action="<?php echo FRONT_ROOT ?>Reservation/PlaceReservation">
             <input readonly style="display: none" type="text" name="keeperId" value="<?php echo $keeper->getId() ?>">
             <div class="opr-card-box" style="padding: 48px 48px 32px 48px;">
                 <!-- Head -->

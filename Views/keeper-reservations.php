@@ -21,7 +21,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                 </div>
                 <div class="row mt-1 justify-content-center">
                     <div class="col-md-auto">
-                        <h4><span style="font-size: 20px">TIP: </span> try adding more days to your stay to be more attractive</h3>
+                        <h4><span style="font-size: 20px">TIP: </span> try adding more days to your stay to be more attractive</h4>
                     </div>
                 </div>
                 <div class="row mt-5 justify-content-center">

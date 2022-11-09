@@ -174,7 +174,7 @@ if ($err || $succ) { ?>
                             reviews
                         </button>
                     </a>
-                    <a href="<?php echo FRONT_ROOT ?>Owner/PlaceReservationView?id=<?php echo $keeper->getId() ?>">
+                    <a href="<?php echo FRONT_ROOT ?>Reservation/PlaceReservationView?id=<?php echo $keeper->getId() ?>">
                         <button class="btn btn-secondary">Book</button>
                     </a>
                 </div>

@@ -42,7 +42,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                         $pendingR = $this->reservationDAO->GetByOwnerIdAndState($owner->getId(), ReservationState::ACCEPTED); 
                         $pending = count($pendingR) > 0;
                     ?>
-                    <a href="<?php echo FRONT_ROOT ?>Owner/Reservations<?php if($pending) echo "?states[]=" . ReservationState::ACCEPTED ?>">
+                    <a href="<?php echo FRONT_ROOT ?>Reservation/Reservations<?php if($pending) echo "?states[]=" . ReservationState::ACCEPTED ?>">
                         <div class=" card-box card-box-border">
                             <?php if ($pending) { ?><div title="You have reservations accepted!" class="circle" style="position: absolute; transform: translateX(280%) translateY(-100%);"><?php echo count($pendingR) ?></div><?php } ?>
                             <span class="title" style="text-align:left; position: absolute;">Bookings</span><br>
