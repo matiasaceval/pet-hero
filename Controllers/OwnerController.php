@@ -173,7 +173,7 @@ class OwnerController {
 
         if ($reservation->getState() != ReservationState::ACCEPTED) {
             Session::Set("error", "The reservation is not in a valid state");
-            header("location:" . FRONT_ROOT . "Owner/Reservations");
+            header("location:" . FRONT_ROOT . "Reservation/Reservations");
             exit;
         }
 
@@ -208,7 +208,7 @@ class OwnerController {
             Session::Set("error", $ex->getMessage());
         }
 
-        header("location:" . FRONT_ROOT . "Owner/Reservations?states[]=" . ReservationState::ACCEPTED);
+        header("location:" . FRONT_ROOT . "Reservation/Reservations?states[]=" . ReservationState::ACCEPTED);
     }
 
     public function GenerateReservationBill(int $id) {

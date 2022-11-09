@@ -22,7 +22,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                 </div>
                 <div class="row mt-5 justify-content-center">
                     <div class="col-md-auto">
-                        <a href="<?php echo ($states) ? FRONT_ROOT . "Owner/Reservations" : FRONT_ROOT ?>">
+                        <a href="<?php echo ($states) ? FRONT_ROOT . "Reservation/Reservations" : FRONT_ROOT ?>">
                             <button class="btn btn-primary"><?php echo ($states) ? "Clear filter" : "Go back" ?></button>
                         </a>
                     </div>
@@ -30,7 +30,7 @@ require_once(VIEWS_PATH . "back-nav.php");
             </div>
         <?php } else { ?>
             <div class="row justify-content-center" style="flex-direction: column">
-                <form id="ow-res-filt" method="get" action="<?php echo FRONT_ROOT ?>Owner/Reservations">
+                <form id="ow-res-filt" method="get" action="<?php echo FRONT_ROOT ?>Reservation/Reservations">
                     <div class="row mt-5 justify-content-center">
                         <?php
                         foreach (ReservationState::GetStates() as $state) { ?>
@@ -46,7 +46,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                         </div>
                         <?php if ($states && !$allStatesSelected) { ?>
                             <div class="col-md-auto" style="padding: 4px">
-                                <a href="<?php echo FRONT_ROOT . "Owner/Reservations" ?>">
+                                <a href="<?php echo FRONT_ROOT . "Reservation/Reservations" ?>">
                                     <button class="btn btn-primary" type="button" title="Clear filter"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                 </a>
                             </div>
