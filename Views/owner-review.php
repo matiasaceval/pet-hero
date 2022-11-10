@@ -54,7 +54,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                         </div>
                     </div>
                 </div>
-                <form method="post" action="<?php echo FRONT_ROOT ?>Owner/PlaceReview" id="review-form">
+                <form method="post" action="<?php echo FRONT_ROOT ?>Review/PlaceReview" id="review-form">
                     <input type="hidden" name="reservationId" value="<?php echo $reservation->getId() ?>">
                     <input type="hidden" name="rating" value="0">
                     <div class="row">

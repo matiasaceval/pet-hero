@@ -65,7 +65,7 @@ class ReviewController {
 
         $keeper = $reservation->getKeeper();
         $reviews = $this->reviewsDAO->GetByKeeperId($keeper->getId());
-        TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/Reservations"]);
+        TempValues::InitValues(["back-page" => FRONT_ROOT . "Reservation/Reservations"]);
         require_once(VIEWS_PATH . "owner-review.php");
     }
 
@@ -84,12 +84,12 @@ class ReviewController {
 
         if ($reservation->getState() != ReservationState::FINISHED) {
             Session::Set("error", "The reservation is not in a valid state");
-            header("location:" . FRONT_ROOT . "Owner/Reservations");
+            header("location:" . FRONT_ROOT . "Reservation/Reservations");
             exit;
         }
         if ($this->reviewsDAO->GetByReservationId($reservationId) != null) {
             Session::Set("error", "You already placed a review for this reservation");
-            header("location:" . FRONT_ROOT . "Owner/Reservations");
+            header("location:" . FRONT_ROOT . "Reservation/Reservations");
             exit;
         }
 
