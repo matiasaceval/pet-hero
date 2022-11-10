@@ -27,8 +27,10 @@ class KeeperController {
         LoginMiddleware::VerifyKeeper();
 
         $keeper = Session::Get("keeper");
-        $reservationsOngoing = $this->reservationDAO->GetByKeeperId($keeper->getId());
         $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
+        $reservationsOngoing = array_filter($reservations, function ($reservation) {
+            return $reservation->getState() !== ReservationState::FINISHED;
+        });
         $availableDays = $keeper->getAvailableDays($reservations);
         require_once(VIEWS_PATH . "keeper-home.php");
     }
@@ -153,14 +155,6 @@ class KeeperController {
         include_once(VIEWS_PATH . "keeper-set-fee-stay.php");
     }
 
-    public function PendingReservationsView() {
-        LoginMiddleware::VerifyKeeper();
-        $keeper = Session::Get("keeper");
-        $reservations = $this->reservationDAO->GetByKeeperIdAndState($keeper->getId(), ReservationState::PENDING);
-        TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "keeper-pending-reservations.php");
-    }
-
     public function Reservations() {
         LoginMiddleware::VerifyKeeper();
         $keeper = Session::Get("keeper");
@@ -169,10 +163,10 @@ class KeeperController {
         require_once(VIEWS_PATH . "keeper-reservations.php");
     }
 
-    public function OngoingReservations() {
+    public function ReservationsInProgress() {
         LoginMiddleware::VerifyKeeper();
         $keeper = Session::Get("keeper");
-        $reservations = $this->reservationDAO->GetByKeeperIdAndStates($keeper->getId(), [ReservationState::ACCEPTED, ReservationState::PAID, ReservationState::IN_PROGRESS]);
+        $reservations = $this->reservationDAO->GetByKeeperIdAndStates($keeper->getId(), ReservationState::GetDisablingStates());
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "keeper-reservations.php");
     }
@@ -189,7 +183,7 @@ class KeeperController {
 
         $reservation->setState(ReservationState::ACCEPTED);
         $this->reservationDAO->Update($reservation);
-        header("location:" . FRONT_ROOT . "Keeper/PendingReservationsView");
+        header("location:" . FRONT_ROOT . "Keeper/ReservationsInProgress");
     }
 
     public function RejectReservation(int $id) {
@@ -204,6 +198,41 @@ class KeeperController {
 
         $reservation->setState(ReservationState::REJECTED);
         $this->reservationDAO->Update($reservation);
-        header("location:" . FRONT_ROOT . "Keeper/PendingReservationsView");
+        header("location:" . FRONT_ROOT . "Keeper/ReservationsInProgress");
+    }
+
+    public function AcceptPayment(int $id) {
+        LoginMiddleware::VerifyKeeper();
+
+        $reservation = $this->reservationDAO->GetById($id);
+
+        if ($reservation == null || $reservation->getKeeper()->getId() != Session::Get("keeper")->getId()) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+
+        $reservation->setState(ReservationState::CONFIRMED);
+        $this->reservationDAO->Update($reservation);
+        header("location:" . FRONT_ROOT . "Keeper/ReservationsInProgress");
+    }
+
+    public function VerifyPayment(int $id) {
+        LoginMiddleware::VerifyKeeper();
+
+        $reservation = $this->reservationDAO->GetById($id);
+
+        if ($reservation == null || $reservation->getKeeper()->getId() != Session::Get("keeper")->getId()) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+
+        if($reservation->getState() !== ReservationState::PAID) {
+            Session::Set("error", "You can't verify a payment because it's not paid or it's already confirmed/rejected");
+            header("location:" . FRONT_ROOT . "Keeper/ReservationsInProgress");
+            exit;
+        }
+
+        TempValues::InitValues(["back-page" => FRONT_ROOT . "Keeper/ReservationsInProgress"]);
+        require_once(VIEWS_PATH . "keeper-verify-payment.php");
     }
 }

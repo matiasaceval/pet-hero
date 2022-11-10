@@ -631,6 +631,61 @@ input[type='checkbox']:checked {
     color: orange !important;
 }
 
+/* kr = keeper reviews */
+.kvp-card-box {
+    border-radius: 10px;
+    padding: 32px;
+    margin: 12px 12px 12px;
+    width: 800px;
+    position: relative;
+    background-color: #fefcfd;
+}
+
+.kvp-card-box h1 {
+    font-size: 26px;
+    font-weight: bold;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kvp-card-box h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kvp-card-box h3 {
+    font-size: 20px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kvp-card-box h4 {
+    font-size: 18px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.kvp-card-box p {
+    font-size: 18px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.img-caption {
+    font-size: 12px !important;
+    color: #222;
+    border: none;
+    background-color: none;
+    padding: 4px;
+}
+
 @keyframes slideInFromLeft {
   0% { background-color: rgba(255, 221, 71, 0.5) }
   100% { background-color: rgba(255, 221, 71, 0) }
@@ -694,4 +749,19 @@ input[type='checkbox']:checked {
 
 .btn-secondary:hover {
     background-color: #574ae2 !important;
+}
+
+.btn-error {
+    font-size: 16px;
+    border-radius: 10px;
+    padding-left: 24px;
+    padding-right: 24px;
+    transition: background-color 0.3s ease;
+    background-color: rgb(219, 46, 46) !important;
+    border-color: rgb(219, 46, 46) !important;
+    color: #fefcfd !important;
+}
+
+.btn-error:hover {
+    background-color: rgb(228, 63, 63) !important;
 }
