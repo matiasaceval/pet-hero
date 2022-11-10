@@ -6,12 +6,25 @@ SELECT *
 FROM pet;
 END $$
 DELIMITER
-CREATE PROCEDURE getPetById(IN id INT) DELIMITER $$
-CREATE PROCEDURE getPetById(IN id INT)
+
+DELIMITER
+$$
+CREATE PROCEDURE GetPetById(IN id INT)
 BEGIN
-SELECT *
+SELECT p.*, o.firstname, o.lastname, o.email, o.phone, o.password
 FROM pet p
-WHERE id = p.id;
+         INNER JOIN owner o ON p.ownerId = o.id
+WHERE p.id = id;
+END $$
+DELIMITER ;
+
+CREATE PROCEDURE getPetByOwnerId(IN id INT) DELIMITER
+$$
+BEGIN
+SELECT p.*, o.firstname, o.lastname, o.email, o.phone, o.password
+FROM pet p
+         INNER JOIN owner o ON p.ownerId = o.id
+WHERE id = o.id;
 END $$
 DELIMITER ;
 
@@ -25,16 +38,6 @@ FROM pet p
 END $$
 DELIMITER ;
 
-DELIMITER
-$$
-CREATE PROCEDURE getPetAndOwnerById(IN id INT)
-BEGIN
-SELECT p.*, o.firstname, o.lastname, o.email, o.phone, o.password
-FROM pet p
-         INNER JOIN owner o ON p.ownerId = o.id
-WHERE p.id = id;
-END $$
-DELIMITER ;
 
 DELIMITER
 $$
@@ -44,7 +47,8 @@ CREATE PROCEDURE addPet(IN name VARCHAR (191), IN species VARCHAR (191), IN bree
 BEGIN
 INSERT INTO pet (name, species, breed, sex, age, image, vaccines, ownerId)
 VALUES (name, species, breed, sex, age, image, vaccine, ownerId);
-ELECT ROW_COUNT();
+SELECT
+ROW_COUNT();
 END $$
 DELIMITER ;
 
@@ -64,7 +68,8 @@ SET p.name     = name,
     p.vaccines = vaccine,
     p.ownerId  = ownerId
 WHERE p.id = id;
-ELECT ROW_COUNT();
+SELECT
+ROW_COUNT();
 END $$
 DELIMITER ;
 
@@ -75,6 +80,7 @@ BEGIN
 DELETE
 p FROM pet p
 WHERE id = p.id;
-ELECT ROW_COUNT();
+SELECT
+ROW_COUNT();
 END $$
 DELIMITER ;
