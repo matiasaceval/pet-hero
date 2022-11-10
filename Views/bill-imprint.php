@@ -122,7 +122,7 @@ $owner = $pet->getOwner();
         html2pdf()
             .set({
                 margin: 30,
-                html2canvas:  { scale: 3, width: 1600, height: 1600, x: 638 },
+                html2canvas:  { scale: 3, width: 1600, height: 2263, x: 530, y: 0 },
                 jsPDF:        { unit: 'px', orientation: 'p' },
                 filename: 'reservation-<?php echo $reservation->getId() . "-" . strtolower($reservation->getPet()->getName()) ?>-bill'
             })
