@@ -20,8 +20,8 @@ class ReservationState {
             ReservationState::PENDING,
             ReservationState::ACCEPTED,
             ReservationState::PAID,
-            ReservationState::IN_PROGRESS,
-            ReservationState::CONFIRMED
+            ReservationState::CONFIRMED,
+            ReservationState::IN_PROGRESS
         ];
     }
 
