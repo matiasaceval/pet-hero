@@ -12,6 +12,7 @@ use Exception;
 use Models\Owner as Owner;
 use Models\Reservation;
 use Models\ReservationState;
+use Utils\GenerateImage;
 use Utils\LoginMiddleware;
 use Utils\Session;
 use Utils\TempValues;
@@ -177,36 +178,15 @@ class OwnerController {
             exit;
         }
 
-        try {
-            $fileExt = explode(".", $image["name"]);
-            $fileType = strtolower(end($fileExt));
-            $filePreName = "reservation-" . $reservation->getId() . "-payment";
-            $fileName = $filePreName . "." . $fileType;
-            $tempFileName = $image["tmp_name"];
-            $filePath = UPLOADS_PATH . basename($fileName);
-
-            $imageSize = getimagesize($tempFileName);
-
-            if ($imageSize !== false) {
-                $files = glob(UPLOADS_PATH . $filePreName . ".*");
-                foreach ($files as $file) {
-                    chmod($file, 0755); //Change the file permissions if allowed
-                    unlink($file); //remove the file
-                }
-
-                if (move_uploaded_file($tempFileName, $filePath)) {
-                    $reservation->setPayment($fileName);
-                    $reservation->setState(ReservationState::PAID);
-                    $this->reservationDAO->Update($reservation);
-                } else {
-                    Session::Set("error", "Error uploading image");
-                }
-            } else {
-                Session::Set("error", "File is not an image");
-            }
-        } catch (Exception $ex) {
-            Session::Set("error", $ex->getMessage());
+        $fileName = GenerateImage::PersistImage($image, "reservation-", $reservation->getId(), "-payment");
+        if($fileName == null) {
+            Session::Set("error", "Invalid image");
+            header("location:" . FRONT_ROOT . "Reservation/Reservations");
+            exit;
         }
+        $reservation->setPayment($fileName);
+        $reservation->setState(ReservationState::PAID);
+        $this->reservationDAO->Update($reservation);
 
         header("location:" . FRONT_ROOT . "Reservation/Reservations?states[]=" . ReservationState::ACCEPTED);
     }

@@ -5,6 +5,7 @@ namespace DAO;
 use DAO\OwnerDAOJson as OwnerDAO;
 use Exception;
 use Models\Pet;
+use Utils\GenerateImage;
 use Utils\Session;
 
 class PetDAOJson implements IPetDAO {
@@ -24,35 +25,12 @@ class PetDAOJson implements IPetDAO {
     public function Add(Pet $pet, $image) {
         $this->RetrieveData();
 
-        $pet->setId($this->GetNextId());
+        $id = $this->GetNextId();
+        $pet->setId($id);
 
-        try {
-            $fileExt = explode(".", $image["name"]);
-            $fileType = strtolower(end($fileExt));
-            $filePreName = "photo-pet-" . $pet->getId();
-            $fileName = $filePreName . "." . $fileType;
-            $tempFileName = $image["tmp_name"];
-            $filePath = UPLOADS_PATH . basename($fileName);
-            $imageSize = getimagesize($tempFileName);
-
-            if ($imageSize !== false) {
-                $files = glob(UPLOADS_PATH . $filePreName . ".*");
-                foreach ($files as $file) {
-                    chmod($file, 0755); //Change the file permissions if allowed
-                    unlink($file); //remove the file
-                }
-
-                if (move_uploaded_file($tempFileName, $filePath)) {
-                    $pet->setImage($fileName);
-                } else {
-                    Session::Set("error", "Error uploading image");
-                }
-            } else {
-                Session::Set("error", "File is not an image");
-            }
-        } catch (Exception $ex) {
-            Session::Set("error", $ex->getMessage());
-        }
+        $fileName = GenerateImage::PersistImage($image, "photo-pet-", $id);
+        
+        $pet->setImage($fileName);      
 
         array_push($this->petList, $pet);
 
