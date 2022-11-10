@@ -1,5 +1,7 @@
 <?php
 
+use Models\ReservationState;
+
 require_once(VIEWS_PATH . "back-nav.php");
 
 ?>
@@ -147,6 +149,35 @@ require_once(VIEWS_PATH . "back-nav.php");
                             </div>
                         </div>
                     </div>
+                    <?php $state = $reservation->getState();
+                    if ($state === ReservationState::PENDING) { ?>
+                        <div class="col-md-auto align-self-end">
+                            <div class="row justify-content-center">
+                                <div class="col-md-auto">
+                                    <a href="<?php echo FRONT_ROOT ?>Keeper/ConfirmReservation?id=<?php echo $reservation->getId() ?>">
+                                        <button class="btn btn-secondary" style="font-size: 22px; min-width: 150px">Accept</button>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row mt-2 justify-content-center">
+                                <div class="col-md-auto">
+                                    <a href="<?php echo FRONT_ROOT ?>Keeper/RejectReservation?id=<?php echo $reservation->getId() ?>">
+                                        <button class=" btn btn-secondary" style="font-size: 22px; min-width: 150px">Reject</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } else if($state === ReservationState::PAID) { ?>
+                        <div class="col-md-auto align-self-end">
+                            <div class="row justify-content-center">
+                                <div class="col-md-auto">
+                                    <a href="<?php echo FRONT_ROOT ?>Keeper/VerifyPayment?id=<?php echo $reservation->getId() ?>">
+                                        <button class=" btn btn-secondary" style="font-size: 22px; min-width: 150px">Verify Payment</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
