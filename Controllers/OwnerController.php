@@ -15,16 +15,19 @@ use Models\ReservationState;
 use Utils\GenerateImage;
 use Utils\LoginMiddleware;
 use Utils\Session;
+use Utils\SingUpMiddleware;
 use Utils\TempValues;
 
-class OwnerController {
+class OwnerController
+{
     private OwnerDAO $ownerDAO;
     private PetDAO $petDAO;
     private KeeperDAO $keeperDAO;
     private ReservationDAO $reservationDAO;
     private ReviewsDAO $reviewsDAO;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->ownerDAO = new OwnerDAO();
         $this->petDAO = new PetDAO();
         $this->keeperDAO = new KeeperDAO();
@@ -32,7 +35,8 @@ class OwnerController {
         $this->reviewsDAO = new ReviewsDAO();
     }
 
-    public function Index() {
+    public function Index()
+    {
         LoginMiddleware::VerifyOwner();
 
         $owner = Session::Get("owner");
@@ -41,11 +45,18 @@ class OwnerController {
 
     /* Owner Sign Up */
     /* -------------------------------------------------------------------------- */
-    public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword) {
+    public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword)
+    {
         // if there's an owner session already, redirect to home
         LoginMiddleware::IfLoggedGoToIndex();
 
         TempValues::InitValues(["firstname" => $firstname, "lastname" => $lastname, "email" => $email, "phone" => $phone]);
+
+        if (!SingUpMiddleware::VerifySecurePassword($password)) {
+            Session::Set("error", "Password must have at least 8 characters, 2 digits, 1 uppercase and 1 lowercase letter");
+            header("location:" . FRONT_ROOT . "Keeper/SignUpView");
+            exit;
+        }
 
         if ($password != $confirmPassword) {
             Session::Set("error", "Passwords do not match");
@@ -75,7 +86,8 @@ class OwnerController {
         header("location:" . FRONT_ROOT . "Owner");
     }
 
-    public function SignUpView() {
+    public function SignUpView()
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
@@ -87,7 +99,8 @@ class OwnerController {
 
     /* Owner Login */
     /* -------------------------------------------------------------------------- */
-    public function Login(string $email, string $password) {
+    public function Login(string $email, string $password)
+    {
         $owner = $this->ownerDAO->GetByEmail($email);
         if ($owner != null && password_verify($password, $owner->getPassword())) {
             Session::Set("owner", $owner);
@@ -100,7 +113,8 @@ class OwnerController {
         header("Location: " . FRONT_ROOT . "Owner/LoginView");
     }
 
-    public function LoginView() {
+    public function LoginView()
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
@@ -112,7 +126,8 @@ class OwnerController {
 
     /* Owner List Keepers */
     /* -------------------------------------------------------------------------- */
-    public function KeepersListView($since = null, $until = null) {
+    public function KeepersListView($since = null, $until = null)
+    {
         LoginMiddleware::VerifyOwner();
         $keeperList = $this->keeperDAO->GetAll();
         $keepersFromToday = $this->SanitizeKeepers($keeperList, $since, $until);
@@ -120,7 +135,8 @@ class OwnerController {
         require_once(VIEWS_PATH . "owner-list-keepers.php");
     }
 
-    private function SanitizeKeepers(array $keeperList, $since, $until): array {
+    private function SanitizeKeepers(array $keeperList, $since, $until): array
+    {
         if ($since == null || $until == null) {
             // only show those who are available
             $keepersFromToday = array_filter($keeperList, function ($keeper) {
@@ -160,7 +176,8 @@ class OwnerController {
 
     /* Owner pay reservation */
     /* -------------------------------------------------------------------------- */
-    public function UploadPayment(int $id, array $image) {
+    public function UploadPayment(int $id, array $image)
+    {
         LoginMiddleware::VerifyOwner();
 
         $reservation = $this->reservationDAO->GetById($id);
@@ -181,7 +198,7 @@ class OwnerController {
         }
 
         $fileName = GenerateImage::PersistImage($image, "reservation-", $reservation->getId(), "-payment");
-        if($fileName == null) {
+        if ($fileName == null) {
             Session::Set("error", "Invalid image");
             header("location:" . FRONT_ROOT . "Reservation/Reservations");
             exit;
@@ -193,7 +210,8 @@ class OwnerController {
         header("location:" . FRONT_ROOT . "Reservation/Reservations?states[]=" . ReservationState::ACCEPTED);
     }
 
-    public function GenerateReservationBill(int $id) {
+    public function GenerateReservationBill(int $id)
+    {
         LoginMiddleware::VerifyOwner();
 
         $reservation = $this->reservationDAO->GetById($id);
