@@ -77,8 +77,9 @@ class OwnerController {
 
     public function SignUpView() {
         LoginMiddleware::IfLoggedGoToIndex();
+        $userType = "Owner";
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "owner-signup.php");
+        require_once(VIEWS_PATH . "user-signup.php");
     }
 
     /* -------------------------------------------------------------------------- */
@@ -101,8 +102,9 @@ class OwnerController {
 
     public function LoginView() {
         LoginMiddleware::IfLoggedGoToIndex();
+        $userType = "Owner";
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "owner-login.php");
+        require_once(VIEWS_PATH . "user-login.php");
     }
 
     /* -------------------------------------------------------------------------- */

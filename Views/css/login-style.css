@@ -838,3 +838,8 @@ h1 {
 input {
     font-size: 18px;
 }
+
+small.progress-bar {
+    width: 0%;
+    transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out !important;
+}

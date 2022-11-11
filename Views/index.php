@@ -9,7 +9,7 @@
                 <div class="card-box card-box-animation"
                      style="height: fit-content; width: fit-content; max-width: 400px; max-height: 800px;">
                     <a href="<?php echo FRONT_ROOT ?>Owner/LoginView">
-                        <img src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/cat.png">
+                        <img src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/owner.png">
                         <p class="user-type">I'm Owner</p>
                     </a>
                 </div>

@@ -8,13 +8,13 @@ require_once(VIEWS_PATH . "back-nav-no-logout.php");
 <div class="main">
     <div class="container">
         <div class="signin-image">
-            <img src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/keeper.png">
-            <a href="<?php echo FRONT_ROOT ?>Keeper/SignUpView" class=" signin-image-link">I do not have an account</a>
+            <img src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/<?php echo strtolower($userType) ?>.png">
+            <a href="<?php echo FRONT_ROOT . $userType ?>/SignUpView" class=" signin-image-link">I do not have an account</a>
         </div>
         <div class="signin-content">
             <div class="signin-form">
                 <h2 class="form-title">Login</h2>
-                <form method="POST" action="<?php echo FRONT_ROOT ?>Keeper/Login" class="register-form"
+                <form method="POST" action="<?php echo FRONT_ROOT . $userType ?>/Login" class="register-form"
                       id="register-form">
                     <div class="form-group">
                         <label for="email"><i class="zmdi zmdi-email"></i></label>

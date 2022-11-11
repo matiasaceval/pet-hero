@@ -80,8 +80,9 @@ class KeeperController
     public function SignUpView()
     {
         LoginMiddleware::IfLoggedGoToIndex();
+        $userType = "Keeper";
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "keeper-signup.php");
+        require_once(VIEWS_PATH . "user-signup.php");
     }
 
     /* -------------------------------------------------------------------------- */
@@ -109,8 +110,9 @@ class KeeperController
     public function LoginView()
     {
         LoginMiddleware::IfLoggedGoToIndex();
+        $userType = "Keeper";
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "keeper-login.php");
+        require_once(VIEWS_PATH . "user-login.php");
     }
 
     /* -------------------------------------------------------------------------- */
