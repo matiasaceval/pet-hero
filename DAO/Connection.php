@@ -64,7 +64,7 @@ class Connection {
             $this->Prepare($query);
 
             $this->BindParameters($parameters, $queryType);
-
+            -
             $this->pdoStatement->execute();
 
             return $this->pdoStatement->fetchAll();
@@ -75,3 +75,4 @@ class Connection {
 }
 
 ?>
+

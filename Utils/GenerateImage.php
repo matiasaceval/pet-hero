@@ -2,11 +2,12 @@
 
 use Exception;
 
-abstract class GenerateImage {
+abstract class GenerateImage
+{
     /**
      * @throws Exception
      */
-    public static function PersistImage(array $image, string $prefix, int $id, string $suffix = '', $deleteAllWithDifferentType = true): string
+    public static function PersistImage(array $image, string $prefix, int $id, string $suffix = '', $deleteAllWithDifferentType = true): ?string
     {
         $fileExt = explode(".", $image["name"]);
         $fileType = strtolower(end($fileExt));
@@ -17,8 +18,8 @@ abstract class GenerateImage {
         $imageSize = getimagesize($tempFileName);
 
         if ($imageSize !== false) {
-            
-            if($deleteAllWithDifferentType){
+
+            if ($deleteAllWithDifferentType) {
                 $files = glob(UPLOADS_PATH . $filePreName . ".*");
                 foreach ($files as $file) {
                     chmod($file, 0755); //Change the file permissions if allowed
