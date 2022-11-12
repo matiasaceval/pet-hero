@@ -38,7 +38,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                 </div>
                 <div class="col-4">
                     <!-- Update Profile -->
-                    <a href="<?php echo FRONT_ROOT ?>Keeper/Reviews">
+                    <a href="<?php echo FRONT_ROOT ?>Keeper/SetFeeStayView">
                         <div class="card-box card-box-border">
                             <span class="title">Profile</span><br>
                             <span class="description">Update your fee and stay date range here!</span>

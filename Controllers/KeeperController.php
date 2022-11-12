@@ -153,21 +153,7 @@ class KeeperController
         Session::Set("keeper", $keeper);
         header("Location: " . FRONT_ROOT . "Keeper");
     }
-
-
-    public function Reviews($id = null)
-    {
-        LoginMiddleware::VerifyKeeper();
-        $keeper = $id ? $this->keeperDAO->GetById($id) : Session::Get("keeper");
-        if ($keeper == null) {
-            header("location:" . FRONT_ROOT . "Home/NotFound");
-            exit;
-        }
-        $reviews = $this->reviewsDAO->GetByKeeperId($keeper->getId());
-        TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "keeper-reviews.php");
-    }
-
+    
 
     public function SetFeeStayView()
     {
@@ -182,6 +168,20 @@ class KeeperController
             TempValues::InitValues(["back-page" => FRONT_ROOT]);
         }
         include_once(VIEWS_PATH . "keeper-set-fee-stay.php");
+    }
+
+
+    public function Reviews($id = null)
+    {
+        LoginMiddleware::VerifyKeeper();
+        $keeper = $id ? $this->keeperDAO->GetById($id) : Session::Get("keeper");
+        if ($keeper == null) {
+            header("location:" . FRONT_ROOT . "Home/NotFound");
+            exit;
+        }
+        $reviews = $this->reviewsDAO->GetByKeeperId($keeper->getId());
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "keeper-reviews.php");
     }
 
 

@@ -12,6 +12,7 @@ if (Session::VerifySession("keeper")) {
     $since = $keeper->getStay()->getSince();
     $until = $keeper->getStay()->getUntil();
     $btn = 'Update';
+    require_once(VIEWS_PATH . "back-nav.php");
 }
 
 ?>
