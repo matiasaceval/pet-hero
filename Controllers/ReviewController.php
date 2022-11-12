@@ -52,13 +52,13 @@ class ReviewController {
 
         if ($reservation->getState() != ReservationState::FINISHED) {
             Session::Set("error", "The reservation is not in a valid state");
-            header("location:" . FRONT_ROOT . "Owner/Reservations");
+            header("location:" . FRONT_ROOT . "Reservation/Reservations");
             exit;
         }
 
         $review = $this->reviewsDAO->GetByReservationId($id);
         if ($review != null) {
-            TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/Reservations"]);
+            TempValues::InitValues(["back-page" => FRONT_ROOT . "Reservation/Reservations"]);
             header("location:" . FRONT_ROOT . "Review/ListKeeperReviews?id=" . $reservation->getKeeper()->getId() . "#review-" . $review->getId());
             exit;
         }
@@ -103,6 +103,6 @@ class ReviewController {
 
         Session::Set("success", "Review placed successfully");
 
-        header("location:" . FRONT_ROOT . "Owner/Reservations");
+        header("location:" . FRONT_ROOT . "Reservation/Reservations");
     }
 }
