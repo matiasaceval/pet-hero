@@ -41,6 +41,7 @@ INSERT INTO keeper (firstname, lastname, email, password, phone, fee)
 VALUES (firstname, lastname, email, password, phone, fee);
 INSERT INTO stay (id, since, until)
 VALUES ((SELECT k.id FROM keeper k WHERE k.email = email), since, until);
+SELECT LAST_INSERT_ID();
 END $$
 DELIMITER ;
 
@@ -54,7 +55,10 @@ UPDATE keeper k , stay s
 SET k.firstname = firstname, k.lastname = lastname, k.email = email, k.password = password, k.phone = phone, k.fee = fee, s.since = since, s.until = until
 WHERE k.id = id AND s.id = id;
 END $$
-SELECT ROW_COUNT();
+SELECT k.* FROM keeper k
+INNER JOIN stay s ON k.id = s.id
+WHERE k.id = id;
+END $$
 DELIMITER ;
 
 DELIMITER
@@ -65,7 +69,7 @@ DELETE
 k FROM keeper k
 WHERE id = k.id;
 SELECT
-ROW_COUNT();
+LAST_INSERT_ID();
 END $$
 DELIMITER ;
 

@@ -16,7 +16,7 @@ BEGIN
 DELETE
 s FROM stay s
 WHERE s.id = stayId;
-SELECT ROW_COUNT();
+SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
@@ -29,7 +29,8 @@ UPDATE stay s
 SET s.since = since,
     s.until = until
 WHERE s.id = stayId;
-SELECT ROW_COUNT();
+SELECT s.* FROM stay s
+WHERE s.id = stayId;
 END$$
 DELIMITER ;
 
@@ -42,6 +43,6 @@ CREATE PROCEDURE `addStay`(IN id INT, IN since DATE, IN until DATE)
 BEGIN
 INSERT INTO stay (id, since, until)
 VALUES (id, since, until);
-SELECT ROW_COUNT();
+SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;

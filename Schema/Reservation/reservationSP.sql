@@ -125,7 +125,7 @@ BEGIN
 DELETE
 r FROM reservation r
 WHERE r.id = reservationId;
-SELECT ROW_COUNT();
+SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
@@ -136,7 +136,8 @@ BEGIN
 UPDATE reservation r
 SET r.state = state, r.payment = payment;
 WHERE r.id = reservationId;
-SELECT ROW_COUNT();
+SELECT r.* FROM reservation r
+WHERE r.id = reservationId;
 END$$
 DELIMITER ;
 
@@ -148,7 +149,7 @@ CREATE PROCEDURE `addReservation`(IN petId INT, IN keeperId INT, IN state VARCHA
 BEGIN
 INSERT INTO reservation (petId, keeperId, state, since, until, price, payment)
 VALUES (petId, keeperId, state, since, until, price, payment);
-SELECT ROW_COUNT();
+SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
 

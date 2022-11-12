@@ -4,7 +4,7 @@ CREATE PROCEDURE `addReview`(IN comment VARCHAR (191), IN rating INT, IN `date` 
 BEGIN
 INSERT INTO review (comment, rating, `date`, reservationId)
 VALUES (comment, rating, `date`, reservationId);
-SELECT ROW_COUNT();
+SELECT LAST_INSERT_ID();
 END $$
 DELIMITER ;
     
@@ -58,7 +58,7 @@ BEGIN
 DELETE
 r FROM review r
 WHERE r.id = reviewId;
-SELECT ROW_COUNT();
+SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
@@ -70,6 +70,7 @@ UPDATE review r
 SET r.comment = comment,
     r.rating  = rating
 WHERE r.id = reviewId;
-SELECT ROW_COUNT();
+SELECT r.* FROM review r
+WHERE r.id = reviewId;
 END$$
 DELIMITER ;

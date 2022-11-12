@@ -35,7 +35,7 @@ CREATE PROCEDURE addOwner(IN firstname VARCHAR (191), IN lastname VARCHAR (191),
 BEGIN
 INSERT INTO owner (firstname, lastname, email, password, phone)
 VALUES (firstname, lastname, email, password, phone);
-SELECT ROW_COUNT();
+SELECT LAST_INSERT_ID();
 END $$
 DELIMITER ;
 
@@ -52,7 +52,8 @@ SET o.firstname = firstname,
     o.password  = password,
     o.phone     = phone
 WHERE o.id = id;
-SELECT ROW_COUNT();
+SELECT o.* FROM owner o
+WHERE o.id = id;
 END $$
 DELIMITER ;
 
@@ -63,7 +64,7 @@ BEGIN
 DELETE
 o FROM owner o
 WHERE id = o.id;
-SELECT ROW_COUNT();
+SELECT LAST_INSERT_ID();
 END $$
 DELIMITER ;
 
