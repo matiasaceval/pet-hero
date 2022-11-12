@@ -23,7 +23,9 @@ require_once(VIEWS_PATH . "back-nav.php");
                     <img id="payment" style="max-width: 650px; max-height: 1000px" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $reservation->getPayment(); ?>" />
                     <p id="caption" class="img-caption">If you find difficulties trying to read the image, you can <span style="font-family: monospace;">"Right Click > Open image in a new tab"</span> to zoom in with freedom.</p>
                     <script>
-                        $('#caption').width($('#payment').width());
+                        $(document).ready(function() {
+                            $('#caption').width($('#payment').width());
+                        })
                     </script>
                 </div>
             </div>
