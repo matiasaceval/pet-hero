@@ -37,6 +37,10 @@ class ReservationState {
             ReservationState::FINISHED
         ];
     }
+
+    public static function StateAsId(string $state){
+        return strtolower(implode('_', explode(" ", $state)));
+    }
 }
 
 /**     

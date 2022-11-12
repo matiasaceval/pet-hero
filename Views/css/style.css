@@ -695,6 +695,30 @@ input[type='checkbox']:checked {
     animation: 3s ease-out 0s 1 slideInFromLeft;
 }
 
+.selected {
+    font-weight: bold;
+    background-color: rgb(198, 195, 233);
+}
+
+.selected:hover {
+    background-color: rgb(181, 176, 233);
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.vertical-center {
+  transform: translateY(20vh);
+}
+
+
 /* Overwriting Bootstrap */
 .container {
     scroll-behavior: smooth;

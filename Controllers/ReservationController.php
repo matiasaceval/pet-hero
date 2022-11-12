@@ -96,21 +96,9 @@ class ReservationController {
         header("location:" . FRONT_ROOT . "Owner/KeepersListView");
     }
 
-    public function Reservations(array $states = array()) {
+    public function Reservations() {
         LoginMiddleware::VerifyOwner();
-        $reservations = array();
-        if (!empty($states)) {
-            if ($states == ReservationState::GetStates()) {
-                // avoiding big URL when filtering by all states
-                header("location:" . FRONT_ROOT . "Owner/Reservations");
-                exit;
-            }
-            $reservations = $this->reservationDAO->GetByOwnerIdAndStates(Session::Get("owner")->getId(), $states);
-        } else {
-            $states = ReservationState::GetStates();
-            $reservations = $this->reservationDAO->GetByOwnerId(Session::Get("owner")->getId());
-        }
-
+        $reservations = $this->reservationDAO->GetByOwnerId(Session::Get("owner")->getId());
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "owner-reservations.php");
     }

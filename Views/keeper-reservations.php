@@ -7,42 +7,119 @@ require_once(VIEWS_PATH . "back-nav.php");
 ?>
 
 <div class="container overflow-hidden">
-    <?php
-    if (empty($reservations)) { ?>
-        <div class="centered-wrapper">
-            <div class="centered-element">
-                <div class="row justify-content-center">
-                    <div class="col-md-auto">
-                        <h2>your booking history is empty!</h2>
-                    </div>
+
+    <div class="centered-wrapper">
+        <div id="filter-row" class="row justify-content-center unselectable" style="flex-direction: column">
+            <div class="dropdown unselectable">
+                <button class="btn btn-primary dropdown-toggle unselectable" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter</button>
+                <div class="dropdown-menu allow-focus unselectable" aria-labelledby="filter-btn">
+                    <?php foreach ($states as $state) { ?>
+                        <a class="dropdown-item unselectable" id="filter_<?php echo ReservationState::StateAsId($state) ?>"><?php echo $state ?></a>
+                    <?php } ?>
                 </div>
-                <div class="row mt-1 justify-content-center">
-                    <div class="col-md-auto">
-                        <h3>go check on your pending reservations to see if you have some!</h3>
-                    </div>
+            </div>
+            <script>
+                let selectedFilters = getSelectedIds();
+
+                $(document).ready(function() {
+                    showSeletedIds();
+                })
+
+                $('.allow-focus').on('click', function(e) {
+                    const target = $(e.target);
+                    target.hasClass('selected') ? target.removeClass('selected') : target.addClass('selected');
+                    showSeletedIds();
+                    e.stopPropagation();
+                });
+
+                function showSeletedIds() {
+                    selectedFilters = getSelectedIds();
+                    const allStates = getAllStates();
+                    let shown = 0;
+                    allStates.forEach(state => {
+                        const target = $(`.${state}`);
+                        if (selectedFilters.includes(state) || selectedFilters.length == 0) {
+                            shown += target.length;
+                            target.show();
+                        } else {
+                            target.hide();
+                        }
+                    });
+
+
+                    if (shown == 0) {
+
+                        const total = <?php echo count($reservations) ?>;
+                        if (total != 0) {
+                            $('#empty-title').html('no reservations match your filter!');
+                            $('#empty-message-a').attr('href', '');
+                            $('#empty-message-a-btn').text('Clear filters');
+                            $('#empty-message-a-btn').click(function() {
+                                $('.dropdown').show();
+                                $('.dropdown-item').removeClass('selected');
+                                showSeletedIds();
+                            });
+                        } else {
+                            $('#empty-message-a').attr('href', '<?php echo FRONT_ROOT ?>');
+                            $('#empty-message-a-btn').text('Go back');
+                            $('.dropdown').hide();
+                        }
+
+                        $('#empty-message').show();
+                    } else {
+                        $('.dropdown').show();
+                        $('#empty-message').hide();
+                    }
+                }
+
+                function getSelectedIds() {
+                    let selectedFilters = [];
+                    $('.dropdown-item.selected').each(function() {
+                        selectedFilters.push($(this).attr('id').split('_')[1]);
+                    });
+                    return selectedFilters;
+                }
+
+                function getAllStates() {
+                    let states = <?php echo json_encode(ReservationState::GetStates()) ?>;
+                    return states.map(state => state.toLowerCase().replace(' ', '_'));
+                }
+            </script>
+        </div>
+    </div>
+
+    <div class="centered-wrapper" id="empty-message">
+        <div class="vertical-center">
+            <div class="row justify-content-center">
+                <div class="col-md-auto">
+                    <h2 id="empty-title">your booking history is empty!</h2>
                 </div>
-                <div class="row mt-1 justify-content-center">
-                    <div class="col-md-auto">
-                        <h4><span style="font-size: 20px">TIP: </span> try adding more days to your stay to be more attractive</h4>
-                    </div>
+            </div>
+            <div class="row mt-1 justify-content-center">
+                <div class="col-md-auto">
+                    <h3>go check on your pending reservations to see if you have some!</h3>
                 </div>
-                <div class="row mt-5 justify-content-center">
-                    <div class="col-md-auto">
-                        <a href="<?php echo FRONT_ROOT ?>">
-                            <button class="btn btn-primary">Go back</button>
-                        </a>
-                    </div>
+            </div>
+            <div class="row mt-1 justify-content-center">
+                <div class="col-md-auto">
+                    <h4><span style="font-size: 20px">TIP: </span> try adding more days to your stay to be more attractive</h4>
+                </div>
+            </div>
+            <div class="row mt-5 justify-content-center">
+                <div class="col-md-auto">
+                    <a id="empty-message-a" href="<?php echo FRONT_ROOT ?>">
+                        <button id="empty-message-a-btn" class="btn btn-primary">Go back</button>
+                    </a>
                 </div>
             </div>
         </div>
-    <?php
-    }
+    </div>
 
-    foreach ($reservations as $reservation) {
+    <?php foreach ($reservations as $reservation) {
         $pet = $reservation->getPet();
         $owner = $pet->getOwner();
     ?>
-        <div class="row mt-4 justify-content-center">
+        <div class="row mt-4 justify-content-center <?php echo ReservationState::StateAsId($reservation->getState()) ?>">
             <div class="kpr-card-box">
                 <div class="row justify-content-center">
                     <div class="col-md-auto">
@@ -167,7 +244,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                                 </div>
                             </div>
                         </div>
-                    <?php } else if($state === ReservationState::PAID) { ?>
+                    <?php } else if ($state === ReservationState::PAID) { ?>
                         <div class="col-md-auto align-self-end">
                             <div class="row justify-content-center">
                                 <div class="col-md-auto">

@@ -7,61 +7,112 @@ require_once(VIEWS_PATH . "back-nav.php");
 ?>
 <div class="container overflow-hidden">
     <div class="centered-wrapper">
-        <?php
-        if (empty($reservations)) { ?>
-            <div class="centered-element">
-                <div class="row justify-content-center">
-                    <div class="col-md-auto">
-                        <h2>your booking history <?php if ($states) echo "for the states specified " ?>is empty!</h2>
-                    </div>
-                </div>
-                <div class="row mt-1 justify-content-center">
-                    <div class="col-md-auto">
-                        <h3>go check on our keepers list and start booking!</h3>
-                    </div>
-                </div>
-                <div class="row mt-5 justify-content-center">
-                    <div class="col-md-auto">
-                        <a href="<?php echo ($states) ? FRONT_ROOT . "Reservation/Reservations" : FRONT_ROOT ?>">
-                            <button class="btn btn-primary"><?php echo ($states) ? "Clear filter" : "Go back" ?></button>
-                        </a>
-                    </div>
+        <div id="filter-row" class="row justify-content-center unselectable" style="flex-direction: column">
+            <div class="dropdown unselectable">
+                <button class="btn btn-primary dropdown-toggle unselectable" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter</button>
+                <div class="dropdown-menu allow-focus unselectable" aria-labelledby="filter-btn">
+                    <?php foreach (ReservationState::GetStates() as $state) { ?>
+                        <a class="dropdown-item unselectable" id="filter_<?php echo ReservationState::StateAsId($state) ?>"><?php echo $state ?></a>
+                    <?php } ?>
                 </div>
             </div>
-        <?php } else { ?>
-            <div class="row justify-content-center" style="flex-direction: column">
-                <form id="ow-res-filt" method="get" action="<?php echo FRONT_ROOT ?>Reservation/Reservations">
-                    <div class="row mt-5 justify-content-center">
-                        <?php
-                        foreach (ReservationState::GetStates() as $state) { ?>
-                            <input type='checkbox' <?php if (in_array($state, $states)) echo "checked" ?> value="<?php echo $state ?>" name='states[]'>
-                            <p class="state-filter"><?php echo $state ?></p>
-                            </input>
-                        <?php } ?>
-                    </div>
-                    <div class=" row mt-4 justify-content-center">
-                        <?php $allStatesSelected = count($states) == count(ReservationState::GetStates()) ?>
-                        <div class="col-md-auto" style="padding: 4px">
-                            <button class="btn btn-primary" type="submit" id="filter-btn">Filter</button>
-                        </div>
-                        <?php if ($states && !$allStatesSelected) { ?>
-                            <div class="col-md-auto" style="padding: 4px">
-                                <a href="<?php echo FRONT_ROOT . "Reservation/Reservations" ?>">
-                                    <button class="btn btn-primary" type="button" title="Clear filter"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                                </a>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </form>
+            <script>
+                let selectedFilters = getSelectedIds();
+
+                $(document).ready(function() {
+                    showSeletedIds();
+                })
+
+                $('.allow-focus').on('click', function(e) {
+                    const target = $(e.target);
+                    target.hasClass('selected') ? target.removeClass('selected') : target.addClass('selected');
+                    showSeletedIds();
+                    e.stopPropagation();
+                });
+
+                function showSeletedIds() {
+                    selectedFilters = getSelectedIds();
+                    const allStates = getAllStates();
+                    let shown = 0;
+                    allStates.forEach(state => {
+                        const target = $(`.${state}`);
+                        if (selectedFilters.includes(state) || selectedFilters.length == 0) {
+                            shown += target.length;
+                            target.show();
+                        } else {
+                            target.hide();
+                        }
+                    });
+
+
+                    if (shown == 0) {
+
+                        const total = <?php echo count($reservations) ?>;
+                        if (total != 0) {
+                            $('#empty-title').html('no reservations match your filter!');
+                            $('#empty-message-a').attr('href', '');
+                            $('#empty-message-a-btn').text('Clear filters');
+                            $('#empty-message-a-btn').click(function() {
+                                $('.dropdown').show();
+                                $('.dropdown-item').removeClass('selected');
+                                showSeletedIds();
+                            });
+                        } else {
+                            $('#empty-message-a').attr('href', '<?php echo FRONT_ROOT ?>');
+                            $('#empty-message-a-btn').text('Go back');
+                            $('.dropdown').hide();
+                        }
+
+                        $('#empty-message').show();
+                    } else {
+                        $('.dropdown').show();
+                        $('#empty-message').hide();
+                    }
+                }
+
+                function getSelectedIds() {
+                    let selectedFilters = [];
+                    $('.dropdown-item.selected').each(function() {
+                        selectedFilters.push($(this).attr('id').split('_')[1]);
+                    });
+                    return selectedFilters;
+                }
+
+                function getAllStates() {
+                    let states = <?php echo json_encode(ReservationState::GetStates()) ?>;
+                    return states.map(state => state.toLowerCase().replace(' ', '_'));
+                }
+            </script>
+        </div>
+    </div>
+
+    <div class="centered-wrapper" id="empty-message">
+        <div class="vertical-center">
+            <div class="row justify-content-center">
+                <div class="col-md-auto">
+                    <h2 id="empty-title">your booking history is empty!</h2>
+                </div>
             </div>
-        <?php } ?>
+            <div class="row mt-1 justify-content-center">
+                <div class="col-md-auto">
+                    <h3>go check on our keepers list and start booking!</h3>
+                </div>
+            </div>
+            <div class="row mt-5 justify-content-center">
+                <div class="col-md-auto">
+                    <a id="empty-message-a" href="<?php echo FRONT_ROOT ?>">
+                        <button id="empty-message-a-btn" class="btn btn-primary">Go back</button>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <?php foreach ($reservations as $reservation) {
         $pet = $reservation->getPet();
         $owner = $pet->getOwner();
     ?>
-        <div class="row mt-4 justify-content-center">
+        <div class="row mt-4 justify-content-center <?php echo ReservationState::StateAsId($reservation->getState()) ?>">
             <div class="kpr-card-box">
                 <div class="row justify-content-center">
                     <div class="col-md-auto">
