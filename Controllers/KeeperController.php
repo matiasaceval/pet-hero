@@ -153,7 +153,7 @@ class KeeperController
         Session::Set("keeper", $keeper);
         header("Location: " . FRONT_ROOT . "Keeper");
     }
-    
+
 
     public function SetFeeStayView()
     {
@@ -208,7 +208,7 @@ class KeeperController
 
         $reservation->setState(ReservationState::ACCEPTED);
         $this->reservationDAO->Update($reservation);
-        header("location:" . FRONT_ROOT . "Keeper/ReservationsInProgress");
+        header("location:" . FRONT_ROOT . "Keeper/Reservations");
     }
 
 
@@ -225,7 +225,7 @@ class KeeperController
 
         $reservation->setState(ReservationState::REJECTED);
         $this->reservationDAO->Update($reservation);
-        header("location:" . FRONT_ROOT . "Keeper/ReservationsInProgress");
+        header("location:" . FRONT_ROOT . "Keeper/Reservations");
     }
 
 
@@ -242,7 +242,7 @@ class KeeperController
 
         $reservation->setState(ReservationState::CONFIRMED);
         $this->reservationDAO->Update($reservation);
-        header("location:" . FRONT_ROOT . "Keeper/ReservationsInProgress");
+        header("location:" . FRONT_ROOT . "Keeper/Reservations");
     }
 
 
@@ -260,11 +260,11 @@ class KeeperController
 
         if ($reservation->getState() !== ReservationState::PAID) {
             Session::Set("error", "You can't verify a payment because it's not paid or it's already confirmed/rejected");
-            header("location:" . FRONT_ROOT . "Keeper/ReservationsInProgress");
+            header("location:" . FRONT_ROOT . "Keeper/Reservations");
             exit;
         }
 
-        TempValues::InitValues(["back-page" => FRONT_ROOT . "Keeper/ReservationsInProgress"]);
+        TempValues::InitValues(["back-page" => FRONT_ROOT . "Keeper/Reservations"]);
         require_once(VIEWS_PATH . "keeper-verify-payment.php");
     }
 }
