@@ -13,7 +13,7 @@ require_once(VIEWS_PATH . "back-nav.php");
             <div class="dropdown unselectable">
                 <button class="btn btn-primary dropdown-toggle unselectable" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter</button>
                 <div class="dropdown-menu allow-focus unselectable" aria-labelledby="filter-btn">
-                    <?php foreach ($states as $state) { ?>
+                    <?php foreach (ReservationState::GetStates() as $state) { ?>
                         <a class="dropdown-item unselectable" id="filter_<?php echo ReservationState::StateAsId($state) ?>"><?php echo $state ?></a>
                     <?php } ?>
                 </div>

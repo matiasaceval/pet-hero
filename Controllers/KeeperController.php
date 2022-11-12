@@ -190,17 +190,6 @@ class KeeperController
         LoginMiddleware::VerifyKeeper();
         $keeper = Session::Get("keeper");
         $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
-        $states = ReservationState::GetStates();
-        TempValues::InitValues(["back-page" => FRONT_ROOT]);
-        require_once(VIEWS_PATH . "keeper-reservations.php");
-    }
-
-    public function ReservationsInProgress()
-    {
-        LoginMiddleware::VerifyKeeper();
-        $keeper = Session::Get("keeper");
-        $reservations = $this->reservationDAO->GetByKeeperIdAndStates($keeper->getId(), ReservationState::GetDisablingStates());
-        $states = ReservationState::GetDisablingStates();
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "keeper-reservations.php");
     }
