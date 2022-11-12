@@ -3,7 +3,6 @@
 namespace Controllers;
 
 use DAO\PetDAOJson as PetDAO;
-use Exception;
 use Models\Pet;
 use Utils\GenerateImage;
 use Utils\LoginMiddleware;
@@ -23,6 +22,10 @@ class PetController {
 
         $petList = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
 
+        // we need the pets that are for the user
+        $petList = array_filter($petList, function ($pet) {
+            return $pet->getActive();
+        });
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "pet-list.php");
     }
@@ -98,12 +101,16 @@ class PetController {
         require_once(VIEWS_PATH . "pet-update.php");
     }
 
+    // Remove Pet actually disables the pet
     public function RemovePet($id) {
         LoginMiddleware::VerifyOwner();
 
         $pet = $this->petDAO->GetById($id);
+
         if ($pet && $pet->getOwner()->getId() == Session::Get("owner")->getId()) {
-            $this->petDAO->RemoveById($id);
+            // we change active to false instead of deleting the pet
+
+            $this->petDAO->DisablePetById($pet->getId());
         } else {
             Session::Set("error", "You can't remove this pet");
         }

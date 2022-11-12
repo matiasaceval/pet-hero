@@ -45,6 +45,7 @@ model Pet {
   Owner       Owner    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId     Int
   Reservations Reservation[]
+  active      Boolean  @default(true)
 }
 
 model Review {

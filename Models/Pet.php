@@ -16,6 +16,7 @@ class Pet {
     private string $image;
     private string $vaccine;
     private Owner $owner;
+    private bool $active;
 
     //Getters and setters
 
@@ -89,6 +90,14 @@ class Pet {
 
     public function setVaccine(string $vaccine): void {
         $this->vaccine = $vaccine;
+    }
+
+    public function getActive(): bool {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): void {
+        $this->active = $active;
     }
 }
 

@@ -19,4 +19,6 @@ interface IPetDAO {
 
     public function GetPetsByOwnerId(int $ownerId): ?array;
 
+    public function DisablePetById(int $id): bool;
+
 }

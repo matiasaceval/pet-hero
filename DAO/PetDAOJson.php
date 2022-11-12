@@ -3,10 +3,8 @@
 namespace DAO;
 
 use DAO\OwnerDAOJson as OwnerDAO;
-use Exception;
 use Models\Pet;
 use Utils\GenerateImage;
-use Utils\Session;
 
 class PetDAOJson implements IPetDAO {
     /**
@@ -27,10 +25,11 @@ class PetDAOJson implements IPetDAO {
 
         $id = $this->GetNextId();
         $pet->setId($id);
+        $pet->setActive(true);
 
         $fileName = GenerateImage::PersistImage($image, "photo-pet-", $id);
-        
-        $pet->setImage($fileName);      
+
+        $pet->setImage($fileName);
 
         array_push($this->petList, $pet);
 
@@ -56,6 +55,7 @@ class PetDAOJson implements IPetDAO {
                 $pet->setBreed($valuesArray["breed"]);
                 $pet->setImage($valuesArray["image"]);
                 $pet->setVaccine($valuesArray["vaccine"]);
+                $pet->setActive($valuesArray["active"]);
                 array_push($this->petList, $pet);
             }
         }
@@ -91,6 +91,7 @@ class PetDAOJson implements IPetDAO {
             $valuesArray["ownerId"] = $pet->getOwner()->getId();
             $valuesArray["image"] = $pet->getImage();
             $valuesArray["vaccine"] = $pet->getVaccine();
+            $valuesArray["active"] = $pet->getActive();
             array_push($arrayToEncode, $valuesArray);
         }
 
@@ -126,6 +127,19 @@ class PetDAOJson implements IPetDAO {
         foreach ($this->petList as $key => $value) {
             if ($value->getId() == $pet->getId()) {
                 $this->petList[$key] = $pet;
+                $this->SaveData();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function DisablePetById(int $id): bool {
+        $this->RetrieveData();
+
+        foreach ($this->petList as $key => $value) {
+            if ($value->getId() == $id) {
+                $this->petList[$key]->setActive(false);
                 $this->SaveData();
                 return true;
             }
