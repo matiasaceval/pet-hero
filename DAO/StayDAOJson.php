@@ -98,6 +98,6 @@ class StayDAOJson implements IStayDAO {
     private function GetNextId() {
         $this->RetrieveData();
         $lastStay = end($this->stayList);
-        return $lastStay === false ? 0 : $lastStay->getId() + 1;
+        return $lastStay === false ? 1 : $lastStay->getId() + 1;
     }
 }

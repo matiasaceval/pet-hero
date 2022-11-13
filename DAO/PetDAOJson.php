@@ -4,7 +4,7 @@ namespace DAO;
 
 use DAO\OwnerDAOJson as OwnerDAO;
 use Models\Pet;
-use Utils\GenerateImage;
+use Utils\GenerateFile;
 
 class PetDAOJson implements IPetDAO {
     /**
@@ -27,7 +27,7 @@ class PetDAOJson implements IPetDAO {
         $pet->setId($id);
         $pet->setActive(true);
 
-        $fileName = GenerateImage::PersistImage($image, "photo-pet-", $id);
+        $fileName = GenerateFile::PersistFile($image, "photo-pet-", $id);
 
         $pet->setImage($fileName);
 
@@ -73,7 +73,7 @@ class PetDAOJson implements IPetDAO {
     private function GetNextId() {
         $this->RetrieveData();
         $lastPet = end($this->petList);
-        return $lastPet === false ? 0 : $lastPet->getId() + 1;
+        return $lastPet === false ? 1 : $lastPet->getId() + 1;
     }
 
     private function SaveData() {
