@@ -102,3 +102,4 @@ abstract class MapFromSQL
         return $keeper;
     }
 }
+
