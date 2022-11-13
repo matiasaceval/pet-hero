@@ -12,7 +12,7 @@ use Exception;
 use Models\Owner as Owner;
 use Models\Reservation;
 use Models\ReservationState;
-use Utils\GenerateImage;
+use Utils\GenerateFile;
 use Utils\LoginMiddleware;
 use Utils\Session;
 use Utils\SingUpMiddleware;
@@ -197,7 +197,7 @@ class OwnerController
             exit;
         }
 
-        $fileName = GenerateImage::PersistImage($image, "reservation-", $reservation->getId(), "-payment");
+        $fileName = GenerateFile::PersistFile($image, "reservation-", $reservation->getId(), "-payment");
         if ($fileName == null) {
             Session::Set("error", "Invalid image");
             header("location:" . FRONT_ROOT . "Reservation/Reservations");

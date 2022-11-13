@@ -4,7 +4,7 @@ namespace Controllers;
 
 use DAO\PetDAOJson as PetDAO;
 use Models\Pet;
-use Utils\GenerateImage;
+use Utils\GenerateFile;
 use Utils\LoginMiddleware;
 use Utils\Session;
 use Utils\TempValues;
@@ -72,7 +72,7 @@ class PetController {
         $pet->setOwner(Session::Get("owner"));
 
         if ($image["size"] > 0) {
-            $fileName = GenerateImage::PersistImage($image, "photo-pet-", $id);
+            $fileName = GenerateFile::PersistFile($image, "photo-pet-", $id);
             if ($fileName == null) {
                 Session::Set("error", "Invalid image");
                 header("location:" . FRONT_ROOT . "Pet/ListPets");
