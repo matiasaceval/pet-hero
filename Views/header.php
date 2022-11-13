@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="<?php echo FONTS_PATH ?>material-icon/css/material-design-iconic-font.min.css">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="<?php echo VIEWS_PATH ?>img/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/favicon.ico" type="image/x-icon" />
     <title>Pet Hero</title>
 
     <!-- Login & Signup -->
