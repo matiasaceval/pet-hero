@@ -6,6 +6,7 @@ use Utils\Session;
 require_once(VIEWS_PATH . "back-nav.php");
 ?>
 
+<script>document.title = "Keepers / Pet Hero" </script>
 <script>
     function filterBtn() {
         const url = window.location.pathname;

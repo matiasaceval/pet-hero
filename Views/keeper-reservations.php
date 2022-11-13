@@ -6,6 +6,7 @@ require_once(VIEWS_PATH . "back-nav.php");
 
 ?>
 
+<script>document.title = "Reservations / Pet Hero" </script>
 <div class="container overflow-hidden">
 
     <div class="centered-wrapper">

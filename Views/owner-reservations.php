@@ -5,6 +5,8 @@ use Models\ReservationState;
 require_once(VIEWS_PATH . "back-nav.php");
 
 ?>
+
+<script>document.title = "Reservations / Pet Hero" </script>
 <div class="container overflow-hidden">
     <div class="centered-wrapper">
         <div id="filter-row" class="row justify-content-center unselectable" style="flex-direction: column">

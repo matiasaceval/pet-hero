@@ -4,6 +4,7 @@ use Models\ReservationState;
 
 require_once(VIEWS_PATH . "home-nav.php");
 ?>
+<script>document.title = "Home / Pet Hero" </script>
 <div class="container overflow-hidden">
     <div class="centered-element">
         <div class="card-box card-box-shadow">

@@ -1,3 +1,4 @@
+<script>document.title = "Not Found / Pet Hero" </script>
 <div class="glitch-bg">
     <div class="container overflow-hidden">
         <div class="centered-wrapper">

@@ -3,6 +3,8 @@
 require_once(VIEWS_PATH . "back-nav.php");
 
 ?>
+
+<script>document.title = "Add Pet / Pet Hero" </script>
 <div class="container overflow-hidden">
     <div class="centered-element">
         <form method="post" enctype='multipart/form-data' action="<?php echo FRONT_ROOT ?>Pet/AddPet">

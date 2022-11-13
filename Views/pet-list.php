@@ -17,6 +17,8 @@ if ($err || $succ) { ?>
     if ($err) Session::Unset('error');
     if ($succ) Session::Unset('success');
 } ?>
+
+<script>document.title = "Pets / Pet Hero" </script>
 <div class="container overflow-hidden">
     <div class="centered-wrapper">
         <?php

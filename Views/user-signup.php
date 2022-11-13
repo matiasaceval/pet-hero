@@ -5,6 +5,8 @@ use Utils\TempValues;
 
 require_once(VIEWS_PATH . "back-nav-no-logout.php");
 ?>
+
+<script>document.title = "Sign Up / Pet Hero" </script>
 <div class="main">
     <div class="container-modified overflow-hidden">
         <div class="centered-element">

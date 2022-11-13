@@ -17,6 +17,7 @@ if (Session::VerifySession("keeper")) {
 
 ?>
 
+<script>document.title = "Fee & Stay / Pet Hero" </script>
 <div class="container overflow-hidden">
     <div class="centered-element">
         <form id="stay-fee-form" method="post" action="<?php echo FRONT_ROOT ?>Keeper/SetFeeStay">

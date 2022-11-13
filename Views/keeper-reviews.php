@@ -6,6 +6,7 @@ use Utils\Session;
 require_once(VIEWS_PATH . "back-nav.php");
 ?>
 
+<script>document.title = "Reviews / Pet Hero" </script>
 <div class="container overflow-hidden">
     <div class="centered-element">
         <div class="centered-wrapper">
