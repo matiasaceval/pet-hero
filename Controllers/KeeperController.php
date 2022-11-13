@@ -7,6 +7,7 @@ use DAO\KeeperDAOJson as KeeperDAO;
 use DAO\ReservationDAOJson as ReservationDAO;
 use DAO\ReviewsDAOJson as ReviewsDAO;
 use Models\Keeper as Keeper;
+use Models\Reservation;
 use Models\ReservationState as ReservationState;
 use Models\Stay as Stay;
 use Utils\LoginMiddleware;
@@ -37,7 +38,7 @@ class KeeperController
         $keeper = Session::Get("keeper");
         $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
         $reservationsOngoing = array_filter($reservations, function ($reservation) {
-            return $reservation->getState() !== ReservationState::FINISHED;
+            return in_array($reservation->getState(), ReservationState::GetDisablingStates());
         });
         $availableDays = $keeper->getAvailableDays($reservations);
         require_once(VIEWS_PATH . "keeper-home.php");
