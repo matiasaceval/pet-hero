@@ -5,7 +5,7 @@ namespace DAO;
 use Models\Pet as Pet;
 
 interface IPetDAO {
-    public function Add(Pet $pet, $image);
+    public function Add(Pet $pet, array $image);
 
     public function GetAll(): array;
 

@@ -15,7 +15,9 @@ require_once(VIEWS_PATH . "back-nav.php");
     ?>
 </span>
 
-<script>document.title = "Update Pet / Pet Hero" </script>
+<script>
+    document.title = "Update Pet / Pet Hero"
+</script>
 <div class="container overflow-hidden">
     <div class="centered-element">
         <form method="post" enctype='multipart/form-data' action="<?php echo FRONT_ROOT ?>Pet/EditPet">
@@ -24,8 +26,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                 <div class=" row">
                     <div class="row" style="padding: 0px 15px 0 15px">
                         <div class="col-2 align-self-center">
-                            <img class="invert" width="60px"
-                                 src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/pet-hero.png">
+                            <img class="invert" width="60px" src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/pet-hero.png">
                         </div>
                         <div class="col-md-auto">
                             <div class="row">
@@ -47,14 +48,11 @@ require_once(VIEWS_PATH . "back-nav.php");
                 <div class="row mt-4">
                     <div class="col-md-auto">
                         <div class="row" style="padding: 0px 15px 0 15px">
-                            <img id="pet-image" class="cover"
-                                 src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() ?>" width="300px"
-                                 height="300px">
+                            <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() ?>" width="300px" height="300px">
                         </div>
                         <div class="row mt-1 justify-content-center">
                             <div class="col-md-auto">
-                                <input id="selectedFile" value="" name="image" type="file"
-                                       accept="image/png, image/jpeg" style="display:none" onchange="(function (){
+                                <input id="selectedFile" value="" name="image" type="file" accept="image/png, image/jpeg" style="display:none" onchange="(function (){
                                                    var selectedFile = document.getElementById('selectedFile').files[0];
                                                    var img = document.getElementById('pet-image')
                                                    var reader = new FileReader();
@@ -62,33 +60,29 @@ require_once(VIEWS_PATH . "back-nav.php");
                                                        img.src = this.result
                                                    }
                                                    reader.readAsDataURL(selectedFile);
-                                               })()"/>
-                                <input type="button" value="Upload Image" class="btn-secondary"
-                                       onclick="document.getElementById('selectedFile').click();"/>
+                                               })()" />
+                                <input type="button" value="Upload Image" class="btn-secondary" onclick="document.getElementById('selectedFile').click();" />
                             </div>
                         </div>
                     </div>
-                    <input readonly hidden name="id" value="<?php echo $pet->getId(); ?>"/>
+                    <input readonly hidden name="id" value="<?php echo $pet->getId(); ?>" />
                     <div class="col-4">
                         <div class="row">
                             <div class="col-md-auto">
                                 <p>Name</p>
-                                <input required name="name" maxlength="20" class="pet-data"
-                                       value="<?php echo $pet->getName(); ?>"/>
+                                <input required name="name" maxlength="20" class="pet-data" value="<?php echo $pet->getName(); ?>" />
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-auto">
                                 <p>Species</p>
-                                <input required name="species" maxlength="20" class="pet-data"
-                                       value="<?php echo $pet->getSpecies(); ?>"/>
+                                <input required name="species" maxlength="20" class="pet-data" value="<?php echo $pet->getSpecies(); ?>" />
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-auto">
                                 <p>Breed</p>
-                                <input required name="breed" maxlength="20" class="pet-data"
-                                       value="<?php echo $pet->getBreed(); ?>"/>
+                                <input required name="breed" maxlength="20" class="pet-data" value="<?php echo $pet->getBreed(); ?>" />
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -104,8 +98,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                                 <p>Sex</p>
                                 <select name="sex" class="pet-data pointer" style="padding-right: 12px;">
                                     <option class="pet-data" value="M">MALE</option>
-                                    <option class="pet-data"
-                                            value="F" <?php if ($pet->getSex() == "F") echo "selected" ?>>FEMALE
+                                    <option class="pet-data" value="F" <?php if ($pet->getSex() == "F") echo "selected" ?>>FEMALE
                                     </option>
                                 </select>
                             </div>
@@ -113,15 +106,22 @@ require_once(VIEWS_PATH . "back-nav.php");
                         <div class="row mt-3">
                             <div class="col-md-auto no-arrow">
                                 <p>Age</p>
-                                <input required name="age" min="0" max="100" type="number" maxlength="5"
-                                       class="pet-data" value="<?php echo $pet->getAge() ?>"/>
+                                <input required name="age" min="0" max="100" type="number" maxlength="5" class="pet-data" value="<?php echo $pet->getAge() ?>" />
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-auto">
                                 <p>Vaccines</p>
-                                <input required name="vaccine" type="url" class="pet-data"
-                                       value="<?php echo $pet->getVaccine() ?>"/>
+                                <input required id="selectedVaccines" name="vaccine" type="file" accept="image/*, .pdf" style="display:none" onchange="(function (){
+                                                   var selectedVaccines = document.getElementById('selectedVaccines').files[0];
+                                                   $('#caption').text('Uploaded: ' + selectedVaccines.name);
+                                               })()" />
+                                <input required type="button" value="Upload Vaccines" class="btn-secondary" onclick="document.getElementById('selectedVaccines').click();" />
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-md-auto">
+                                <p id="caption" class="img-caption" style="max-width: 15em">* Must be an image or pdf</p>
                             </div>
                         </div>
                     </div>
@@ -131,8 +131,7 @@ require_once(VIEWS_PATH . "back-nav.php");
             <!-- Submit -->
             <div class="row mt-4 justify-content-center">
                 <div class="col-md-auto">
-                    <button onclick="document.getElementById('back-btn').click(); return false;"
-                            class="btn btn-primary">Cancel
+                    <button onclick="document.getElementById('back-btn').click(); return false;" class="btn btn-primary">Cancel
                     </button>
                 </div>
                 <div class="col-md-auto">

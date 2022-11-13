@@ -20,16 +20,23 @@ class PetDAOJson implements IPetDAO {
         $this->ownerDAO = new OwnerDAO();
     }
 
-    public function Add(Pet $pet, $image) {
+    public function Add(Pet $pet, array $files) {
         $this->RetrieveData();
 
         $id = $this->GetNextId();
         $pet->setId($id);
         $pet->setActive(true);
 
-        $fileName = GenerateFile::PersistFile($image, "photo-pet-", $id);
+        $image = $files['image'];
+        $vaccine = $files['vaccine'];
 
-        $pet->setImage($fileName);
+        $imagePath = GenerateFile::PersistFile($image, "photo-pet-", $id);
+
+        $vaccinePath = GenerateFile::PersistFile($vaccine, "vaccine-pet-", $id);
+
+        $pet->setImage($imagePath);
+
+        $pet->setVaccine($vaccinePath);
 
         array_push($this->petList, $pet);
 
