@@ -718,6 +718,9 @@ input[type='checkbox']:checked {
   transform: translateY(20vh);
 }
 
+.bill-font {
+    font-family: Arial, Helvetica, sans-serif !important;  
+}
 
 /* Overwriting Bootstrap */
 .container {
