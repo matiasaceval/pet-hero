@@ -25,16 +25,21 @@ care is a short stay in exchange for remuneration.*
 ### Second Checking
 
 - [X] FR7 - Consult Keepers availability on a range of dates.
-- [ ] FR8 - Create a Reservation from an Owner to a Keeper
-- [ ] FR9 - Consult programmed Reservations and old ones as Keeper.
-- [ ] FR10 - Confirm Reservation as a Keeper.
+- [X] FR8 - Create a Reservation from an Owner to a Keeper
+- [X] FR9 - Consult programmed Reservations and old ones as Keeper.
+- [X] FR10 - Confirm Reservation as a Keeper.
 
 ### Third Checking
 
-- [ ] FR11 - Create Payment Coupon for an Owner
-- [ ] FR12 - Coupon payment simulation (Reservation confirmation).
+- [X] FR11 - Create Payment Coupon for an Owner
+- [X] FR12 - Coupon payment simulation (Reservation confirmation).
 
 ## Miscellaneous
 
 - Runs in PHP >= 7.4
 - Need to create "Data" and "Uploads" folders on root
+
+## How to run prisma migrations
+```sh
+npx prisma migrate dev
+```
