@@ -6,7 +6,9 @@ require_once(VIEWS_PATH . "back-nav.php");
 
 ?>
 
-<script>document.title = "Reservations / Pet Hero" </script>
+<script>
+    document.title = "Reservations / Pet Hero"
+</script>
 <div class="container overflow-hidden">
     <div class="centered-wrapper">
         <div id="filter-row" class="row justify-content-center unselectable" style="flex-direction: column">
@@ -242,8 +244,12 @@ require_once(VIEWS_PATH . "back-nav.php");
                                             console.log(selectedFile.name);
                                             $('#msg-success').text('Uploaded: ' + selectedFile.name);
                                             $('#payment-submit').css('display', 'block');
+                                            $('#caption').css('display', 'none');
                                         })()" />
                                             <button class="btn btn-secondary" style="font-size: 22px; min-width: 150px" onclick="document.getElementById('selectedFile').click();">Upload Payment</button>
+                                        </div>
+                                        <div class="row mt-1 justify-content-center">
+                                            <p id="caption" class="img-caption">* Must be an image</p>
                                         </div>
                                         <div class="row mt-1 justify-content-center">
                                             <button id="payment-submit" class="btn btn-secondary" type="submit" style="font-size: 22px; min-width: 150px; display:none">Submit</button>
