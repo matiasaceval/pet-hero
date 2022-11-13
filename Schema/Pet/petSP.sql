@@ -11,7 +11,7 @@ DELIMITER
 $$
 CREATE PROCEDURE GetPetById(IN id INT)
 BEGIN
-SELECT p.*, o.firstname, o.lastname, o.email, o.phone, o.password
+SELECT p.*, o.*
 FROM pet p
          INNER JOIN owner o ON p.ownerId = o.id
 WHERE p.id = id;
@@ -21,7 +21,7 @@ DELIMITER ;
 CREATE PROCEDURE getPetByOwnerId(IN id INT) DELIMITER
 $$
 BEGIN
-SELECT p.*, o.firstname, o.lastname, o.email, o.phone, o.password
+SELECT p.*, o.*
 FROM pet p
          INNER JOIN owner o ON p.ownerId = o.id
 WHERE id = o.id;
@@ -32,7 +32,7 @@ DELIMITER
 $$
 CREATE PROCEDURE getAllPetAndOwner()
 BEGIN
-SELECT p.*, o.firstname, o.lastname, o.email, o.phone, o.password
+SELECT p.*, o.*
 FROM pet p
          INNER JOIN owner o ON p.ownerId = o.id;
 END $$
@@ -55,7 +55,7 @@ DELIMITER
 $$
 CREATE PROCEDURE updatePet(IN id INT, IN name VARCHAR (191), IN species VARCHAR (191), IN breed VARCHAR (191),
                            IN sex VARCHAR (191), IN age VARCHAR (191), IN image VARCHAR (191), IN vaccine VARCHAR (191),
-                           IN ownerId INT)
+                           IN ownerId INT, IN active BOOLEAN)
 BEGIN
 UPDATE pet p
 SET p.name     = name,
@@ -65,7 +65,8 @@ SET p.name     = name,
     p.age      = age,
     p.image    = image,
     p.vaccines = vaccine,
-    p.ownerId  = ownerId
+    p.ownerId  = ownerId,
+    p.active   = active
 WHERE p.id = id;
 SELECT LAST_INSERT_ID();
 END $$
