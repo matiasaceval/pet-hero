@@ -20,6 +20,10 @@ class Pet {
 
     //Getters and setters
 
+    public function __construct() {
+        $this->active = true;
+    }
+
     public function getId(): int {
         return $this->id;
     }
