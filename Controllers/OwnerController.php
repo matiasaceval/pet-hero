@@ -207,7 +207,7 @@ class OwnerController
         $reservation->setState(ReservationState::PAID);
         $this->reservationDAO->Update($reservation);
 
-        header("location:" . FRONT_ROOT . "Reservation/Reservations?states[]=" . ReservationState::ACCEPTED);
+        header("location:" . FRONT_ROOT . "Reservation/Reservations");
     }
 
     public function GenerateReservationBill(int $id)
