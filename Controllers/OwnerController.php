@@ -230,4 +230,18 @@ class OwnerController
 
     /* -------------------------------------------------------------------------- */
 
+
+    /* Owner Reviews Made */
+
+    public function ReviewsMade()
+    {
+        LoginMiddleware::VerifyOwner();
+        $owner = Session::Get("owner");
+        $reviews = $this->reviewsDAO->GetByOwnerId($owner->getId());
+        TempValues::InitValues(["back-page" => FRONT_ROOT]);
+        require_once(VIEWS_PATH . "owner-reviews-made.php");
+    }
+
+    /* -------------------------------------------------------------------------- */
+
 }

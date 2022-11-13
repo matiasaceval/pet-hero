@@ -52,7 +52,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                 </div>
                 <div class="col-3">
                     <!-- Reviews -->
-                    <a href="">
+                    <a href="<?php echo FRONT_ROOT ?>Owner/ReviewsMade">
                         <div class="card-box card-box-border">
                             <span class="title">Reviews</span><br>
                             <span class="description">List all reviews made</span>

@@ -112,7 +112,7 @@ require_once(VIEWS_PATH . "back-nav.php");
         $pet = $reservation->getPet();
         $owner = $pet->getOwner();
     ?>
-        <div class="row mt-4 justify-content-center <?php echo ReservationState::StateAsId($reservation->getState()) ?>">
+        <div class="row mt-4 justify-content-center <?php echo ReservationState::StateAsId($reservation->getState()) ?>" id="reservation-<?php echo $reservation->getId() ?>">
             <div class="kpr-card-box">
                 <div class="row justify-content-center">
                     <div class="col-md-auto">

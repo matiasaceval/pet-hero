@@ -112,6 +112,12 @@ class ReviewsDAOJson implements IReviewsDAO {
         return array_filter($this->reviewList, fn($review) => $review->getReservation()->getKeeper()->getId() == $id);
     }
 
+    public function GetByOwnerId(int $id): array {
+        $this->RetrieveData();
+
+        return array_filter($this->reviewList, fn($review) => $review->getReservation()->getPet()->getOwner()->getId() == $id);
+    }
+
     public function GetByReservationId(int $id): Reviews|null {
         $this->RetrieveData();
 
