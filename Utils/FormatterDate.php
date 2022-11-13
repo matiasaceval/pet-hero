@@ -10,15 +10,14 @@ abstract class FormatterDate
     /**
      * @throws Exception
      */
-    public static function ConvertRangeSQLToApp($dates): array
+    public static function ConvertRangeSQLToApp($dates)
     {
-
         //------------------ parse date from mysql to php
         $since = new DateTime($dates["since"]);
         $until = new DateTime($dates["until"]);
         //to string
-        $sinceAmericanFormat = \date("m-d-Y", $since);
-        $untilAmericanFormat = \date("m-d-Y", $until);
+        $sinceAmericanFormat = \date("d-m-Y", $since);
+        $untilAmericanFormat = \date("d-m-Y", $until);
         $dates["since"] = $sinceAmericanFormat;
         $dates["until"] = $untilAmericanFormat;
         return $dates;
@@ -27,39 +26,36 @@ abstract class FormatterDate
     /**
      * @throws Exception
      */
-    public static function ConvertRangeAppToSQL($dates): array
+    public static function ConvertRangeAppToSQL($dates)
     {
         //------------------ parse date from php to mysql
         $since = new DateTime($dates["since"]);
         $until = new DateTime($dates["until"]);
         //to string
-        $sinceSQLFormat = \date("Y-m-d H:i:s", $since);
-        $untilSQLFormat = \date("Y-m-d H:i:s", $until);
-        $dates["since"] = $sinceSQLFormat;
-        $dates["until"] = $untilSQLFormat;
+        $sinceAmericanFormat = \date("Y-m-d H:i:s", $since);
+        $untilAmericanFormat = \date("Y-m-d H:i:s", $until);
+        $dates["since"] = $sinceAmericanFormat;
+        $dates["until"] = $untilAmericanFormat;
         return $dates;
     }
 
     /**
      * @throws Exception
      */
-    public static function ConvertSingleDateSQLToApp($date): array
+    public static function ConvertSingleDateSQLToApp($date): string
     {
-
-        $date = new DateTime($date["date"]);
-        $dateAmericanFormat = \date("m-d-Y", $date);
-        $dates["date"] = $dateAmericanFormat;
-        return $dates;
+        $date = new DateTime($date);
+        return \date("d-m-Y", $date);
     }
 
     /**
      * @throws Exception
      */
-    public static function ConvertSingleDateAppToSQL($date): array
+    public static function ConvertSingleDateAppToSQL($date): string
     {
-        $date = new DateTime($date["date"]);
-        $dateSQLFormat = \date("Y-m-d", $date);
-        $dates["date"] = $dateSQLFormat;
-        return $dates;
+        $date = new DateTime($date);
+        return \date("Y-m-d H:i:s", $date);
     }
+
 }
+?>
