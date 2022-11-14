@@ -12,44 +12,58 @@ DELIMITER
 $$
 CREATE PROCEDURE `getAllReviews`()
 BEGIN
-SELECT r.*, k.*, p.*, o.* , s.*, re.*
+SELECT r.*, k.*, p.*, o.*, s.*, re.*
 FROM review r
-        INNER JOIN reservation re ON re.id = r.reservationId 
-        INNER JOIN keeper k ON k.id = re.keeperId
-        LEFT JOIN pet p ON p.id = re.petId
-        INNER JOIN owner o ON o.id = p.ownerId
-        INNER JOIN stay s ON s.id = k.id
-END$$
-DELIMITER ;
+         INNER JOIN reservation re ON re.id = r.reservationId
+         INNER JOIN keeper k ON k.id = re.keeperId
+         LEFT JOIN pet p ON p.id = re.petId
+         INNER JOIN owner o ON o.id = p.ownerId
+         INNER JOIN stay s ON s.id = k.id END$$
+DELIMITER;
 
 DELIMITER
 $$
 CREATE PROCEDURE getReviewByKeeperId(IN id INT)
 BEGIN
-SELECT r.*, k.*, p.* , o.* , s.*, re.*
+SELECT r.*, k.*, p.*, o.*, s.*, re.*
 FROM review r
-        INNER JOIN reservation re ON re.id = r.reservationId 
-        INNER JOIN keeper k ON k.id = re.keeperId
-        LEFT JOIN pet p ON p.id = re.petId
-        INNER JOIN owner o ON o.id = p.ownerId
-        INNER JOIN stay s ON s.id = k.id
-    WHERE r.keeperId = id;
+         INNER JOIN reservation re ON re.id = r.reservationId
+         INNER JOIN keeper k ON k.id = re.keeperId
+         LEFT JOIN pet p ON p.id = re.petId
+         INNER JOIN owner o ON o.id = p.ownerId
+         INNER JOIN stay s ON s.id = k.id
+WHERE r.keeperId = id;
 END $$
 DELIMITER ;
 
-DELIMITER 
+DELIMITER
 $$
 CREATE PROCEDURE getReviewById(IN id INT)
 BEGIN
-SELECT r.*, k.*, p.* , o.* , s.*, re.*
+SELECT r.*, k.*, p.*, o.*, s.*, re.*
 FROM review r
-        INNER JOIN reservation re ON re.id = r.reservationId 
-        INNER JOIN keeper k ON k.id = re.keeperId
-        LEFT JOIN pet p ON p.id = re.petId
-        INNER JOIN owner o ON o.id = p.ownerId
-        INNER JOIN stay s ON s.id = k.id
-    WHERE r.id = id;
+         INNER JOIN reservation re ON re.id = r.reservationId
+         INNER JOIN keeper k ON k.id = re.keeperId
+         LEFT JOIN pet p ON p.id = re.petId
+         INNER JOIN owner o ON o.id = p.ownerId
+         INNER JOIN stay s ON s.id = k.id
+WHERE r.id = id;
 END $$
+
+DELIMITER
+$$
+CREATE PROCEDURE getReviewByReservationId(IN id INT)
+BEGIN
+SELECT r.*, k.*, p.*, o.*, s.*, re.*
+FROM review r
+         INNER JOIN reservation re ON re.id = r.reservationId
+         INNER JOIN keeper k ON k.id = re.keeperId
+         LEFT JOIN pet p ON p.id = re.petId
+         INNER JOIN owner o ON o.id = p.ownerId
+         INNER JOIN stay s ON s.id = k.id
+WHERE r.reservationId = id;
+END $$
+DELIMITER ;
 
 DELIMITER
 $$
@@ -70,7 +84,8 @@ UPDATE review r
 SET r.comment = comment,
     r.rating  = rating
 WHERE r.id = reviewId;
-SELECT r.* FROM review r
+SELECT r.*
+FROM review r
 WHERE r.id = reviewId;
 END$$
 DELIMITER ;
