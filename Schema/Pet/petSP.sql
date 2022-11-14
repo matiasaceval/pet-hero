@@ -68,7 +68,8 @@ SET p.name     = name,
     p.ownerId  = ownerId,
     p.active   = active
 WHERE p.id = id;
-SELECT LAST_INSERT_ID();
+SELECT p.* FROM pet p
+WHERE p.id = id;
 END $$
 DELIMITER ;
 
@@ -80,5 +81,17 @@ DELETE
 p FROM pet p
 WHERE id = p.id;
 SELECT LAST_INSERT_ID();
+END $$
+DELIMITER ;
+
+DELIMITER
+$$
+CREATE PROCEDURE disablePet(IN id INT)
+BEGIN
+UPDATE pet p
+SET p.active = FALSE
+WHERE p.id = id;
+SELECT p.* FROM pet p
+WHERE p.id = id;
 END $$
 DELIMITER ;
