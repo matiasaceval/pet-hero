@@ -6,6 +6,7 @@ use Exception;
 use Models\Keeper;
 use Models\Owner as Owner;
 use Models\Pet;
+use Models\Reviews;
 
 abstract class SetterSQLData
 {
@@ -63,5 +64,13 @@ abstract class SetterSQLData
     /**
      * @throws Exception
      */
-
+    public static function SetFromReviews(Reviews $reviews): array
+    {
+        $parameters = array();
+        $parameters["comment"] = $reviews->getComment();
+        $parameters["rating"] = $reviews->getRating();
+        $parameters["reservationId"] = $reviews->getReservation()->getId();
+        $parameters["date"] = $reviews->getDate();
+        return $parameters;
+    }
 }
