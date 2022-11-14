@@ -9,6 +9,7 @@ use Models\Keeper as Keeper;
 use Models\Stay;
 use Utils\FormatterDate;
 use Utils\MapFromSQL;
+use Utils\SetterSQLData;
 
 
 class KeeperSQLDAO implements IKeeperDAO
@@ -22,7 +23,7 @@ class KeeperSQLDAO implements IKeeperDAO
     {
         $this->connection = Connection::GetInstance();
 
-        $parameters = $this->setFromValue($keeper);
+        $parameters = SetterSQLData::SetFromKeeper($keeper);
 
         $query = "CALL addKeeper(?,?,?,?,?,?,?,?)";
         return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
@@ -63,29 +64,35 @@ class KeeperSQLDAO implements IKeeperDAO
     /**
      * @throws Exception
      */
-    public function RemoveById(int $id): ?int
+    public function RemoveById(int $id): bool
     {
         $this->connection = Connection::GetInstance();
 
         $parameters["id"] = $id;
 
         $query = "CALL deleteKeeper(?)";
-        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+        $keeperId = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+
+        if (isset($keeperId)) {
+            return true;
+        }
+        return false;
+
 
     }
 
     /**
      * @throws Exception
      */
-    public function Update(Keeper $keeper): ?Keeper
+    public function Update(Keeper $keeper): bool
     {
         $this->connection = Connection::GetInstance();
 
-        $parameters = $this->setFromValue($keeper);
+        $parameters = SetterSQLData::SetFromKeeper($keeper);
         $parameters["id"] = $keeper->getId();
         $query = "CALL updateKeeper(?,?,?,?,?,?,?,?,?)";
 
-        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) != null;
 
 
     }
@@ -109,27 +116,4 @@ class KeeperSQLDAO implements IKeeperDAO
     }
 
 
-
-    /**
-     * @throws Exception
-     */
-    private function setFromValue(Keeper $keeper): array
-    {
-        $parameters["firstname"] = $keeper->getFirstname();
-        $parameters["lastname"] = $keeper->getLastname();
-        $parameters["email"] = $keeper->getEmail();
-        $parameters["password"] = $keeper->getPassword();
-        $parameters["phone"] = $keeper->getPhone();
-        $parameters["fee"] = $keeper->getFee();
-
-        //-----------------parse date for mysql data base
-        $dates["since"] = $keeper->getStay()->getSince();
-        $dates["until"] = $keeper->getStay()->getUntil();
-
-        $value = FormatterDate::ConvertRangeAppToSQL($dates);
-
-        $parameters["since"] = $value["since"];
-        $parameters["until"] = $value["until"];
-        return $parameters;
-    }
 }

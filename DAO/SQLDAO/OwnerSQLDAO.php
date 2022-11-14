@@ -5,6 +5,8 @@ namespace DAO;
 use Exception;
 use Models\Owner as Owner;
 use DAO\IOwnerDAO as IOwnerDao;
+use Utils\MapFromSQL;
+use Utils\SetterSQLData;
 
 class OwnerSQLDAO implements IOwnerDao
 {
@@ -14,14 +16,12 @@ class OwnerSQLDAO implements IOwnerDao
      * Data base Error
      * @throws Exception
      */
-    public function Add(Owner $owner)
+    public function Add(Owner $owner): ?int
     {
         $this->connection = Connection::GetInstance();
         $query = "CALL addOwner(?,?,?,?,?)";
-        $parameters = $this->SetFromOwner($owner);
-        $row = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
-        return $row > 0;
-
+        $parameters = SetterSQLData::SetFromOwner($owner);
+        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
     }
 
     /**
@@ -35,7 +35,7 @@ class OwnerSQLDAO implements IOwnerDao
         $result = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
         $ownersList = array();
         foreach ($result as $value) {
-            $owner = $this->MapOwner($value);
+            $owner = MapFromSQL::MapFromOwner($value);
             array_push($ownersList, $owner);
         }
         return $ownersList;
@@ -52,7 +52,7 @@ class OwnerSQLDAO implements IOwnerDao
         $parameters["id"] = $id;
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
         if ($result != null) {
-            return $this->MapOwner($result);
+            return MapFromSQL::MapFromOwner($result);
         }
         return null;
     }
@@ -66,8 +66,7 @@ class OwnerSQLDAO implements IOwnerDao
         $this->connection = Connection::GetInstance();
         $query = "CALL deleteOwner(?)";
         $parameters["id"] = $id;
-        $row = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
-        return $row > 0;
+        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) > 0;
     }
 
 
@@ -79,10 +78,9 @@ class OwnerSQLDAO implements IOwnerDao
     {
         $this->connection = Connection::GetInstance();
         $query = "CALL updateOwner(?,?,?,?,?,?)";
-        $parameters = $this->SetFromOwner($owner);
+        $parameters = SetterSQLData::SetFromOwner($owner);
         $parameters["id"] = $owner->getId();
-        $row = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
-        return $row > 0;
+        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) != null;
     }
 
     /**
@@ -96,30 +94,10 @@ class OwnerSQLDAO implements IOwnerDao
         $parameters["email"] = $email;
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
         if ($result != null) {
-            return $this->MapOwner($result);
+            return MapFromSQL::MapFromOwner($result);
         }
         return null;
     }
 
-    private function SetFromOwner(Owner $owner): array
-    {
-        $value["firstname"] = $owner->getFirstname();
-        $value["lastname"] = $owner->getLastname();
-        $value["phone"] = $owner->getPhone();
-        $value["email"] = $owner->getEmail();
-        $value["password"] = $owner->getPassword();
-        return $value;
-    }
 
-    private function MapOwner($value): Owner
-    {
-        $owner = new Owner();
-        $owner->setId($value["id"]);
-        $owner->setFirstname($value["firstname"]);
-        $owner->setLastname($value["lastname"]);
-        $owner->setEmail($value["email"]);
-        $owner->setPhone($value["phone"]);
-        $owner->setPassword($value["password"]);
-        return $owner;
-    }
 }
