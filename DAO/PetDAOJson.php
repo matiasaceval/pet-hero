@@ -3,6 +3,7 @@
 namespace DAO;
 
 use DAO\OwnerDAOJson as OwnerDAO;
+use Exception;
 use Models\Pet;
 use Utils\GenerateFile;
 
@@ -20,6 +21,9 @@ class PetDAOJson implements IPetDAO {
         $this->ownerDAO = new OwnerDAO();
     }
 
+    /**
+     * @throws Exception
+     */
     public function Add(Pet $pet, array $files) {
         $this->RetrieveData();
 
@@ -128,17 +132,17 @@ class PetDAOJson implements IPetDAO {
 
     }
 
-    public function Update(Pet $pet): bool {
+    public function Update(Pet $pet): ?Pet {
         $this->RetrieveData();
 
         foreach ($this->petList as $key => $value) {
             if ($value->getId() == $pet->getId()) {
                 $this->petList[$key] = $pet;
                 $this->SaveData();
-                return true;
+                return $this->petList[$key];
             }
         }
-        return false;
+        return null;
     }
 
     public function DisablePetById(int $id): bool {
