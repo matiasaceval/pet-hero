@@ -3,11 +3,8 @@
 namespace DAO;
 
 use DAO\IKeeperDAO as IKeeperDAO;
-use DateTime;
 use Exception;
 use Models\Keeper as Keeper;
-use Models\Stay;
-use Utils\FormatterDate;
 use Utils\MapFromSQL;
 use Utils\SetterSQLData;
 
