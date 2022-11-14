@@ -52,6 +52,20 @@ END $$
 
 DELIMITER
 $$
+CREATE PROCEDURE getReviewByOwnerId(IN id INT)
+BEGIN
+SELECT r.*, k.*, p.*, o.*, s.*, re.*
+FROM review r
+         INNER JOIN reservation re ON re.id = r.reservationId
+         INNER JOIN keeper k ON k.id = re.keeperId
+         LEFT JOIN pet p ON p.id = re.petId
+         INNER JOIN owner o ON o.id = p.ownerId
+         INNER JOIN stay s ON s.id = k.id
+WHERE o.id = id;
+END $$
+
+DELIMITER
+$$
 CREATE PROCEDURE getReviewByReservationId(IN id INT)
 BEGIN
 SELECT r.*, k.*, p.*, o.*, s.*, re.*
