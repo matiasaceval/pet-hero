@@ -2,23 +2,23 @@
 
 use Exception;
 
-abstract class GenerateImage
+abstract class GenerateFile
 {
     /**
      * @throws Exception
      */
-    public static function PersistImage(array $image, string $prefix, int $id, string $suffix = '', $deleteAllWithDifferentType = true): ?string
+    public static function PersistFile(array $file, string $prefix, int $id, string $suffix = '', $deleteAllWithDifferentType = true): ?string
     {
-        $fileExt = explode(".", $image["name"]);
+        $fileExt = explode(".", $file["name"]);
         $fileType = strtolower(end($fileExt));
         $filePreName = $prefix . $id . $suffix;
         $fileName = $filePreName . "." . $fileType;
-        $tempFileName = $image["tmp_name"];
+
+        $tempFileName = $file["tmp_name"];
         $filePath = UPLOADS_PATH . basename($fileName);
-        $imageSize = getimagesize($tempFileName);
+        $fileSize = filesize($tempFileName);
 
-        if ($imageSize !== false) {
-
+        if ($fileSize !== false) {
             if ($deleteAllWithDifferentType) {
                 $files = glob(UPLOADS_PATH . $filePreName . ".*");
                 foreach ($files as $file) {
@@ -30,10 +30,10 @@ abstract class GenerateImage
             if (move_uploaded_file($tempFileName, $filePath)) {
                 return $fileName;
             } else {
-                Session::Set("error", "Error uploading image");
+                Session::Set("error", "Error uploading file");
             }
         } else {
-            Session::Set("error", "File is not an image");
+            Session::Set("error", "Error uploading file");
         }
         return null;
     }

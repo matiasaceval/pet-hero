@@ -4,8 +4,10 @@ use Models\ReservationState;
 
 require_once(VIEWS_PATH . "home-nav.php");
 ?>
-<script>document.title = "Home / Pet Hero" </script>
-<div class="container overflow-hidden">
+<script>
+    document.title = "Home / Pet Hero"
+</script>
+<div class="container overflow-hidden blurred-bg">
     <div class="centered-element">
         <div class="card-box card-box-shadow">
             <div class="row card-box-margin-bottom">
@@ -13,13 +15,10 @@ require_once(VIEWS_PATH . "home-nav.php");
                     <span class="title">Hi <?php echo $owner->getFirstname(); ?>!</span><br>
                     <span class="description">Welcome back, we've missed you!</span>
                 </div>
-                <div class="col-5">
-                    <img src="<?php echo VIEWS_PATH ?>img/background.png" width="300px" class="img-fluid">
-                </div>
             </div>
 
-            <div class="row gy-5">
-                <div class="col-3">
+            <div class="row gy-5 blur-wrap">
+                <div class="col-3 blur-card">
                     <!-- Pets -->
                     <a href="<?php echo FRONT_ROOT ?>Pet/ListPets">
                         <div class="card-box card-box-border">
@@ -28,7 +27,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                         </div>
                     </a>
                 </div>
-                <div class="col-3">
+                <div class="col-3 blur-card">
                     <!-- Keepers -->
                     <a href="<?php echo FRONT_ROOT ?>Owner/KeepersListView">
                         <div class="card-box card-box-border">
@@ -37,13 +36,13 @@ require_once(VIEWS_PATH . "home-nav.php");
                         </div>
                     </a>
                 </div>
-                <div class="col-3">
+                <div class="col-3 blur-card">
                     <!-- Bookings -->
-                    <?php 
-                        $pendingR = $this->reservationDAO->GetByOwnerIdAndState($owner->getId(), ReservationState::ACCEPTED); 
-                        $pending = count($pendingR) > 0;
+                    <?php
+                    $pendingR = $this->reservationDAO->GetByOwnerIdAndState($owner->getId(), ReservationState::ACCEPTED);
+                    $pending = count($pendingR) > 0;
                     ?>
-                    <a href="<?php echo FRONT_ROOT ?>Reservation/Reservations<?php if($pending) echo "?states[]=" . ReservationState::ACCEPTED ?>">
+                    <a href="<?php echo FRONT_ROOT ?>Reservation/Reservations">
                         <div class=" card-box card-box-border">
                             <?php if ($pending) { ?><div title="You have reservations accepted!" class="circle" style="position: absolute; transform: translateX(280%) translateY(-100%);"><?php echo count($pendingR) ?></div><?php } ?>
                             <span class="title" style="text-align:left; position: absolute;">Bookings</span><br>
@@ -51,7 +50,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                         </div>
                     </a>
                 </div>
-                <div class="col-3">
+                <div class="col-3 blur-card">
                     <!-- Reviews -->
                     <a href="<?php echo FRONT_ROOT ?>Owner/ReviewsMade">
                         <div class="card-box card-box-border">

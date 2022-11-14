@@ -68,7 +68,7 @@ class KeeperDAOJson implements IKeeperDAO {
     public function GetNextId() {
         $this->RetrieveData();
         $lastKeeper = end($this->keeperList);
-        return $lastKeeper === false ? 0 : $lastKeeper->getId() + 1;
+        return $lastKeeper === false ? 1 : $lastKeeper->getId() + 1;
     }
 
     private function SaveData() {

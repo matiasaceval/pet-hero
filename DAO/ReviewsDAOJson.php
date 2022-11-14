@@ -58,7 +58,7 @@ class ReviewsDAOJson implements IReviewsDAO {
     private function GetNextId() {
         $this->RetrieveData();
         $lastReviews = end($this->reviewList);
-        return $lastReviews === false ? 0 : $lastReviews->getId() + 1;
+        return $lastReviews === false ? 1 : $lastReviews->getId() + 1;
     }
 
     private function SaveData() {

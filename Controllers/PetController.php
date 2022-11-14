@@ -4,7 +4,7 @@ namespace Controllers;
 
 use DAO\PetDAOJson as PetDAO;
 use Models\Pet;
-use Utils\GenerateImage;
+use Utils\GenerateFile;
 use Utils\LoginMiddleware;
 use Utils\Session;
 use Utils\TempValues;
@@ -39,9 +39,8 @@ class PetController {
         $pet->setBreed($breed);
         $pet->setAge($age);
         $pet->setSex($sex);
-        $pet->setVaccine($vaccine);
         $pet->setOwner(Session::Get("owner"));
-        $this->petDAO->Add($pet, $image);
+        $this->petDAO->Add($pet, ['image' => $image, 'vaccine' => $vaccine]);
 
         header("location:" . FRONT_ROOT . "Pet/ListPets");
     }
@@ -68,11 +67,10 @@ class PetController {
         $pet->setBreed($breed);
         $pet->setAge($age);
         $pet->setSex($sex);
-        $pet->setVaccine($vaccine);
         $pet->setOwner(Session::Get("owner"));
 
         if ($image["size"] > 0) {
-            $fileName = GenerateImage::PersistImage($image, "photo-pet-", $id);
+            $fileName = GenerateFile::PersistFile($image, "photo-pet-", $id);
             if ($fileName == null) {
                 Session::Set("error", "Invalid image");
                 header("location:" . FRONT_ROOT . "Pet/ListPets");
@@ -82,6 +80,19 @@ class PetController {
         } else {
             $pet->setImage($getPet->getImage());
         }
+
+        if ($vaccine["size"] > 0) {
+            $fileName = GenerateFile::PersistFile($vaccine, "vaccine-pet-", $id);
+            if ($fileName == null) {
+                Session::Set("error", "Invalid vaccine");
+                header("location:" . FRONT_ROOT . "Pet/ListPets");
+                exit;
+            }
+            $pet->setVaccine($fileName);
+        } else {
+            $pet->setVaccine($getPet->getVaccine());
+        }
+
         $this->petDAO->Update($pet);
 
 

@@ -4,7 +4,9 @@ use Models\ReservationState;
 
 require_once(VIEWS_PATH . "home-nav.php");
 ?>
-<script>document.title = "Home / Pet Hero" </script>
+<script>
+    document.title = "Home / Pet Hero"
+</script>
 <div class="container overflow-hidden">
     <div class="centered-element">
         <div class="card-box card-box-shadow">
@@ -16,8 +18,8 @@ require_once(VIEWS_PATH . "home-nav.php");
                 </div>
             </div>
 
-            <div class="row gy-5">
-                <div class="col-4">
+            <div class="row gy-5 blur-wrap">
+                <div class="col-4 blur-card">
                     <!-- Bookings -->
                     <a href="<?php echo FRONT_ROOT ?>Keeper/Reservations">
                         <div class=" card-box card-box-border">
@@ -28,7 +30,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                         </div>
                     </a>
                 </div>
-                <div class="col-4">
+                <div class="col-4 blur-card">
                     <!-- Reviews -->
                     <a href="<?php echo FRONT_ROOT ?>Keeper/Reviews">
                         <div class="card-box card-box-border">
@@ -37,7 +39,7 @@ require_once(VIEWS_PATH . "home-nav.php");
                         </div>
                     </a>
                 </div>
-                <div class="col-4">
+                <div class="col-4 blur-card">
                     <!-- Update Profile -->
                     <a href="<?php echo FRONT_ROOT ?>Keeper/SetFeeStayView">
                         <div class="card-box card-box-border">
