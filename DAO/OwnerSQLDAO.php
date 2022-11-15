@@ -51,8 +51,8 @@ class OwnerSQLDAO implements IOwnerDao
         $query = "CALL getOwnerById(?)";
         $parameters["id"] = $id;
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-        if ($result != null) {
-            return MapFromSQL::MapFromOwner($result);
+        if (count($result) > 0) {
+            return MapFromSQL::MapFromOwner($result[0]);
         }
         return null;
     }
@@ -93,8 +93,8 @@ class OwnerSQLDAO implements IOwnerDao
         $query = "CALL getOwnerByEmail(?)";
         $parameters["email"] = $email;
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-        if ($result != null) {
-            return MapFromSQL::MapFromOwner($result);
+        if (count($result) > 0) {
+            return MapFromSQL::MapFromOwner($result[0]);
         }
         return null;
     }

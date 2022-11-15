@@ -66,8 +66,8 @@ class PetSQLDAO implements IPetDAO
         $query = "CALL GetPetById(?)";
         $parameters["id"] = $id;
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-        if ($result != null) {
-            return MapFromSQL::MapFromPet($result);
+        if (count($result) > 0) {
+            return MapFromSQL::MapFromPet($result[0]);
         }
         return null;
     }

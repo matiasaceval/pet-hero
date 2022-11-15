@@ -79,8 +79,8 @@ class ReviewsSQLDAO implements IReviewsDAO
         $parameters["id"] = $id;
         $query = "CALL getReviewById(?)";
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-        if ($result != null) {
-            return MapFromSQL::MapFromReview($result);
+        if (count($result) > 0) {
+            return MapFromSQL::MapFromReview($result[0]);
         }
         return null;
     }
@@ -95,8 +95,8 @@ class ReviewsSQLDAO implements IReviewsDAO
         $parameters["id"] = $id;
         $query = "CALL getReviewByReservationId(?)";
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-        if ($result != null) {
-            return MapFromSQL::MapFromReview($result);
+        if (count($result) > 0) {
+            return MapFromSQL::MapFromReview($result[0]);
         }
         return null;
     }

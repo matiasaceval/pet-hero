@@ -53,7 +53,7 @@ class ReservationSQLDAO implements IReservationDAOJson
         $parameters["id"] = $id;
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
         if (count($result) > 0) {
-            return MapFromSQL::MapFromReservation($result);
+            return MapFromSQL::MapFromReservation($result[0]);
         }
         return null;
     }
