@@ -27,14 +27,14 @@ class PetSQLDAO implements IPetDAO
 
 
         $id = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
-        $pet = $this->GetById($id);
+        $pet->setId($id);
         $image = $files['image'];
         $vaccine = $files['vaccine'];
         $fileName = GenerateFile::PersistFile($image, "photo-pet-", $pet->getId());
         $fileVaccine = GenerateFile::PersistFile($vaccine, "vaccine-pet-", $pet->getId());
         $pet->setImage($fileName);
         $pet->setVaccine($fileVaccine);
-        $updatePet = $this->Update($pet);
+        $updatePet = $this->Update($pet); //TODO: rompe aca
         return $updatePet->getId();
     }
 
@@ -124,8 +124,9 @@ class PetSQLDAO implements IPetDAO
     public function Update(Pet $pet): ?Pet
     {
         $this->connection = Connection::GetInstance();
-        $query = "CALL updatePet(?,?,?,?,?,?,?,?,?)";
+        $query = "CALL updatePet(?,?,?,?,?,?,?,?,?,?)";
         $parameters = SetterSQLData::SetFromPet($pet);
+        $parameters["id"] = $pet->getId();
         return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 
     }
