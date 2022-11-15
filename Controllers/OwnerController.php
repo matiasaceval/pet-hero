@@ -44,6 +44,9 @@ class OwnerController
 
     /* Owner Sign Up */
     /* -------------------------------------------------------------------------- */
+    /**
+     * @throws Exception
+     */
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword)
     {
         // if there's an owner session already, redirect to home
@@ -78,7 +81,8 @@ class OwnerController
         $owner->setPassword(password_hash($password, PASSWORD_DEFAULT));
 
 
-        $this->ownerDAO->Add($owner);
+        $id = $this->ownerDAO->Add($owner);
+        $owner->setId($id);
 
         TempValues::UnsetValues();
         Session::Set("owner", $owner);
@@ -98,6 +102,9 @@ class OwnerController
 
     /* Owner Login */
     /* -------------------------------------------------------------------------- */
+    /**
+     * @throws Exception
+     */
     public function Login(string $email, string $password)
     {
         $owner = $this->ownerDAO->GetByEmail($email);
@@ -125,6 +132,9 @@ class OwnerController
 
     /* Owner List Keepers */
     /* -------------------------------------------------------------------------- */
+    /**
+     * @throws Exception
+     */
     public function KeepersListView($since = null, $until = null)
     {
         LoginMiddleware::VerifyOwner();
@@ -155,7 +165,11 @@ class OwnerController
 
         }
 
-        $keepersFromToday = array_filter($keepersFromToday, function ($keeper) {
+        $keepersFromToday = array_filter(/**
+         * @throws Exception
+         */ /**
+         * @throws Exception
+         */ $keepersFromToday, function ($keeper) {
             $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
             $availableDays = $keeper->getAvailableDays($reservations);
             return $availableDays >= 1;
@@ -212,6 +226,9 @@ class OwnerController
         header("location:" . FRONT_ROOT . "Reservation/Reservations");
     }
 
+    /**
+     * @throws Exception
+     */
     public function GenerateReservationBill(int $id)
     {
         LoginMiddleware::VerifyOwner();
@@ -235,6 +252,9 @@ class OwnerController
 
     /* Owner Reviews Made */
 
+    /**
+     * @throws Exception
+     */
     public function ReviewsMade()
     {
         LoginMiddleware::VerifyOwner();

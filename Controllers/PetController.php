@@ -37,6 +37,9 @@ class PetController
         require_once(VIEWS_PATH . "pet-list.php");
     }
 
+    /**
+     * @throws Exception
+     */
     public function AddPet($name, $species, $breed, $age, $sex, $image, $vaccine): void
     {
         LoginMiddleware::VerifyOwner();
@@ -47,9 +50,12 @@ class PetController
         $pet->setBreed($breed);
         $pet->setAge($age);
         $pet->setSex($sex);
+        $pet->setVaccine(" ");
+        $pet->setImage(" ");
+        $pet->setActive(true);
         $pet->setOwner(Session::Get("owner"));
-        $this->petDAO->Add($pet, ['image' => $image, 'vaccine' => $vaccine]);
-
+        $id = $this->petDAO->Add($pet, ['image' => $image, 'vaccine' => $vaccine]);
+        $pet->setId($id);
         header("location:" . FRONT_ROOT . "Pet/ListPets");
     }
 
