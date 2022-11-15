@@ -22,7 +22,7 @@ abstract class MapFromSQL
         $reviews->setComment($value["comment"]);
         $reviews->setRating($value["rating"]);
         $value["date"] = FormatterDate::ConvertSingleDateSQLToApp($value["date"]);
-        $reviews->setDate((string)$value["date"]);
+        $reviews->setDate($value["date"]);
         $reviews->setReservation(self::MapFromReservation($value));
         return $reviews;
     }
@@ -80,7 +80,7 @@ abstract class MapFromSQL
     /**
      * @throws Exception
      */
-    public static function MapFromKeeper($value): Keeper
+    public static function MapFromKeeper($value): ?Keeper
     {
         $keeper = new Keeper();
         $stay = new Stay();

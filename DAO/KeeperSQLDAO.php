@@ -52,8 +52,8 @@ class KeeperSQLDAO implements IKeeperDAO
         $parameters["id"] = $id;
         $query = "CALL getKeeperById(?)";
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-        if ($result != null) {
-            return MapFromSQL::MapFromKeeper($result);
+        if (count($result) > 0) {
+            return MapFromSQL::MapFromKeeper($result[0]);
         }
         return null;
     }
@@ -85,8 +85,8 @@ class KeeperSQLDAO implements IKeeperDAO
     {
         $this->connection = Connection::GetInstance();
 
-        $parameters = SetterSQLData::SetFromKeeper($keeper);
         $parameters["id"] = $keeper->getId();
+        $parameters = SetterSQLData::SetFromKeeper($keeper);
         $query = "CALL updateKeeper(?,?,?,?,?,?,?,?,?)";
 
         return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) != null;
@@ -107,8 +107,9 @@ class KeeperSQLDAO implements IKeeperDAO
 
         $keeper = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 
-        if ($keeper != null)
-            return MapFromSQL::MapFromKeeper($keeper);
+        if (count($keeper) > 0) {
+            return MapFromSQL::MapFromKeeper($keeper[0]);
+        }
         return null;
     }
 

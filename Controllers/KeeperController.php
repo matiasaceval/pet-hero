@@ -6,6 +6,7 @@ namespace Controllers;
 use DAO\KeeperSQLDAO as KeeperDAO;
 use DAO\ReservationSQLDAO as ReservationDAO;
 use DAO\ReviewsSQLDAO as ReviewsDAO;
+use Exception;
 use Models\Keeper as Keeper;
 use Models\ReservationState as ReservationState;
 use Models\Stay as Stay;
@@ -30,6 +31,9 @@ class KeeperController
         $this->reviewsDAO = new ReviewsDAO();
     }
 
+    /**
+     * @throws Exception
+     */
     public function Index()
     {
         LoginMiddleware::VerifyKeeper();
@@ -46,6 +50,9 @@ class KeeperController
     /* Keeper Sign Up */
     /* -------------------------------------------------------------------------- */
 
+    /**
+     * @throws Exception
+     */
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword)
     {
         // if there's an keeper session already, redirect to home
@@ -99,6 +106,9 @@ class KeeperController
     /* -------------------------------------------------------------------------- */
 
 
+    /**
+     * @throws Exception
+     */
     public function Login(string $email, string $password)
     {
         $keeper = $this->keeperDAO->GetByEmail($email);
@@ -125,6 +135,9 @@ class KeeperController
     /* -------------------------------------------------------------------------- */
 
 
+    /**
+     * @throws Exception
+     */
     public function SetFeeStay($fee, $since, $until)
     {
         $tempKeeper = TempValues::GetValue("keeper-set-fee-stay");
@@ -145,8 +158,9 @@ class KeeperController
         $keeper->setStay($stay);
 
         if ($tempKeeper) {
-            $this->keeperDAO->Add($keeper);
-        } else {
+            $id = $this->keeperDAO->Add($keeper);
+                $keeper->setId($id);
+        } else if(Session::VerifySession("keeper")) {
             $this->keeperDAO->Update($keeper);
         }
 
@@ -171,6 +185,9 @@ class KeeperController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function Reviews($id = null)
     {
         LoginMiddleware::VerifyKeeper();
@@ -185,6 +202,9 @@ class KeeperController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function Reservations()
     {
         LoginMiddleware::VerifyKeeper();
@@ -195,6 +215,9 @@ class KeeperController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function ConfirmReservation(int $id)
     {
         LoginMiddleware::VerifyKeeper();
@@ -212,6 +235,9 @@ class KeeperController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function RejectReservation(int $id)
     {
         LoginMiddleware::VerifyKeeper();
@@ -229,6 +255,9 @@ class KeeperController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function AcceptPayment(int $id)
     {
         LoginMiddleware::VerifyKeeper();
@@ -246,6 +275,9 @@ class KeeperController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function VerifyPayment(int $id)
     {
         LoginMiddleware::VerifyKeeper();
