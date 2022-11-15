@@ -6,6 +6,7 @@ use Exception;
 use Models\Keeper;
 use Models\Owner as Owner;
 use Models\Pet;
+use Models\Reservation;
 use Models\Reviews;
 
 abstract class SetterSQLData
@@ -73,4 +74,25 @@ abstract class SetterSQLData
         $parameters["date"] = $reviews->getDate();
         return $parameters;
     }
+
+    /**
+     * @throws Exception
+     */
+    public static function SetFromReservation(Reservation $reservation): array
+    {
+        $parameters = array();
+        $parameters["payment"] = $reservation->getPayment();
+        $parameters["petId"] = $reservation->getPet()->getId();
+        $parameters["keeperId"] = $reservation->getKeeper()->getId();
+        $parameters["price"] = $reservation->getPrice();
+        $parameters["state"] = $reservation->getState();
+
+        $dates["since"] = $reservation->getSince();
+        $dates["until"] = $reservation->getUntil();
+        $value = FormatterDate::ConvertRangeAppToSQL($dates);
+        $parameters["since"] = $value["since"];
+        $parameters["until"] = $value["until"];
+        return $parameters;
+    }
+
 }
