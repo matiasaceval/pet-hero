@@ -56,9 +56,12 @@ abstract class SetterSQLData
         $values["name"] = $pet->getName();
         $values["species"] = $pet->getSpecies();
         $values["breed"] = $pet->getBreed();
-        $values["age"] = $pet->getAge();
         $values["sex"] = $pet->getSex();
+        $values["age"] = $pet->getAge();
+        $values["image"] = $pet->getImage();
+        $values["vaccine"] = $pet->getVaccine();
         $values["ownerId"] = $pet->getOwner()->getId();
+        $values["active"] = $pet->getActive();
         return $values;
     }
 
