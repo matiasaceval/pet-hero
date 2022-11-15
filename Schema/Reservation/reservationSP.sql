@@ -60,26 +60,38 @@ DELIMITER ;
 
 DELIMITER
 $$
-CREATE PROCEDURE `deleteReservation`(IN reservationId INT)
+CREATE PROCEDURE `getReservationByOwnerId`(IN `ownerId` INT)
+BEGIN
+SELECT r.*, p.*, k.*
+FROM `reservation` r
+         INNER JOIN pet p ON r.petId = p.id
+         INNER JOIN keeper k ON r.keeperId = k.id
+WHERE `ownerId` = p.ownerId;
+END$$
+DELIMITER ;
+
+DELIMITER
+$$
+CREATE PROCEDURE `deleteReservation`(IN id INT)
 BEGIN
 DELETE
 r FROM reservation r
-WHERE r.id = reservationId;
+WHERE r.id = id;
 SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
 DELIMITER
 $$
-CREATE PROCEDURE `updateReservationState`(IN reservationId INT, IN state VARCHAR (191), IN payment VARCHAR (191))
+CREATE PROCEDURE `updateReservationState`(IN id INT, IN state VARCHAR (191), IN payment VARCHAR (191))
 BEGIN
 UPDATE reservation r
 SET r.state   = state,
     r.payment = payment;
-WHERE r.id = reservationId;
+WHERE r.id = id;
 SELECT r.*
 FROM reservation r
-WHERE r.id = reservationId;
+WHERE r.id = id;
 END$$
 DELIMITER ;
 
