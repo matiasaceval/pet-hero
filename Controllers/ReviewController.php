@@ -2,27 +2,34 @@
 
 namespace Controllers;
 
-use DAO\KeeperDAOJson as KeeperDAO;
-use DAO\ReservationDAOJson as ReservationDAO;
-use DAO\ReviewsDAOJson as ReviewsDAO;
+use DAO\KeeperSQLDAO as KeeperDAO;
+use DAO\ReservationSQLDAO as ReservationDAO;
+use DAO\ReviewsSQLDAO as ReviewsDAO;
+use Exception;
 use Models\ReservationState;
 use Models\Reviews;
 use Utils\LoginMiddleware;
 use Utils\Session;
 use Utils\TempValues;
 
-class ReviewController {
+class ReviewController
+{
     private ReviewsDAO $reviewsDAO;
     private KeeperDAO $keeperDAO;
     private ReservationDAO $reservationDAO;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->reviewsDAO = new ReviewsDAO();
         $this->keeperDAO = new KeeperDAO();
         $this->reservationDAO = new ReservationDAO();
     }
 
-    public function ListKeeperReviews($id) {
+    /**
+     * @throws Exception
+     */
+    public function ListKeeperReviews($id): void
+    {
         LoginMiddleware::VerifyOwner();
         $keeper = $this->keeperDAO->GetById($id);
         if ($keeper == null) {
@@ -37,7 +44,12 @@ class ReviewController {
     }
 
     // TODO: Display Review errors on Reservations
-    public function Review(int $id) {
+
+    /**
+     * @throws Exception
+     */
+    public function Review(int $id): void
+    {
         LoginMiddleware::VerifyOwner();
         $reservation = $this->reservationDAO->GetById($id);
         if ($reservation == null) {
@@ -70,7 +82,12 @@ class ReviewController {
     }
 
     // TODO: Display Review errors on Reservations
-    public function PlaceReview(string $comment, int $rating, int $reservationId) {
+
+    /**
+     * @throws Exception
+     */
+    public function PlaceReview(string $comment, int $rating, int $reservationId): void
+    {
         LoginMiddleware::VerifyOwner();
         $reservation = $this->reservationDAO->GetById($reservationId);
         if ($reservation == null) {

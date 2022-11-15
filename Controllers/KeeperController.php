@@ -3,11 +3,10 @@
 namespace Controllers;
 
 
-use DAO\KeeperDAOJson as KeeperDAO;
-use DAO\ReservationDAOJson as ReservationDAO;
-use DAO\ReviewsDAOJson as ReviewsDAO;
+use DAO\KeeperSQLDAO as KeeperDAO;
+use DAO\ReservationSQLDAO as ReservationDAO;
+use DAO\ReviewsSQLDAO as ReviewsDAO;
 use Models\Keeper as Keeper;
-use Models\Reservation;
 use Models\ReservationState as ReservationState;
 use Models\Stay as Stay;
 use Utils\LoginMiddleware;
@@ -54,7 +53,7 @@ class KeeperController
 
         TempValues::InitValues(["firstname" => $firstname, "lastname" => $lastname, "email" => $email, "phone" => $phone]);
 
-        if(!SingUpMiddleware::VerifySecurePassword($password)){
+        if (!SingUpMiddleware::VerifySecurePassword($password)) {
             Session::Set("error", "Password must have at least 8 characters, 2 digits, 1 uppercase and 1 lowercase letter");
             header("location:" . FRONT_ROOT . "Keeper/SignUpView");
             exit;

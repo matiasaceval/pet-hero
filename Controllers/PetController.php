@@ -2,22 +2,29 @@
 
 namespace Controllers;
 
-use DAO\PetDAOJson as PetDAO;
+use DAO\PetSQLDAO as PetDAO;
+use Exception;
 use Models\Pet;
 use Utils\GenerateFile;
 use Utils\LoginMiddleware;
 use Utils\Session;
 use Utils\TempValues;
 
-class PetController {
+class PetController
+{
 
     private PetDAO $petDAO;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->petDAO = new PetDAO();
     }
 
-    public function ListPets() {
+    /**
+     * @throws Exception
+     */
+    public function ListPets(): void
+    {
         LoginMiddleware::VerifyOwner();
 
         $petList = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
@@ -30,7 +37,8 @@ class PetController {
         require_once(VIEWS_PATH . "pet-list.php");
     }
 
-    public function AddPet($name, $species, $breed, $age, $sex, $image, $vaccine) {
+    public function AddPet($name, $species, $breed, $age, $sex, $image, $vaccine): void
+    {
         LoginMiddleware::VerifyOwner();
 
         $pet = new Pet();
@@ -45,13 +53,18 @@ class PetController {
         header("location:" . FRONT_ROOT . "Pet/ListPets");
     }
 
-    public function AddPetView() {
+    public function AddPetView(): void
+    {
         LoginMiddleware::VerifyOwner();
         TempValues::InitValues(["back-page" => FRONT_ROOT . "Pet/ListPets"]);
         require_once(VIEWS_PATH . "pet-add.php");
     }
 
-    public function EditPet($id, $name, $species, $breed, $age, $sex, $image, $vaccine) {
+    /**
+     * @throws Exception
+     */
+    public function EditPet($id, $name, $species, $breed, $age, $sex, $image, $vaccine): void
+    {
         LoginMiddleware::VerifyOwner();
 
         $getPet = $this->petDAO->GetById($id);
@@ -99,7 +112,11 @@ class PetController {
         header("location:" . FRONT_ROOT . "Pet/ListPets#id-" . $id);
     }
 
-    public function Update($id) {
+    /**
+     * @throws Exception
+     */
+    public function Update($id): void
+    {
         LoginMiddleware::VerifyOwner();
 
         $pet = $this->petDAO->GetById($id);
@@ -113,7 +130,12 @@ class PetController {
     }
 
     // Remove Pet actually disables the pet
-    public function RemovePet($id) {
+
+    /**
+     * @throws Exception
+     */
+    public function RemovePet($id): void
+    {
         LoginMiddleware::VerifyOwner();
 
         $pet = $this->petDAO->GetById($id);

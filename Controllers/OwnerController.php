@@ -2,15 +2,14 @@
 
 namespace Controllers;
 
-use DAO\KeeperDAOJson as KeeperDAO;
-use DAO\OwnerDAOJson as OwnerDAO;
-use DAO\PetDAOJson as PetDAO;
-use DAO\ReservationDAOJson as ReservationDAO;
-use DAO\ReviewsDAOJson as ReviewsDAO;
+use DAO\KeeperSQLDAO as KeeperDAO;
+use DAO\OwnerSQLDAO as OwnerDAO;
+use DAO\PetSQLDAO as PetDAO;
+use DAO\ReservationSQLDAO as ReservationDAO;
+use DAO\ReviewsSQLDAO as ReviewsDAO;
 use DateTime;
 use Exception;
 use Models\Owner as Owner;
-use Models\Reservation;
 use Models\ReservationState;
 use Utils\GenerateFile;
 use Utils\LoginMiddleware;
@@ -176,6 +175,9 @@ class OwnerController
 
     /* Owner pay reservation */
     /* -------------------------------------------------------------------------- */
+    /**
+     * @throws Exception
+     */
     public function UploadPayment(int $id, array $image)
     {
         LoginMiddleware::VerifyOwner();
