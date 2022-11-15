@@ -57,8 +57,9 @@ abstract class MapFromSQL
         $pet->setBreed($value["breed"]);
         $pet->setAge($value["age"]);
         $pet->setImage($value["image"]);
-        $pet->setVaccine($value["vaccine"]);
+        $pet->setVaccine($value["vaccines"]);
         $pet->setSex($value["sex"]);
+        $pet->setActive($value["active"]);
         $pet->setOwner(self::MapFromOwner($value));
         return $pet;
 
