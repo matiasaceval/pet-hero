@@ -41,9 +41,9 @@ abstract class SetterSQLData
     {
         $value["firstname"] = $owner->getFirstname();
         $value["lastname"] = $owner->getLastname();
-        $value["phone"] = $owner->getPhone();
         $value["email"] = $owner->getEmail();
         $value["password"] = $owner->getPassword();
+        $value["phone"] = $owner->getPhone();
         return $value;
     }
 
