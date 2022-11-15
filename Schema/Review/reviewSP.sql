@@ -18,7 +18,8 @@ FROM review r
          INNER JOIN keeper k ON k.id = re.keeperId
          LEFT JOIN pet p ON p.id = re.petId
          INNER JOIN owner o ON o.id = p.ownerId
-         INNER JOIN stay s ON s.id = k.id END$$
+         INNER JOIN stay s ON s.id = k.id;
+END $$
 DELIMITER;
 
 DELIMITER
@@ -49,6 +50,7 @@ FROM review r
          INNER JOIN stay s ON s.id = k.id
 WHERE r.id = id;
 END $$
+DELIMITER ;
 
 DELIMITER
 $$

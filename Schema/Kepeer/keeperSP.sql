@@ -66,7 +66,7 @@ $$
 CREATE PROCEDURE deleteKeeper(IN id INT)
 BEGIN
 DELETE
-k FROM keeper k
+k.* FROM keeper k
 WHERE id = k.id;
 SELECT
 LAST_INSERT_ID();

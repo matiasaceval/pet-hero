@@ -1,13 +1,12 @@
 DELIMITER
-&&
+$$
 CREATE PROCEDURE getAllReservations()
 BEGIN
 SELECT r.*, p.*, k.*
 FROM reservation r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN owner k ON p.ownerId = k.id;
-END
-&&
+END $$
 DELIMITER ;
 
 DELIMITER
@@ -87,7 +86,7 @@ CREATE PROCEDURE `updateReservationState`(IN id INT, IN state VARCHAR (191), IN 
 BEGIN
 UPDATE reservation r
 SET r.state   = state,
-    r.payment = payment;
+    r.payment = payment
 WHERE r.id = id;
 SELECT r.*
 FROM reservation r

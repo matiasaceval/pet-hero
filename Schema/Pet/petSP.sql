@@ -18,8 +18,9 @@ WHERE p.id = id;
 END $$
 DELIMITER ;
 
-CREATE PROCEDURE getPetByOwnerId(IN id INT) DELIMITER
+DELIMITER
 $$
+CREATE PROCEDURE getPetByOwnerId(IN id INT)
 BEGIN
 SELECT p.*, o.*
 FROM pet p
@@ -78,7 +79,7 @@ $$
 CREATE PROCEDURE deletePet(IN id INT)
 BEGIN
 DELETE
-p FROM pet p
+p.* FROM pet p
 WHERE id = p.id;
 SELECT LAST_INSERT_ID();
 END $$

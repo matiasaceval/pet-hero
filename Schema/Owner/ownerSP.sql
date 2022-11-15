@@ -62,7 +62,7 @@ $$
 CREATE PROCEDURE deleteOwner(IN id INT)
 BEGIN
 DELETE
-o FROM owner o
+o.* FROM owner o
 WHERE id = o.id;
 SELECT LAST_INSERT_ID();
 END $$
