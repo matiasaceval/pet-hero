@@ -13,12 +13,14 @@ if ($err || $succ) { ?>
             <p><span style="color: #fefcfd"><?php echo $err ?? $succ ?></span></p>
         </div>
     </div>
-    <?php
+<?php
     if ($err) Session::Unset('error');
     if ($succ) Session::Unset('success');
 } ?>
 
-<script>document.title = "Pets / Pet Hero" </script>
+<script>
+    document.title = "Pets / Pet Hero"
+</script>
 <div class="container overflow-hidden">
     <div class="centered-wrapper">
         <?php
@@ -57,15 +59,14 @@ if ($err || $succ) { ?>
         <?php
         foreach ($petList as $key => $pet) {
             $newRow = $key % 3 == 0;
-            ?>
+        ?>
             <div class="small-card-container" id="id-<?php echo $pet->getId() ?>">
-                <div class="small-card-box pet-card-background">
+                <div class="small-card-box pet-card-background" id="<?php echo time() ?>">
                     <!-- Head -->
                     <div class="row">
                         <div class="row" style="padding: 0px 15px 0 15px">
                             <div class="col-2 align-self-center">
-                                <img class="invert" width="50px"
-                                     src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/pet-hero.png">
+                                <img class="invert" width="50px" src="<?php echo FRONT_ROOT . VIEWS_PATH ?>img/pet-hero.png">
                             </div>
                             <div class="col-9">
                                 <div class="row">
@@ -81,22 +82,18 @@ if ($err || $succ) { ?>
                             </div>
                             <div class="col-1 align-self-center">
                                 <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle card-update-delete" type="button"
-                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
+                                    <button class="btn btn-secondary dropdown-toggle card-update-delete" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Edit
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item"
-                                           href="<?php echo FRONT_ROOT ?>Pet/Update?id=<?php echo $pet->GetId() ?>">Update</a>
-                                        <a class="dropdown-item" href="" onclick="
+                                        <a class="dropdown-item" href="<?php echo FRONT_ROOT ?>Pet/Update?id=<?php echo $pet->GetId() ?>">Update</a>
+                                        <a class="dropdown-item" href="#" onclick="
                                                 const petName = '<?php echo $pet->GetName() ?>';
                                                 const petId = <?php echo $pet->GetId() ?>;
                                                 const msg = `Are you sure you want to delete ${petName} (id: ${petId})?`;
-                                                if(confirm(msg)){
+                                                if (confirm(msg)) {
                                                     window.location.href = `<?php echo FRONT_ROOT ?>Pet/RemovePet?id=${petId}`;
-                                                }
-                                                ">Delete</a>
+                                                }" id="delete-pet-<?php echo $pet->GetId() ?>">Delete</a>
                                     </div>
                                 </div>
                             </div>
@@ -107,9 +104,7 @@ if ($err || $succ) { ?>
                     <div class="row mt-4">
                         <div class="col-md-auto">
                             <div class="row" style="padding: 0px 15px 0 15px">
-                                <img id="pet-image" class="cover"
-                                     src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() . "?" . time() ?>" width="200px"
-                                     height="200px">
+                                <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() . "?" . time() ?>" width="200px" height="200px">
                             </div>
                         </div>
                         <div class="col-3">
@@ -166,7 +161,7 @@ if ($err || $succ) { ?>
                 </div>
             </div>
 
-            <?php
+        <?php
         }
         ?>
     </div>
