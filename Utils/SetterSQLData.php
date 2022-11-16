@@ -74,8 +74,8 @@ abstract class SetterSQLData
         $parameters = array();
         $parameters["comment"] = $reviews->getComment();
         $parameters["rating"] = $reviews->getRating();
+        $parameters["date"] = FormatterDate::ConvertSingleDateAppToSQL($reviews->getDate());
         $parameters["reservationId"] = $reviews->getReservation()->getId();
-        $parameters["date"] = $reviews->getDate();
         return $parameters;
     }
 
