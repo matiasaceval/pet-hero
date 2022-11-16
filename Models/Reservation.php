@@ -17,7 +17,7 @@ class Reservation {
     {
         $this->keeper = new Keeper();
         $this->pet = new Pet();
-        $payment = "pending";
+        $this->setPayment("pending");
     }
 
     /**
