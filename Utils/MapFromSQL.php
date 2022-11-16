@@ -18,7 +18,7 @@ abstract class MapFromSQL
     public static function MapFromReview($value): Reviews
     {
         $reviews = new Reviews();
-        $reviews->setId($value["id"]);
+        $reviews->setId($value["reviewId"]);
         $reviews->setComment($value["comment"]);
         $reviews->setRating($value["rating"]);
         $value["date"] = FormatterDate::ConvertSingleDateSQLToApp($value["date"]);
@@ -51,7 +51,7 @@ abstract class MapFromSQL
     public static function MapFromPet($value): Pet
     {
         $pet = new Pet();
-        $pet->setId($value[0]);
+        $pet->setId($value["petId"]);
         $pet->setName($value["name"]);
         $pet->setSpecies($value["species"]);
         $pet->setBreed($value["breed"]);
@@ -69,7 +69,7 @@ abstract class MapFromSQL
     public static function MapFromOwner($value): Owner
     {
         $owner = new Owner();
-        $owner->setId($value["id"]);
+        $owner->setId($value["ownerId"]);
         $owner->setFirstname($value["firstname"]);
         $owner->setLastname($value["lastname"]);
         $owner->setEmail($value["email"]);
@@ -85,7 +85,7 @@ abstract class MapFromSQL
     {
         $keeper = new Keeper();
         $stay = new Stay();
-        $keeper->setId($value["id"]);
+        $keeper->setId($value["keeperId"]);
         $keeper->setFirstname($value["firstname"]);
         $keeper->setLastname($value["lastname"]);
         $keeper->setEmail($value["email"]);
