@@ -83,17 +83,19 @@ abstract class SetterSQLData
     public static function SetFromReservation(Reservation $reservation): array
     {
         $parameters = array();
-        $parameters["payment"] = $reservation->getPayment();
         $parameters["petId"] = $reservation->getPet()->getId();
         $parameters["keeperId"] = $reservation->getKeeper()->getId();
-        $parameters["price"] = $reservation->getPrice();
         $parameters["state"] = $reservation->getState();
-
+        
         $dates["since"] = $reservation->getSince();
         $dates["until"] = $reservation->getUntil();
         $value = FormatterDate::ConvertRangeAppToSQL($dates);
         $parameters["since"] = $value["since"];
         $parameters["until"] = $value["until"];
+
+        $parameters["price"] = $reservation->getPrice();
+        $parameters["payment"] = $reservation->getPayment();
+
         return $parameters;
     }
 
