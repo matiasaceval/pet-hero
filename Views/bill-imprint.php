@@ -8,7 +8,9 @@ $pet = $reservation->getPet();
 $owner = $pet->getOwner();
 ?>
 
-<script>document.title = "Generating bill..."</script>
+<script>
+    document.title = "Generating bill..."
+</script>
 
 <body style="background: none">
     <div id="bill" class="container">
@@ -139,8 +141,11 @@ $owner = $pet->getOwner();
                     scale: scale
                 },
                 callback: function(doc) {
-                    doc.save(filename + '.pdf');
-                    window.close();
+                    doc.save(filename + '.pdf', {
+                        returnPromise: true
+                    }).then(() => {
+                        window.close();
+                    });
                 }
             });
         })
