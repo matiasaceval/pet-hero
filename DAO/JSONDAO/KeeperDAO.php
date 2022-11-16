@@ -2,6 +2,7 @@
 
 namespace DAO\JSONDAO;
 
+use DAO\IKeeperDAO;
 use DAO\JSONDAO\StayDAO as StayDAO;
 use Models\Keeper;
 use Models\Stay;
