@@ -52,8 +52,6 @@ SET o.firstname = firstname,
     o.password  = password,
     o.phone     = phone
 WHERE o.id = id;
-SELECT o.* FROM owner o
-WHERE o.id = id;
 END $$
 DELIMITER ;
 
@@ -64,7 +62,6 @@ BEGIN
 DELETE
 o.* FROM owner o
 WHERE id = o.id;
-SELECT LAST_INSERT_ID();
 END $$
 DELIMITER ;
 

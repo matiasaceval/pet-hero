@@ -55,10 +55,6 @@ UPDATE keeper k , stay s
 SET k.firstname = firstname, k.lastname = lastname, k.email = email, k.password = password, k.phone = phone, k.fee = fee, s.since = since, s.until = until
 WHERE k.id = id AND s.id = id;
 END $$
-SELECT k.* FROM keeper k
-INNER JOIN stay s ON k.id = s.id
-WHERE k.id = id;
-END $$
 DELIMITER ;
 
 DELIMITER
@@ -68,8 +64,6 @@ BEGIN
 DELETE
 k.* FROM keeper k
 WHERE id = k.id;
-SELECT
-LAST_INSERT_ID();
 END $$
 DELIMITER ;
 

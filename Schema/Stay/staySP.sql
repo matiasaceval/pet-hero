@@ -16,7 +16,6 @@ BEGIN
 DELETE
 s FROM stay s
 WHERE s.id = stayId;
-SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
@@ -28,8 +27,6 @@ BEGIN
 UPDATE stay s
 SET s.since = since,
     s.until = until
-WHERE s.id = stayId;
-SELECT s.* FROM stay s
 WHERE s.id = stayId;
 END$$
 DELIMITER ;

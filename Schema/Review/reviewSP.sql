@@ -88,7 +88,6 @@ BEGIN
 DELETE
 r FROM review r
 WHERE r.id = reviewId;
-SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
@@ -99,9 +98,6 @@ BEGIN
 UPDATE review r
 SET r.comment = comment,
     r.rating  = rating
-WHERE r.id = reviewId;
-SELECT r.*
-FROM review r
 WHERE r.id = reviewId;
 END$$
 DELIMITER ;

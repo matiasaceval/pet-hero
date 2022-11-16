@@ -76,7 +76,6 @@ BEGIN
 DELETE
 r FROM reservation r
 WHERE r.id = id;
-SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
@@ -87,9 +86,6 @@ BEGIN
 UPDATE reservation r
 SET r.state   = state,
     r.payment = payment
-WHERE r.id = id;
-SELECT r.*
-FROM reservation r
 WHERE r.id = id;
 END$$
 DELIMITER ;
