@@ -1,12 +1,12 @@
 <?php
 
-namespace DAO;
+namespace DAO\JSONDAO;
 
-use DAO\StayDAOJson as StayDAO;
+use DAO\JSONDAO\StayDAO as StayDAO;
 use Models\Keeper;
 use Models\Stay;
 
-class KeeperDAOJson implements IKeeperDAO {
+class KeeperDAO implements IKeeperDAO {
     /**
      * @var Keeper[]
      */

@@ -1,13 +1,14 @@
 <?php
 
-namespace DAO;
+namespace DAO\JSONDAO;
 
-use DAO\OwnerDAOJson as OwnerDAO;
+use DAO\IPetDAO;
+use DAO\JSONDAO\OwnerDAO as OwnerDAO;
 use Exception;
 use Models\Pet;
 use Utils\GenerateFile;
 
-class PetDAOJson implements IPetDAO {
+class PetDAO implements IPetDAO {
     /**
      * @var Pet[]
      */

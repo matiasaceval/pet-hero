@@ -2,11 +2,11 @@
 
 namespace Controllers;
 
-use DAO\KeeperSQLDAO as KeeperDAO;
-use DAO\OwnerSQLDAO as OwnerDAO;
-use DAO\PetSQLDAO as PetDAO;
-use DAO\ReservationSQLDAO as ReservationDAO;
-use DAO\ReviewsSQLDAO as ReviewsDAO;
+use DAO\SQLDAO\KeeperDAO as KeeperDAO;
+use DAO\SQLDAO\OwnerDAO as OwnerDAO;
+use DAO\SQLDAO\PetDAO as PetDAO;
+use DAO\SQLDAO\ReservationDAO as ReservationDAO;
+use DAO\SQLDAO\ReviewsDAO as ReviewsDAO;
 use DateTime;
 use Exception;
 use Models\Owner as Owner;

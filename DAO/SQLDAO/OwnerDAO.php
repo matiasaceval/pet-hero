@@ -1,28 +1,27 @@
 <?php
 
-namespace DAO;
+namespace DAO\SQLDAO;
 
-use DAO\IKeeperDAO as IKeeperDAO;
+use DAO\Connection;
 use Exception;
-use Models\Keeper as Keeper;
+use Models\Owner as Owner;
+use DAO\IOwnerDAO as IOwnerDao;
 use Utils\MapFromSQL;
 use Utils\SetterSQLData;
 
-
-class KeeperSQLDAO implements IKeeperDAO
+class OwnerDAO implements IOwnerDao
 {
     private $connection;
 
     /**
+     * Data base Error
      * @throws Exception
      */
-    public function Add(Keeper $keeper): ?int
+    public function Add(Owner $owner): ?int
     {
         $this->connection = Connection::GetInstance();
-
-        $parameters = SetterSQLData::SetFromKeeper($keeper);
-
-        $query = "CALL addKeeper(?,?,?,?,?,?,?,?)";
+        $query = "CALL addOwner(?,?,?,?,?)";
+        $parameters = SetterSQLData::SetFromOwner($owner);
         $id = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
         if(count($id) > 0) {
             return $id[0]['LAST_INSERT_ID()'];
@@ -31,87 +30,75 @@ class KeeperSQLDAO implements IKeeperDAO
     }
 
     /**
+     * Data base Error
      * @throws Exception
      */
     public function GetAll(): array
     {
         $this->connection = Connection::GetInstance();
-        $query = "CALL getAllKeepers()";
+        $query = "CALL getAllOwners()";
         $result = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-        $keepersList = array();
+        $ownersList = array();
         foreach ($result as $value) {
-            $keeper = MapFromSQL::MapFromKeeper($value);
-            array_push($keepersList, $keeper);
+            $owner = MapFromSQL::MapFromOwner($value);
+            array_push($ownersList, $owner);
         }
-        return $keepersList;
+        return $ownersList;
     }
 
     /**
+     * Data base Error
      * @throws Exception
      */
-    public function GetById(int $id): ?Keeper
+    public function GetById(int $id): ?Owner
     {
         $this->connection = Connection::GetInstance();
-
+        $query = "CALL getOwnerById(?)";
         $parameters["id"] = $id;
-        $query = "CALL getKeeperById(?)";
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
         if (count($result) > 0) {
-            return MapFromSQL::MapFromKeeper($result[0]);
+            return MapFromSQL::MapFromOwner($result[0]);
         }
         return null;
     }
 
     /**
+     * Data base Error
      * @throws Exception
      */
     public function RemoveById(int $id): bool
     {
         $this->connection = Connection::GetInstance();
-
+        $query = "CALL deleteOwner(?)";
         $parameters["id"] = $id;
-
-        $query = "CALL deleteKeeper(?)";
-        $keeperId = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
-
-        if (isset($keeperId)) {
-            return true;
-        }
-        return false;
-
-
+        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) > 0;
     }
 
+
     /**
+     * Data base Error
      * @throws Exception
      */
-    public function Update(Keeper $keeper): bool
+    public function Update(Owner $owner): bool
     {
         $this->connection = Connection::GetInstance();
-
-        $parameters = SetterSQLData::SetFromKeeper($keeper, $keeper->getId());
-        $query = "CALL updateKeeper(?,?,?,?,?,?,?,?,?)";
-
+        $query = "CALL updateOwner(?,?,?,?,?,?)";
+        $parameters = SetterSQLData::SetFromOwner($owner, $owner->getId());
         return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) != null;
-
-
     }
 
     /**
+     * Data base Error
      * @throws Exception
      */
-    public function GetByEmail(string $email): ?Keeper
+    public function GetByEmail(string $email): ?Owner
     {
         $this->connection = Connection::GetInstance();
-
+        $query = "CALL getOwnerByEmail(?)";
         $parameters["email"] = $email;
-
-        $query = "CALL getKeeperByEmail(?)";
-
-        $keeper = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-
-        if (count($keeper) > 0) {
-            return MapFromSQL::MapFromKeeper($keeper[0]);
+        $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+        if (count($result) > 0) {
+            return MapFromSQL::MapFromOwner($result[0]);
         }
         return null;
     }

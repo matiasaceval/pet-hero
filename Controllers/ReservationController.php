@@ -2,10 +2,10 @@
 
 namespace Controllers;
 
-use DAO\KeeperSQLDAO as KeeperDAO;
-use DAO\PetSQLDAO as PetDAO;
-use DAO\ReservationSQLDAO as ReservationDAO;
-use DAO\ReviewsSQLDAO as ReviewsDAO;
+use DAO\SQLDAO\KeeperDAO as KeeperDAO;
+use DAO\SQLDAO\PetDAO as PetDAO;
+use DAO\SQLDAO\ReservationDAO as ReservationDAO;
+use DAO\SQLDAO\ReviewsDAO as ReviewsDAO;
 use Exception;
 use Models\Reservation;
 use Models\ReservationState;

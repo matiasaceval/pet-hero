@@ -1,10 +1,11 @@
 <?php
 
-namespace DAO;
+namespace DAO\JSONDAO;
 
+use DAO\IStayDAO;
 use Models\Stay;
 
-class StayDAOJson implements IStayDAO {
+class StayDAO implements IStayDAO {
     /**
      * @var Stay[]
      */

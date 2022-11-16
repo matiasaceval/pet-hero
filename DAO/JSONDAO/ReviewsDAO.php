@@ -1,20 +1,21 @@
 <?php
 
-namespace DAO;
+namespace DAO\JSONDAO;
 
+use DAO\IReviewsDAO;
 use Models\Reviews;
-
-class ReviewsDAOJson implements IReviewsDAO {
+use DAO\JSONDAO\ReservationDAO as ReservationDAO;
+class ReviewsDAO implements IReviewsDAO {
     /**
      * @var Reviews[]
      */
     private array $reviewList = array();
     private string $fileName;
-    private ReservationDAOJson $reservationDAO;
+    private ReservationDAO $reservationDAO;
 
     public function __construct() {
         $this->fileName = ROOT . "/Data/reviews.json";
-        $this->reservationDAO = new ReservationDAOJson();
+        $this->reservationDAO = new ReservationDAO();
     }
 
     function Add(Reviews $review) {

@@ -1,18 +1,21 @@
 <?php
 
-namespace DAO;
+namespace DAO\JSONDAO;
 
+use DAO\IReservationDAOJson;
+use DAO\JSONDAO\PetDAO as PetDAO;
+use DAO\JSONDAO\KeeperDAO as KeeperDAO;
 use Models\Reservation;
 
-class ReservationDAOJson implements IReservationDAOJson {
+class ReservationDAO implements IReservationDAOJson {
     private $reservationList = array();
     private $fileName;
-    private $petDAO;
-    private $keeperDAO;
+    private PetDAO $petDAO;
+    private KeeperDAO $keeperDAO;
 
     public function __construct() {
-        $this->petDAO = new PetDAOJson();
-        $this->keeperDAO = new KeeperDAOJson();
+        $this->petDAO = new PetDAO();
+        $this->keeperDAO = new KeeperDAO();
         $this->fileName = ROOT . "/Data/reservations.json";
     }
 

@@ -1,8 +1,10 @@
 <?php
 
-namespace DAO;
+namespace DAO\SQLDAO;
 
+use DAO\Connection;
 use DAO\IReviewsDAO as IReviewsDAO;
+use DAO\QueryType;
 use Exception;
 use Models\Keeper;
 use Models\Owner;
@@ -14,7 +16,7 @@ use Utils\FormatterDate;
 use Utils\MapFromSQL;
 use Utils\SetterSQLData;
 
-class ReviewsSQLDAO implements IReviewsDAO
+class ReviewsDAO implements IReviewsDAO
 {
     private $connection;
 

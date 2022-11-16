@@ -1,8 +1,9 @@
 <?php
 
-namespace DAO;
+namespace DAO\SQLDAO;
 
-
+use DAO\Connection;
+use DAO\QueryType;
 use Exception;
 use Models\Pet;
 use Utils\GenerateFile;
@@ -10,7 +11,7 @@ use Utils\MapFromSQL;
 use DAO\IPetDAO as IPetDAO;
 use Utils\SetterSQLData;
 
-class PetSQLDAO implements IPetDAO
+class PetDAO implements IPetDAO
 {
 
     private $connection;

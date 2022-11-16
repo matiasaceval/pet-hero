@@ -1,14 +1,16 @@
 <?php
 
-namespace DAO;
+namespace DAO\SQLDAO;
 
+use DAO\Connection;
+use DAO\QueryType;
 use Exception;
 use Models\Reservation;
 use DAO\IReservationDAOJson as IReservationDAOJson;
 use Utils\MapFromSQL;
 use Utils\SetterSQLData;
 
-class ReservationSQLDAO implements IReservationDAOJson
+class ReservationDAO implements IReservationDAOJson
 {
     private $connection;
 

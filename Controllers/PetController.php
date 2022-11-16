@@ -2,7 +2,7 @@
 
 namespace Controllers;
 
-use DAO\PetSQLDAO as PetDAO;
+use DAO\SQLDAO\PetDAO as PetDAO;
 use Exception;
 use Models\Pet;
 use Utils\GenerateFile;
