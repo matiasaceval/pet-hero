@@ -51,7 +51,7 @@ abstract class MapFromSQL
     public static function MapFromPet($value): Pet
     {
         $pet = new Pet();
-        $pet->setId($value["id"]);
+        $pet->setId($value[0]);
         $pet->setName($value["name"]);
         $pet->setSpecies($value["species"]);
         $pet->setBreed($value["breed"]);
