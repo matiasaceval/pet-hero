@@ -38,7 +38,7 @@ abstract class MapFromSQL
         $reservation->setPrice($value["price"]);
         $reservation->setCreatedAt($value["createdAt"]);
         $reservation->setPayment($value["payment"]);
-        $dates = FormatterDate::ConvertRangeSQLToApp([$value["since"], $value["until"]]);
+        $dates = FormatterDate::ConvertRangeSQLToApp($value);
         $reservation->setSince($dates["since"]);
         $reservation->setUntil($dates["until"]);
         $reservation->setPet(self::MapFromPet($value));
