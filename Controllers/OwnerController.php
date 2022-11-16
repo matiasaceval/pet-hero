@@ -82,6 +82,8 @@ class OwnerController
 
 
         $id = $this->ownerDAO->Add($owner);
+        var_dump($id);
+        return null;
         $owner->setId($id);
 
         TempValues::UnsetValues();

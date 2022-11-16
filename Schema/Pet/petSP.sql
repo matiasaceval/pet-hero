@@ -43,11 +43,11 @@ DELIMITER ;
 DELIMITER
 $$
 CREATE PROCEDURE addPet(IN name VARCHAR (191), IN species VARCHAR (191), IN breed VARCHAR (191),
-                        IN sex VARCHAR (191), IN age VARCHAR (191), IN image VARCHAR (191), IN vaccine VARCHAR (191),
+                        IN sex VARCHAR (191), IN age VARCHAR (191), IN image VARCHAR (191), IN vaccines VARCHAR (191),
                         IN ownerId INT)
 BEGIN
 INSERT INTO pet (name, species, breed, sex, age, image, vaccines, ownerId)
-VALUES (name, species, breed, sex, age, image, vaccine, ownerId);
+VALUES (name, species, breed, sex, age, image, vaccines, ownerId);
 SELECT LAST_INSERT_ID();
 END $$
 DELIMITER ;
@@ -55,7 +55,7 @@ DELIMITER ;
 DELIMITER
 $$
 CREATE PROCEDURE updatePet(IN id INT, IN name VARCHAR (191), IN species VARCHAR (191), IN breed VARCHAR (191),
-                           IN sex VARCHAR (191), IN age VARCHAR (191), IN image VARCHAR (191), IN vaccine VARCHAR (191),
+                           IN sex VARCHAR (191), IN age VARCHAR (191), IN image VARCHAR (191), IN vaccines VARCHAR (191),
                            IN ownerId INT, IN active BOOLEAN)
 BEGIN
 UPDATE pet p
@@ -65,9 +65,9 @@ SET p.name     = name,
     p.sex      = sex,
     p.age      = age,
     p.image    = image,
-    p.vaccines = vaccine,
+    p.vaccines = vaccines,
     p.ownerId  = ownerId,
-    p.active   = active
+    p.active   = active,
 WHERE p.id = id;
 SELECT p.* FROM pet p
 WHERE p.id = id;

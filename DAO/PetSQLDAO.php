@@ -27,6 +27,7 @@ class PetSQLDAO implements IPetDAO
 
 
         $id = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+        var_dump($id);
         $pet->setId($id);
         $image = $files['image'];
         $vaccine = $files['vaccine'];
@@ -125,12 +126,10 @@ class PetSQLDAO implements IPetDAO
     {
         $this->connection = Connection::GetInstance();
         $query = "CALL updatePet(?,?,?,?,?,?,?,?,?,?)";
-        $parameters = SetterSQLData::SetFromPet($pet);
-        $parameters["id"] = $pet->getId();
+        $parameters = $this->SetParametersToUpdate($pet);
         return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 
     }
-
 
     /**
      * @throws Exception
@@ -141,6 +140,22 @@ class PetSQLDAO implements IPetDAO
         $query = "CALL disablePet(?)";
         $parameters["id"] = $id;
         return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) != null;
+    }
+
+    private function SetParametersToUpdate(Pet $pet): array
+    {
+        $parameters = array();
+        $parameters["id"] = $pet->getId();
+        $parameters["name"] = $pet->getName();
+        $parameters["species"] = $pet->getSpecies();
+        $parameters["breed"] = $pet->getBreed();
+        $parameters["sex"] = $pet->getSex();
+        $parameters["age"] = $pet->getAge();
+        $parameters["image"] = $pet->getImage();
+        $parameters["vaccines"] = $pet->getVaccine();
+        $parameters["ownerId"] = $pet->getOwner()->getId();
+        $parameters["active"] = $pet->getActive();
+        return $parameters;
     }
 }
 

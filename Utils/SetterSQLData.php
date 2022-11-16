@@ -61,7 +61,6 @@ abstract class SetterSQLData
         $values["image"] = $pet->getImage();
         $values["vaccine"] = $pet->getVaccine();
         $values["ownerId"] = $pet->getOwner()->getId();
-        $values["active"] = $pet->getActive();
         return $values;
     }
 
