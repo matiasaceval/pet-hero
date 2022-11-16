@@ -40,7 +40,7 @@ class PetController
     /**
      * @throws Exception
      */
-    public function AddPet($name, $species, $breed, $age, $sex, $image, $vaccine): void
+    public function AddPet(string $name, string $species, string $breed, int $age, string  $sex, array $image, array $vaccine): void
     {
         LoginMiddleware::VerifyOwner();
 
@@ -69,7 +69,7 @@ class PetController
     /**
      * @throws Exception
      */
-    public function EditPet($id, $name, $species, $breed, $age, $sex, $image, $vaccine): void
+    public function EditPet(int $id, string $name, string $species, string $breed, int $age, string $sex, array $image, array $vaccine): void
     {
         LoginMiddleware::VerifyOwner();
 
@@ -121,7 +121,7 @@ class PetController
     /**
      * @throws Exception
      */
-    public function Update($id): void
+    public function Update(int $id): void
     {
         LoginMiddleware::VerifyOwner();
 
@@ -140,7 +140,7 @@ class PetController
     /**
      * @throws Exception
      */
-    public function RemovePet($id): void
+    public function RemovePet(int $id): void
     {
         LoginMiddleware::VerifyOwner();
 

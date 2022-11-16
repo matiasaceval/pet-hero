@@ -4,7 +4,6 @@ namespace Controllers;
 
 use DAO\SQLDAO\KeeperDAO as KeeperDAO;
 use DAO\SQLDAO\OwnerDAO as OwnerDAO;
-use DAO\SQLDAO\PetDAO as PetDAO;
 use DAO\SQLDAO\ReservationDAO as ReservationDAO;
 use DAO\SQLDAO\ReviewsDAO as ReviewsDAO;
 use DateTime;
@@ -20,7 +19,6 @@ use Utils\TempValues;
 class OwnerController
 {
     private OwnerDAO $ownerDAO;
-    private PetDAO $petDAO;
     private KeeperDAO $keeperDAO;
     private ReservationDAO $reservationDAO;
     private ReviewsDAO $reviewsDAO;
@@ -28,7 +26,6 @@ class OwnerController
     public function __construct()
     {
         $this->ownerDAO = new OwnerDAO();
-        $this->petDAO = new PetDAO();
         $this->keeperDAO = new KeeperDAO();
         $this->reservationDAO = new ReservationDAO();
         $this->reviewsDAO = new ReviewsDAO();
@@ -135,7 +132,7 @@ class OwnerController
     /**
      * @throws Exception
      */
-    public function KeepersListView($since = null, $until = null)
+    public function KeepersListView(string $since = null, string $until = null)
     {
         LoginMiddleware::VerifyOwner();
         $keeperList = $this->keeperDAO->GetAll();
@@ -144,7 +141,7 @@ class OwnerController
         require_once(VIEWS_PATH . "owner-list-keepers.php");
     }
 
-    private function SanitizeKeepers(array $keeperList, $since, $until): array
+    private function SanitizeKeepers(array $keeperList, string $since, string $until): array
     {
         if ($since == null || $until == null) {
             // only show those who are available

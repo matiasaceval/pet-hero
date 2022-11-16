@@ -138,7 +138,7 @@ class KeeperController
     /**
      * @throws Exception
      */
-    public function SetFeeStay($fee, $since, $until)
+    public function SetFeeStay(int $fee, string $since, string $until)
     {
         $tempKeeper = TempValues::GetValue("keeper-set-fee-stay");
 
@@ -188,7 +188,7 @@ class KeeperController
     /**
      * @throws Exception
      */
-    public function Reviews($id = null)
+    public function Reviews(int $id = null)
     {
         LoginMiddleware::VerifyKeeper();
         $keeper = $id ? $this->keeperDAO->GetById($id) : Session::Get("keeper");

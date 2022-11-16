@@ -28,7 +28,7 @@ class ReviewController
     /**
      * @throws Exception
      */
-    public function ListKeeperReviews($id): void
+    public function ListKeeperReviews(int $id): void
     {
         LoginMiddleware::VerifyOwner();
         $keeper = $this->keeperDAO->GetById($id);
