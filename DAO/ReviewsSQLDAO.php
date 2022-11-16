@@ -28,7 +28,7 @@ class ReviewsSQLDAO implements IReviewsDAO
 
         $parameters = SetterSQLData::SetFromReviews($reviews);
 
-        $query = "CALL addReviews(?,?,?,?)";
+        $query = "CALL addReview(?,?,?,?)";
 
         $id = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
         if(count($id) > 0) {
