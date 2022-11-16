@@ -3,7 +3,7 @@ DELIMITER
 $$
 CREATE PROCEDURE getAllKeepers()
 BEGIN
-SELECT k.id as keeperID, k.*, s.since, s.until
+SELECT k.id as keeperId, k.*, s.since, s.until
 FROM keeper k
          LEFT JOIN stay s ON k.id = s.id; -- left join to get all keepers even if they have no stay
 END$$
@@ -13,7 +13,7 @@ DELIMITER
 $$
 CREATE PROCEDURE getKeeperById(IN id INT)
 BEGIN
-SELECT k.id as keeperID, k.*, s.since, s.until
+SELECT k.id as keeperId, k.*, s.since, s.until
 FROM keeper k
          INNER JOIN stay s ON k.id = s.id
 WHERE k.id = id;
@@ -24,7 +24,7 @@ DELIMITER
 $$
 CREATE PROCEDURE getKeeperByEmail(IN email VARCHAR (191) COLLATE utf8_unicode_ci)
 BEGIN
-SELECT k.id as keeperID, k.*, s.since, s.until
+SELECT k.id as keeperId, k.*, s.since, s.until
 FROM keeper k
          INNER JOIN stay s ON k.id = s.id
 WHERE k.email = email;
