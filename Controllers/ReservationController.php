@@ -2,30 +2,37 @@
 
 namespace Controllers;
 
-use DAO\KeeperDAOJson as KeeperDAO;
-use DAO\PetDAOJson as PetDAO;
-use DAO\ReservationDAOJson as ReservationDAO;
-use DAO\ReviewsDAOJson as ReviewsDAO;
+use DAO\SQLDAO\KeeperDAO as KeeperDAO;
+use DAO\SQLDAO\PetDAO as PetDAO;
+use DAO\SQLDAO\ReservationDAO as ReservationDAO;
+use DAO\SQLDAO\ReviewsDAO as ReviewsDAO;
+use Exception;
 use Models\Reservation;
 use Models\ReservationState;
 use Utils\LoginMiddleware;
 use Utils\Session;
 use Utils\TempValues;
 
-class ReservationController {
+class ReservationController
+{
     private KeeperDAO $keeperDAO;
     private ReservationDAO $reservationDAO;
     private ReviewsDAO $reviewsDAO;
     private PetDAO $petDAO;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->keeperDAO = new KeeperDAO();
         $this->reservationDAO = new ReservationDAO();
         $this->reviewsDAO = new ReviewsDAO();
         $this->petDAO = new PetDAO();
     }
 
-    public function PlaceReservationView(int $id) {
+    /**
+     * @throws Exception
+     */
+    public function PlaceReservationView(int $id): void
+    {
         LoginMiddleware::VerifyOwner();
         $keeper = $this->keeperDAO->GetById($id);
         if ($keeper == null) {
@@ -46,7 +53,11 @@ class ReservationController {
 
     }
 
-    private function AvailablePets(): null|array {
+    /**
+     * @throws Exception
+     */
+    private function AvailablePets(): null|array
+    {
         $pets = $this->petDAO->GetPetsByOwnerId(Session::Get("owner")->getId());
         $reservationsOfOwner = $this->reservationDAO->GetByOwnerIdAndStates(Session::Get("owner")->getId(), ReservationState::GetDisablingStates());
         if ($pets == null && $reservationsOfOwner == null) {
@@ -63,7 +74,11 @@ class ReservationController {
         return $pets;
     }
 
-    public function PlaceReservation(int $petId, int $keeperId, string $since, string $until) {
+    /**
+     * @throws Exception
+     */
+    public function PlaceReservation(int $petId, int $keeperId, string $since, string $until): void
+    {
         LoginMiddleware::VerifyOwner();
 
         $pet = $this->petDAO->GetById($petId);
@@ -96,7 +111,11 @@ class ReservationController {
         header("location:" . FRONT_ROOT . "Owner/KeepersListView");
     }
 
-    public function Reservations() {
+    /**
+     * @throws Exception
+     */
+    public function Reservations(): void
+    {
         LoginMiddleware::VerifyOwner();
         $reservations = $this->reservationDAO->GetByOwnerId(Session::Get("owner")->getId());
         TempValues::InitValues(["back-page" => FRONT_ROOT]);

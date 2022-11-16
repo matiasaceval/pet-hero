@@ -1,14 +1,16 @@
 <?php
 
-namespace DAO;
+namespace DAO\SQLDAO;
 
+use DAO\Connection;
+use DAO\QueryType;
 use Exception;
 use Models\Reservation;
 use DAO\IReservationDAOJson as IReservationDAOJson;
 use Utils\MapFromSQL;
 use Utils\SetterSQLData;
 
-class ReservationSQLDAO implements IReservationDAOJson
+class ReservationDAO implements IReservationDAOJson
 {
     private $connection;
 
@@ -21,7 +23,11 @@ class ReservationSQLDAO implements IReservationDAOJson
         $this->connection = Connection::GetInstance();
         $query = 'CALL addReservation(?,?,?,?,?,?,?)';
         $parameters = SetterSQLData::SetFromReservation($reservation);
-        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+        $id = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+        if(count($id) > 0) {
+            return $id[0]['LAST_INSERT_ID()'];
+        }
+        return null;
 
 
     }
@@ -53,7 +59,7 @@ class ReservationSQLDAO implements IReservationDAOJson
         $parameters["id"] = $id;
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
         if (count($result) > 0) {
-            return MapFromSQL::MapFromReservation($result);
+            return MapFromSQL::MapFromReservation($result[0]);
         }
         return null;
     }
@@ -178,7 +184,7 @@ class ReservationSQLDAO implements IReservationDAOJson
     public function Update(Reservation $reservation): bool
     {
         $this->connection = Connection::GetInstance();
-        $query = 'CALL updateReservation(?,?,?)';
+        $query = 'CALL updateReservationState(?,?,?)';
         $parameters = $this->SetDataUpdate($reservation);
         return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) != null;
     }

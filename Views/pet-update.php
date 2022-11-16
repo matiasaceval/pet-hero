@@ -48,11 +48,11 @@ require_once(VIEWS_PATH . "back-nav.php");
                 <div class="row mt-4">
                     <div class="col-md-auto">
                         <div class="row" style="padding: 0px 15px 0 15px">
-                            <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() ?>" width="300px" height="300px">
+                            <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() . "?" . time() ?>" width="300px" height="300px">
                         </div>
                         <div class="row mt-1 justify-content-center">
                             <div class="col-md-auto">
-                                <input id="selectedFile" value="" name="image" type="file" accept="image/png, image/jpeg" style="display:none" onchange="(function (){
+                                <input id="selectedFile" value="<?php echo $pet->getImage() ?>" name="image" type="file" accept="image/png, image/jpeg" style="display:none" onchange="(function (){
                                                    var selectedFile = document.getElementById('selectedFile').files[0];
                                                    var img = document.getElementById('pet-image')
                                                    var reader = new FileReader();
@@ -112,11 +112,11 @@ require_once(VIEWS_PATH . "back-nav.php");
                         <div class="row mt-3">
                             <div class="col-md-auto">
                                 <p>Vaccines</p>
-                                <input required id="selectedVaccines" name="vaccine" type="file" accept="image/*, .pdf" style="display:none" onchange="(function (){
+                                <input id="selectedVaccines" name="vaccine" type="file" accept="image/*, .pdf" style="display:none" value="<?php echo $pet->getVaccine() ?>" onchange="(function (){
                                                    var selectedVaccines = document.getElementById('selectedVaccines').files[0];
                                                    $('#caption').text('Uploaded: ' + selectedVaccines.name);
                                                })()" />
-                                <input required type="button" value="Upload Vaccines" class="btn-secondary" onclick="document.getElementById('selectedVaccines').click();" />
+                                <input type="button" value="Upload Vaccines" class="btn-secondary" onclick="document.getElementById('selectedVaccines').click();" />
                             </div>
                         </div>
                         <div class="row mt-1">

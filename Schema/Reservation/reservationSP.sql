@@ -1,20 +1,19 @@
 DELIMITER
-&&
+$$
 CREATE PROCEDURE getAllReservations()
 BEGIN
-SELECT r.*, p.*, k.*
+SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
 FROM reservation r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN owner k ON p.ownerId = k.id;
-END
-&&
+END $$
 DELIMITER ;
 
 DELIMITER
 $$
 CREATE PROCEDURE `getReservationById`(IN `id` INT)
 BEGIN
-SELECT r.*, p.*, k.*
+SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
 FROM reservation r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN keeper k ON r.keeperId = k.id
@@ -26,7 +25,7 @@ DELIMITER
 $$
 CREATE PROCEDURE `getReservationByState`(IN state VARCHAR (191) COLLATE utf8_unicode_ci)
 BEGIN
-SELECT r.*, p.*, k.*
+SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
 FROM `reservation` r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN keeper k ON r.keeperId = k.id
@@ -38,7 +37,7 @@ DELIMITER
 $$
 CREATE PROCEDURE `getReservationByPetId`(IN `petId` INT)
 BEGIN
-SELECT r.*, p.*, k.*
+SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
 FROM `reservation` r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN keeper k ON r.keeperId = k.id
@@ -50,7 +49,7 @@ DELIMITER
 $$
 CREATE PROCEDURE `getReservationByKeeperId`(IN `keeperId` INT)
 BEGIN
-SELECT r.*, p.*, k.*
+SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
 FROM `reservation` r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN keeper k ON r.keeperId = k.id
@@ -62,7 +61,7 @@ DELIMITER
 $$
 CREATE PROCEDURE `getReservationByOwnerId`(IN `ownerId` INT)
 BEGIN
-SELECT r.*, p.*, k.*
+SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
 FROM `reservation` r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN keeper k ON r.keeperId = k.id
@@ -77,7 +76,6 @@ BEGIN
 DELETE
 r FROM reservation r
 WHERE r.id = id;
-SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
@@ -87,10 +85,7 @@ CREATE PROCEDURE `updateReservationState`(IN id INT, IN state VARCHAR (191), IN 
 BEGIN
 UPDATE reservation r
 SET r.state   = state,
-    r.payment = payment;
-WHERE r.id = id;
-SELECT r.*
-FROM reservation r
+    r.payment = payment
 WHERE r.id = id;
 END$$
 DELIMITER ;
@@ -101,8 +96,8 @@ $$
 CREATE PROCEDURE `addReservation`(IN petId INT, IN keeperId INT, IN state VARCHAR (191), IN since DATE, IN until DATE,
                                   price FLOAT (10), IN payment VARCHAR (191))
 BEGIN
-INSERT INTO reservation (petId, keeperId, state, since, until, price, payment)
-VALUES (petId, keeperId, state, since, until, price, payment);
+INSERT INTO reservation
+VALUES (default, since, until, state, price, default, petId, keeperId, payment);
 SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
@@ -117,10 +112,15 @@ SET
 UPDATE reservation r
 
 SET r.state = CASE
-                  WHEN r.state = 'PENDING' AND r.since < @date THEN 'CANCELED'
-                  WHEN r.state = 'CONFIRMED' AND r.since < @date THEN 'CANCELED'
-                  WHEN r.state = 'PAID' AND r.since = @date THEN 'IN_PROGRESS'
-                  WHEN r.state = 'IN_PROGRESS' AND r.until < @date THEN 'FINISHED'
+                  WHEN (
+                       r.state = 'PENDING' 
+                    OR r.state = 'ACCEPTED'
+                    OR r.state = 'PAID'
+                  )
+                  AND CAST(r.since AS Date) < @date THEN 'CANCELED'
+
+                  WHEN r.state = 'CONFIRMED' AND CAST(r.since AS Date) >= @date AND CAST(r.until AS Date) <= @date THEN 'IN PROGRESS'
+                  WHEN r.state = 'IN PROGRESS' AND CAST(r.until AS Date) < @date THEN 'FINISHED'
                   ELSE r.state
     END;
 END$$

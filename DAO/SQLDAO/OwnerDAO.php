@@ -1,14 +1,16 @@
 <?php
 
-namespace DAO;
+namespace DAO\SQLDAO;
 
+use DAO\Connection;
+use DAO\QueryType;
 use Exception;
 use Models\Owner as Owner;
 use DAO\IOwnerDAO as IOwnerDao;
 use Utils\MapFromSQL;
 use Utils\SetterSQLData;
 
-class OwnerSQLDAO implements IOwnerDao
+class OwnerDAO implements IOwnerDao
 {
     private $connection;
 
@@ -21,7 +23,11 @@ class OwnerSQLDAO implements IOwnerDao
         $this->connection = Connection::GetInstance();
         $query = "CALL addOwner(?,?,?,?,?)";
         $parameters = SetterSQLData::SetFromOwner($owner);
-        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+        $id = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+        if(count($id) > 0) {
+            return $id[0]['LAST_INSERT_ID()'];
+        }
+        return null;
     }
 
     /**
@@ -51,8 +57,8 @@ class OwnerSQLDAO implements IOwnerDao
         $query = "CALL getOwnerById(?)";
         $parameters["id"] = $id;
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-        if ($result != null) {
-            return MapFromSQL::MapFromOwner($result);
+        if (count($result) > 0) {
+            return MapFromSQL::MapFromOwner($result[0]);
         }
         return null;
     }
@@ -78,8 +84,7 @@ class OwnerSQLDAO implements IOwnerDao
     {
         $this->connection = Connection::GetInstance();
         $query = "CALL updateOwner(?,?,?,?,?,?)";
-        $parameters = SetterSQLData::SetFromOwner($owner);
-        $parameters["id"] = $owner->getId();
+        $parameters = SetterSQLData::SetFromOwner($owner, $owner->getId());
         return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) != null;
     }
 
@@ -93,8 +98,8 @@ class OwnerSQLDAO implements IOwnerDao
         $query = "CALL getOwnerByEmail(?)";
         $parameters["email"] = $email;
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-        if ($result != null) {
-            return MapFromSQL::MapFromOwner($result);
+        if (count($result) > 0) {
+            return MapFromSQL::MapFromOwner($result[0]);
         }
         return null;
     }

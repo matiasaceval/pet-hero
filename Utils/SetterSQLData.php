@@ -14,8 +14,9 @@ abstract class SetterSQLData
     /**
      * @throws Exception
      */
-    public static function SetFromKeeper(Keeper $keeper): array
+    public static function SetFromKeeper(Keeper $keeper, int $id = null): array
     {
+        if($id != null) $parameters["id"] = $id;
         $parameters["firstname"] = $keeper->getFirstname();
         $parameters["lastname"] = $keeper->getLastname();
         $parameters["email"] = $keeper->getEmail();
@@ -37,13 +38,14 @@ abstract class SetterSQLData
     /**
      * @throws Exception
      */
-    public static function SetFromOwner(Owner $owner): array
+    public static function SetFromOwner(Owner $owner, int $id = null): array
     {
+        if($id != null) $parameters["id"] = $id;
         $value["firstname"] = $owner->getFirstname();
         $value["lastname"] = $owner->getLastname();
-        $value["phone"] = $owner->getPhone();
         $value["email"] = $owner->getEmail();
         $value["password"] = $owner->getPassword();
+        $value["phone"] = $owner->getPhone();
         return $value;
     }
 
@@ -56,8 +58,10 @@ abstract class SetterSQLData
         $values["name"] = $pet->getName();
         $values["species"] = $pet->getSpecies();
         $values["breed"] = $pet->getBreed();
-        $values["age"] = $pet->getAge();
         $values["sex"] = $pet->getSex();
+        $values["age"] = $pet->getAge();
+        $values["image"] = $pet->getImage();
+        $values["vaccine"] = $pet->getVaccine();
         $values["ownerId"] = $pet->getOwner()->getId();
         return $values;
     }
@@ -70,8 +74,8 @@ abstract class SetterSQLData
         $parameters = array();
         $parameters["comment"] = $reviews->getComment();
         $parameters["rating"] = $reviews->getRating();
+        $parameters["date"] = FormatterDate::ConvertSingleDateAppToSQL($reviews->getDate());
         $parameters["reservationId"] = $reviews->getReservation()->getId();
-        $parameters["date"] = $reviews->getDate();
         return $parameters;
     }
 
@@ -81,17 +85,19 @@ abstract class SetterSQLData
     public static function SetFromReservation(Reservation $reservation): array
     {
         $parameters = array();
-        $parameters["payment"] = $reservation->getPayment();
         $parameters["petId"] = $reservation->getPet()->getId();
         $parameters["keeperId"] = $reservation->getKeeper()->getId();
-        $parameters["price"] = $reservation->getPrice();
         $parameters["state"] = $reservation->getState();
-
+        
         $dates["since"] = $reservation->getSince();
         $dates["until"] = $reservation->getUntil();
         $value = FormatterDate::ConvertRangeAppToSQL($dates);
         $parameters["since"] = $value["since"];
         $parameters["until"] = $value["until"];
+
+        $parameters["price"] = $reservation->getPrice();
+        $parameters["payment"] = $reservation->getPayment();
+
         return $parameters;
     }
 

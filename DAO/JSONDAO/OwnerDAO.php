@@ -1,10 +1,11 @@
 <?php
 
-namespace DAO;
+namespace DAO\JSONDAO;
 
+use DAO\IOwnerDAO;
 use Models\Owner;
 
-class OwnerDAOJson implements IOwnerDAO {
+class OwnerDAO implements IOwnerDAO {
     /**
      * @var Owner[]
      */

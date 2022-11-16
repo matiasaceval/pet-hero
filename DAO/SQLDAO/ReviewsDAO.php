@@ -1,8 +1,10 @@
 <?php
 
-namespace DAO;
+namespace DAO\SQLDAO;
 
+use DAO\Connection;
 use DAO\IReviewsDAO as IReviewsDAO;
+use DAO\QueryType;
 use Exception;
 use Models\Keeper;
 use Models\Owner;
@@ -14,7 +16,7 @@ use Utils\FormatterDate;
 use Utils\MapFromSQL;
 use Utils\SetterSQLData;
 
-class ReviewsSQLDAO implements IReviewsDAO
+class ReviewsDAO implements IReviewsDAO
 {
     private $connection;
 
@@ -28,9 +30,13 @@ class ReviewsSQLDAO implements IReviewsDAO
 
         $parameters = SetterSQLData::SetFromReviews($reviews);
 
-        $query = "CALL addReviews(?,?,?,?)";
+        $query = "CALL addReview(?,?,?,?)";
 
-        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+        $id = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+        if(count($id) > 0) {
+            return $id[0]['LAST_INSERT_ID()'];
+        }
+        return null;
 
     }
 
@@ -79,8 +85,8 @@ class ReviewsSQLDAO implements IReviewsDAO
         $parameters["id"] = $id;
         $query = "CALL getReviewById(?)";
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-        if ($result != null) {
-            return MapFromSQL::MapFromReview($result);
+        if (count($result) > 0) {
+            return MapFromSQL::MapFromReview($result[0]);
         }
         return null;
     }
@@ -95,8 +101,8 @@ class ReviewsSQLDAO implements IReviewsDAO
         $parameters["id"] = $id;
         $query = "CALL getReviewByReservationId(?)";
         $result = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-        if ($result != null) {
-            return MapFromSQL::MapFromReview($result);
+        if (count($result) > 0) {
+            return MapFromSQL::MapFromReview($result[0]);
         }
         return null;
     }

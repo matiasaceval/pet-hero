@@ -3,7 +3,7 @@ DELIMITER
 $$
 CREATE PROCEDURE getAllKeepers()
 BEGIN
-SELECT k.*, s.since, s.until
+SELECT k.id as keeperId, k.*, s.since, s.until
 FROM keeper k
          LEFT JOIN stay s ON k.id = s.id; -- left join to get all keepers even if they have no stay
 END$$
@@ -13,7 +13,7 @@ DELIMITER
 $$
 CREATE PROCEDURE getKeeperById(IN id INT)
 BEGIN
-SELECT k.*, s.since, s.until
+SELECT k.id as keeperId, k.*, s.since, s.until
 FROM keeper k
          INNER JOIN stay s ON k.id = s.id
 WHERE k.id = id;
@@ -24,7 +24,7 @@ DELIMITER
 $$
 CREATE PROCEDURE getKeeperByEmail(IN email VARCHAR (191) COLLATE utf8_unicode_ci)
 BEGIN
-SELECT k.*, s.since, s.until
+SELECT k.id as keeperId, k.*, s.since, s.until
 FROM keeper k
          INNER JOIN stay s ON k.id = s.id
 WHERE k.email = email;
@@ -55,10 +55,6 @@ UPDATE keeper k , stay s
 SET k.firstname = firstname, k.lastname = lastname, k.email = email, k.password = password, k.phone = phone, k.fee = fee, s.since = since, s.until = until
 WHERE k.id = id AND s.id = id;
 END $$
-SELECT k.* FROM keeper k
-INNER JOIN stay s ON k.id = s.id
-WHERE k.id = id;
-END $$
 DELIMITER ;
 
 DELIMITER
@@ -66,10 +62,8 @@ $$
 CREATE PROCEDURE deleteKeeper(IN id INT)
 BEGIN
 DELETE
-k FROM keeper k
+k.* FROM keeper k
 WHERE id = k.id;
-SELECT
-LAST_INSERT_ID();
 END $$
 DELIMITER ;
 

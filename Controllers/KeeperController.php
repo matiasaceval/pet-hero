@@ -3,11 +3,11 @@
 namespace Controllers;
 
 
-use DAO\KeeperDAOJson as KeeperDAO;
-use DAO\ReservationDAOJson as ReservationDAO;
-use DAO\ReviewsDAOJson as ReviewsDAO;
+use DAO\SQLDAO\KeeperDAO as KeeperDAO;
+use DAO\SQLDAO\ReservationDAO as ReservationDAO;
+use DAO\SQLDAO\ReviewsDAO as ReviewsDAO;
+use Exception;
 use Models\Keeper as Keeper;
-use Models\Reservation;
 use Models\ReservationState as ReservationState;
 use Models\Stay as Stay;
 use Utils\LoginMiddleware;
@@ -31,6 +31,9 @@ class KeeperController
         $this->reviewsDAO = new ReviewsDAO();
     }
 
+    /**
+     * @throws Exception
+     */
     public function Index()
     {
         LoginMiddleware::VerifyKeeper();
@@ -47,6 +50,9 @@ class KeeperController
     /* Keeper Sign Up */
     /* -------------------------------------------------------------------------- */
 
+    /**
+     * @throws Exception
+     */
     public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword)
     {
         // if there's an keeper session already, redirect to home
@@ -54,7 +60,7 @@ class KeeperController
 
         TempValues::InitValues(["firstname" => $firstname, "lastname" => $lastname, "email" => $email, "phone" => $phone]);
 
-        if(!SingUpMiddleware::VerifySecurePassword($password)){
+        if (!SingUpMiddleware::VerifySecurePassword($password)) {
             Session::Set("error", "Password must have at least 8 characters, 2 digits, 1 uppercase and 1 lowercase letter");
             header("location:" . FRONT_ROOT . "Keeper/SignUpView");
             exit;
@@ -100,6 +106,9 @@ class KeeperController
     /* -------------------------------------------------------------------------- */
 
 
+    /**
+     * @throws Exception
+     */
     public function Login(string $email, string $password)
     {
         $keeper = $this->keeperDAO->GetByEmail($email);
@@ -126,6 +135,9 @@ class KeeperController
     /* -------------------------------------------------------------------------- */
 
 
+    /**
+     * @throws Exception
+     */
     public function SetFeeStay($fee, $since, $until)
     {
         $tempKeeper = TempValues::GetValue("keeper-set-fee-stay");
@@ -146,8 +158,9 @@ class KeeperController
         $keeper->setStay($stay);
 
         if ($tempKeeper) {
-            $this->keeperDAO->Add($keeper);
-        } else {
+            $id = $this->keeperDAO->Add($keeper);
+                $keeper->setId($id);
+        } else if(Session::VerifySession("keeper")) {
             $this->keeperDAO->Update($keeper);
         }
 
@@ -172,6 +185,9 @@ class KeeperController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function Reviews($id = null)
     {
         LoginMiddleware::VerifyKeeper();
@@ -186,6 +202,9 @@ class KeeperController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function Reservations()
     {
         LoginMiddleware::VerifyKeeper();
@@ -196,6 +215,9 @@ class KeeperController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function ConfirmReservation(int $id)
     {
         LoginMiddleware::VerifyKeeper();
@@ -213,6 +235,9 @@ class KeeperController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function RejectReservation(int $id)
     {
         LoginMiddleware::VerifyKeeper();
@@ -230,6 +255,9 @@ class KeeperController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function AcceptPayment(int $id)
     {
         LoginMiddleware::VerifyKeeper();
@@ -247,6 +275,9 @@ class KeeperController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function VerifyPayment(int $id)
     {
         LoginMiddleware::VerifyKeeper();

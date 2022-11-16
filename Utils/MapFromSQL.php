@@ -18,11 +18,11 @@ abstract class MapFromSQL
     public static function MapFromReview($value): Reviews
     {
         $reviews = new Reviews();
-        $reviews->setId($value["id"]);
+        $reviews->setId($value["reviewId"]);
         $reviews->setComment($value["comment"]);
         $reviews->setRating($value["rating"]);
         $value["date"] = FormatterDate::ConvertSingleDateSQLToApp($value["date"]);
-        $reviews->setDate((string)$value["date"]);
+        $reviews->setDate($value["date"]);
         $reviews->setReservation(self::MapFromReservation($value));
         return $reviews;
     }
@@ -38,7 +38,7 @@ abstract class MapFromSQL
         $reservation->setPrice($value["price"]);
         $reservation->setCreatedAt($value["createdAt"]);
         $reservation->setPayment($value["payment"]);
-        $dates = FormatterDate::ConvertRangeSQLToApp([$value["since"], $value["until"]]);
+        $dates = FormatterDate::ConvertRangeSQLToApp($value);
         $reservation->setSince($dates["since"]);
         $reservation->setUntil($dates["until"]);
         $reservation->setPet(self::MapFromPet($value));
@@ -51,14 +51,15 @@ abstract class MapFromSQL
     public static function MapFromPet($value): Pet
     {
         $pet = new Pet();
-        $pet->setId($value["id"]);
+        $pet->setId($value["petId"]);
         $pet->setName($value["name"]);
         $pet->setSpecies($value["species"]);
         $pet->setBreed($value["breed"]);
         $pet->setAge($value["age"]);
         $pet->setImage($value["image"]);
-        $pet->setVaccine($value["vaccine"]);
+        $pet->setVaccine($value["vaccines"]);
         $pet->setSex($value["sex"]);
+        $pet->setActive($value["active"]);
         $pet->setOwner(self::MapFromOwner($value));
         return $pet;
 
@@ -68,7 +69,7 @@ abstract class MapFromSQL
     public static function MapFromOwner($value): Owner
     {
         $owner = new Owner();
-        $owner->setId($value["id"]);
+        $owner->setId($value["ownerId"]);
         $owner->setFirstname($value["firstname"]);
         $owner->setLastname($value["lastname"]);
         $owner->setEmail($value["email"]);
@@ -80,11 +81,11 @@ abstract class MapFromSQL
     /**
      * @throws Exception
      */
-    public static function MapFromKeeper($value): Keeper
+    public static function MapFromKeeper($value): ?Keeper
     {
         $keeper = new Keeper();
         $stay = new Stay();
-        $keeper->setId($value["id"]);
+        $keeper->setId($value["keeperId"]);
         $keeper->setFirstname($value["firstname"]);
         $keeper->setLastname($value["lastname"]);
         $keeper->setEmail($value["email"]);

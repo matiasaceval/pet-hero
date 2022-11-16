@@ -1,13 +1,14 @@
 <?php
 
-namespace DAO;
+namespace DAO\JSONDAO;
 
-use DAO\OwnerDAOJson as OwnerDAO;
+use DAO\IPetDAO;
+use DAO\JSONDAO\OwnerDAO as OwnerDAO;
 use Exception;
 use Models\Pet;
 use Utils\GenerateFile;
 
-class PetDAOJson implements IPetDAO {
+class PetDAO implements IPetDAO {
     /**
      * @var Pet[]
      */
@@ -132,17 +133,17 @@ class PetDAOJson implements IPetDAO {
 
     }
 
-    public function Update(Pet $pet): ?Pet {
+    public function Update(Pet $pet): bool {
         $this->RetrieveData();
 
         foreach ($this->petList as $key => $value) {
             if ($value->getId() == $pet->getId()) {
                 $this->petList[$key] = $pet;
                 $this->SaveData();
-                return $this->petList[$key];
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     public function DisablePetById(int $id): bool {

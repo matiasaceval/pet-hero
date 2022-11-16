@@ -10,7 +10,7 @@ define("JS_PATH", FRONT_ROOT . VIEWS_PATH . "js/");
 define("FONTS_PATH", FRONT_ROOT . VIEWS_PATH . "fonts/");
 
 define("DB_HOST", "localhost");
-define("DB_NAME", "pet-hero");
+define("DB_NAME", "pet_hero");
 define("DB_USER", "root");
 define("DB_PASS", "");
 ?>

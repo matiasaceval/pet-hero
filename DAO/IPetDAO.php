@@ -13,7 +13,7 @@ interface IPetDAO {
 
     public function RemoveById(int $id): bool;
 
-    public function Update(Pet $pet): ?Pet;
+    public function Update(Pet $pet): bool;
 
     public function GetOwnerId(int $petId): ?int;
 

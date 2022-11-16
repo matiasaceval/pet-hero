@@ -3,16 +3,16 @@
 namespace Models;
 
 class ReservationState {
-    const PENDING = "PENDING";
-    const ACCEPTED = "ACCEPTED";
-    const REJECTED = "REJECTED";
+    const PENDING = "PENDING";          // when created the reservation
+    const ACCEPTED = "ACCEPTED";        // when the reservation is accepted by the keeper
+    const REJECTED = "REJECTED";        // when the reservation is rejected by the keeper
 
-    const CANCELED = "CANCELED";
+    const CANCELED = "CANCELED";        // when the reservation is canceled because the time to upload the payment has expired
 
-    const PAID = "PAID";
-    const CONFIRMED = "CONFIRMED";
-    const IN_PROGRESS = "IN PROGRESS";
-    const FINISHED = "FINISHED";
+    const PAID = "PAID";                // when the payment is uploaded
+    const CONFIRMED = "CONFIRMED";      // when the payment is confirmed by the keeper
+    const IN_PROGRESS = "IN PROGRESS";  // when the reservation is in progress
+    const FINISHED = "FINISHED";        // when the reservation is finished
 
     /* Pets with these states can't be hosted */
     public static function GetDisablingStates(): array {

@@ -2,8 +2,8 @@ DELIMITER
 $$
 CREATE PROCEDURE getAllOwners()
 BEGIN
-SELECT *
-FROM owner;
+SELECT o.id as ownerId, o.*
+FROM owner o;
 END $$
 DELIMITER ;
 
@@ -11,7 +11,7 @@ DELIMITER
 $$
 CREATE PROCEDURE getOwnerById(IN id INT)
 BEGIN
-SELECT *
+SELECT o.id as ownerId, o.*
 FROM owner o
 WHERE id = o.id;
 END $$
@@ -21,7 +21,7 @@ DELIMITER
 $$
 CREATE PROCEDURE getOwnerByEmail(IN email VARCHAR (191) COLLATE utf8_unicode_ci)
 BEGIN
-SELECT *
+SELECT o.id as ownerId, o.*
 FROM owner o
 WHERE email = o.email;
 END $$
@@ -52,8 +52,6 @@ SET o.firstname = firstname,
     o.password  = password,
     o.phone     = phone
 WHERE o.id = id;
-SELECT o.* FROM owner o
-WHERE o.id = id;
 END $$
 DELIMITER ;
 
@@ -62,9 +60,8 @@ $$
 CREATE PROCEDURE deleteOwner(IN id INT)
 BEGIN
 DELETE
-o FROM owner o
+o.* FROM owner o
 WHERE id = o.id;
-SELECT LAST_INSERT_ID();
 END $$
 DELIMITER ;
 

@@ -12,27 +12,50 @@ DELIMITER
 $$
 CREATE PROCEDURE `getAllReviews`()
 BEGIN
-SELECT r.*, k.*, p.*, o.*, s.*, re.*
+SELECT r.id  as reviewId,
+       r.*,
+       k.id  as keeperId,
+       k.*,
+       p.id  as petId,
+       p.*,
+       o.id  as ownerId,
+       o.*,
+       s.id  as stayId,
+       s.*,
+       re.id as reservationId,
+       re.*
 FROM review r
          INNER JOIN reservation re ON re.id = r.reservationId
          INNER JOIN keeper k ON k.id = re.keeperId
          LEFT JOIN pet p ON p.id = re.petId
          INNER JOIN owner o ON o.id = p.ownerId
-         INNER JOIN stay s ON s.id = k.id END$$
+         INNER JOIN stay s ON s.id = k.id;
+END $$
 DELIMITER;
 
 DELIMITER
 $$
 CREATE PROCEDURE getReviewByKeeperId(IN id INT)
 BEGIN
-SELECT r.*, k.*, p.*, o.*, s.*, re.*
+SELECT r.id  as reviewId,
+       r.*,
+       k.id  as keeperId,
+       k.*,
+       p.id  as petId,
+       p.*,
+       o.id  as ownerId,
+       o.*,
+       s.id  as stayId,
+       s.*,
+       re.id as reservationId,
+       re.*
 FROM review r
          INNER JOIN reservation re ON re.id = r.reservationId
          INNER JOIN keeper k ON k.id = re.keeperId
          LEFT JOIN pet p ON p.id = re.petId
          INNER JOIN owner o ON o.id = p.ownerId
          INNER JOIN stay s ON s.id = k.id
-WHERE r.keeperId = id;
+WHERE k.id = id;
 END $$
 DELIMITER ;
 
@@ -40,7 +63,18 @@ DELIMITER
 $$
 CREATE PROCEDURE getReviewById(IN id INT)
 BEGIN
-SELECT r.*, k.*, p.*, o.*, s.*, re.*
+SELECT r.id  as reviewId,
+       r.*,
+       k.id  as keeperId,
+       k.*,
+       p.id  as petId,
+       p.*,
+       o.id  as ownerId,
+       o.*,
+       s.id  as stayId,
+       s.*,
+       re.id as reservationId,
+       re.*
 FROM review r
          INNER JOIN reservation re ON re.id = r.reservationId
          INNER JOIN keeper k ON k.id = re.keeperId
@@ -49,12 +83,24 @@ FROM review r
          INNER JOIN stay s ON s.id = k.id
 WHERE r.id = id;
 END $$
+DELIMITER ;
 
 DELIMITER
 $$
 CREATE PROCEDURE getReviewByOwnerId(IN id INT)
 BEGIN
-SELECT r.*, k.*, p.*, o.*, s.*, re.*
+SELECT r.id  as reviewId,
+       r.*,
+       k.id  as keeperId,
+       k.*,
+       p.id  as petId,
+       p.*,
+       o.id  as ownerId,
+       o.*,
+       s.id  as stayId,
+       s.*,
+       re.id as reservationId,
+       re.*
 FROM review r
          INNER JOIN reservation re ON re.id = r.reservationId
          INNER JOIN keeper k ON k.id = re.keeperId
@@ -68,7 +114,18 @@ DELIMITER
 $$
 CREATE PROCEDURE getReviewByReservationId(IN id INT)
 BEGIN
-SELECT r.*, k.*, p.*, o.*, s.*, re.*
+SELECT r.id  as reviewId,
+       r.*,
+       k.id  as keeperId,
+       k.*,
+       p.id  as petId,
+       p.*,
+       o.id  as ownerId,
+       o.*,
+       s.id  as stayId,
+       s.*,
+       re.id as reservationId,
+       re.*
 FROM review r
          INNER JOIN reservation re ON re.id = r.reservationId
          INNER JOIN keeper k ON k.id = re.keeperId
@@ -86,7 +143,6 @@ BEGIN
 DELETE
 r FROM review r
 WHERE r.id = reviewId;
-SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
@@ -97,9 +153,6 @@ BEGIN
 UPDATE review r
 SET r.comment = comment,
     r.rating  = rating
-WHERE r.id = reviewId;
-SELECT r.*
-FROM review r
 WHERE r.id = reviewId;
 END$$
 DELIMITER ;
