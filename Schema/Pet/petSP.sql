@@ -93,7 +93,5 @@ BEGIN
 UPDATE pet p
 SET p.active = FALSE
 WHERE p.id = id;
-SELECT p.* FROM pet p
-WHERE p.id = id;
 END $$
 DELIMITER ;
