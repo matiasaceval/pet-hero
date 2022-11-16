@@ -48,7 +48,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                 <div class="row mt-4">
                     <div class="col-md-auto">
                         <div class="row" style="padding: 0px 15px 0 15px">
-                            <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() ?>" width="300px" height="300px">
+                            <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() . "?" . time() ?>" width="300px" height="300px">
                         </div>
                         <div class="row mt-1 justify-content-center">
                             <div class="col-md-auto">

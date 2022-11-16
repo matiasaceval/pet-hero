@@ -133,7 +133,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                     <!-- Photo -->
                     <div class="col-md-auto">
                         <div class="row justify-content-center" style="margin-top: 4px; padding-right: 14px; padding-bottom: 14px;">
-                            <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() ?>" width="200px" height="200px">
+                            <img id="pet-image" class="cover" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() . "?" . time() ?>" width="200px" height="200px">
                         </div>
                     </div>
 

@@ -108,7 +108,7 @@ if ($err || $succ) { ?>
                         <div class="col-md-auto">
                             <div class="row" style="padding: 0px 15px 0 15px">
                                 <img id="pet-image" class="cover"
-                                     src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() ?>" width="200px"
+                                     src="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getImage() . "?" . time() ?>" width="200px"
                                      height="200px">
                             </div>
                         </div>

@@ -21,7 +21,7 @@ require_once(VIEWS_PATH . "back-nav.php");
             </div>
             <div class="row mt-4 justify-content-center">
                 <div class="col-md-auto">
-                    <img id="payment" style="max-width: 650px; max-height: 1000px" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $reservation->getPayment(); ?>" />
+                    <img id="payment" style="max-width: 650px; max-height: 1000px" src="<?php echo FRONT_ROOT . UPLOADS_PATH . $reservation->getPayment() . "?" . time() ?>" />
                     <p id="caption" class="img-caption">If you find difficulties trying to read the image, you can <span style="font-family: monospace;">"Right Click > Open image in a new tab"</span> to zoom in with freedom.</p>
                     <script>
                         $(document).ready(function() {
