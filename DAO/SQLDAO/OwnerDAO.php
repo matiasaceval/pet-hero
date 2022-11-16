@@ -3,6 +3,7 @@
 namespace DAO\SQLDAO;
 
 use DAO\Connection;
+use DAO\QueryType;
 use Exception;
 use Models\Owner as Owner;
 use DAO\IOwnerDAO as IOwnerDao;
