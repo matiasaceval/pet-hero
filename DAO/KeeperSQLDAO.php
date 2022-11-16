@@ -89,8 +89,7 @@ class KeeperSQLDAO implements IKeeperDAO
     {
         $this->connection = Connection::GetInstance();
 
-        $parameters["id"] = $keeper->getId();
-        $parameters = SetterSQLData::SetFromKeeper($keeper);
+        $parameters = SetterSQLData::SetFromKeeper($keeper, $keeper->getId());
         $query = "CALL updateKeeper(?,?,?,?,?,?,?,?,?)";
 
         return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) != null;

@@ -14,8 +14,9 @@ abstract class SetterSQLData
     /**
      * @throws Exception
      */
-    public static function SetFromKeeper(Keeper $keeper): array
+    public static function SetFromKeeper(Keeper $keeper, int $id = null): array
     {
+        if($id != null) $parameters["id"] = $id;
         $parameters["firstname"] = $keeper->getFirstname();
         $parameters["lastname"] = $keeper->getLastname();
         $parameters["email"] = $keeper->getEmail();
@@ -37,8 +38,9 @@ abstract class SetterSQLData
     /**
      * @throws Exception
      */
-    public static function SetFromOwner(Owner $owner): array
+    public static function SetFromOwner(Owner $owner, int $id = null): array
     {
+        if($id != null) $parameters["id"] = $id;
         $value["firstname"] = $owner->getFirstname();
         $value["lastname"] = $owner->getLastname();
         $value["email"] = $owner->getEmail();

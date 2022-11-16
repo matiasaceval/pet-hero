@@ -82,8 +82,7 @@ class OwnerSQLDAO implements IOwnerDao
     {
         $this->connection = Connection::GetInstance();
         $query = "CALL updateOwner(?,?,?,?,?,?)";
-        $parameters = SetterSQLData::SetFromOwner($owner);
-        $parameters["id"] = $owner->getId();
+        $parameters = SetterSQLData::SetFromOwner($owner, $owner->getId());
         return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) != null;
     }
 
