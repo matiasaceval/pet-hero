@@ -20,7 +20,7 @@ class KeeperDAO implements IKeeperDAO {
         $this->stayDAO = new StayDAO();
     }
 
-    function Add(Keeper $keeper) {
+    function Add(Keeper $keeper): ?int {
         $this->RetrieveData();
 
         $id = $this->GetNextId();
@@ -33,6 +33,8 @@ class KeeperDAO implements IKeeperDAO {
         array_push($this->keeperList, $keeper);
 
         $this->SaveData();
+
+        return $id;
     }
 
     private function RetrieveData() {

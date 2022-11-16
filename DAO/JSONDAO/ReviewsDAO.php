@@ -4,7 +4,7 @@ namespace DAO\JSONDAO;
 
 use DAO\IReviewsDAO;
 use Models\Reviews;
-use DAO\JSONDAO\ReservationDAO as ReservationDAO;
+use DAO\SQLDAO\ReservationDAO as ReservationDAO;
 class ReviewsDAO implements IReviewsDAO {
     /**
      * @var Reviews[]
@@ -18,14 +18,18 @@ class ReviewsDAO implements IReviewsDAO {
         $this->reservationDAO = new ReservationDAO();
     }
 
-    function Add(Reviews $review) {
+    function Add(Reviews $review): ?int {
         $this->RetrieveData();
 
-        $review->setId($this->GetNextId());
+        $id = $this->GetNextId();
+
+        $review->setId($id);
 
         array_push($this->reviewList, $review);
 
         $this->SaveData();
+
+        return $id;
     }
 
     private function RetrieveData() {

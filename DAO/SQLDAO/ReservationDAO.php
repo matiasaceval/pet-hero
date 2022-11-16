@@ -18,7 +18,7 @@ class ReservationDAO implements IReservationDAOJson
     /**
      * @throws Exception
      */
-    public function Add(Reservation $reservation)
+    public function Add(Reservation $reservation): ?int
     {
         $this->connection = Connection::GetInstance();
         $query = 'CALL addReservation(?,?,?,?,?,?,?)';

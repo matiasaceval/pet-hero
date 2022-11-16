@@ -3,8 +3,8 @@
 namespace DAO\JSONDAO;
 
 use DAO\IReservationDAOJson;
-use DAO\JSONDAO\PetDAO as PetDAO;
-use DAO\JSONDAO\KeeperDAO as KeeperDAO;
+use DAO\SQLDAO\PetDAO as PetDAO;
+use DAO\SQLDAO\KeeperDAO as KeeperDAO;
 use Models\Reservation;
 
 class ReservationDAO implements IReservationDAOJson {
@@ -19,12 +19,15 @@ class ReservationDAO implements IReservationDAOJson {
         $this->fileName = ROOT . "/Data/reservations.json";
     }
 
-    public function Add(Reservation $reservation) {
+    public function Add(Reservation $reservation): ?int {
         $this->RetrieveData();
-        $reservation->setId($this->GetNextId());
+        $id = $this->GetNextId();
+        $reservation->setId($id);
         $reservation->setCreatedAt(date("Y-m-d H:i:s"));
         array_push($this->reservationList, $reservation);
         $this->SaveData();
+
+        return $id;
     }
 
     private function RetrieveData() {

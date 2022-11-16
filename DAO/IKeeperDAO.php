@@ -6,7 +6,7 @@ use Models\Keeper;
 use Models\Stay;
 
 interface IKeeperDAO {
-    public function Add(Keeper $keeper);
+    public function Add(Keeper $keeper): ?int;
 
     public function GetAll(): array;
 

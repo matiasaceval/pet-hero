@@ -3,7 +3,7 @@
 namespace DAO\JSONDAO;
 
 use DAO\IPetDAO;
-use DAO\JSONDAO\OwnerDAO as OwnerDAO;
+use DAO\SQLDAO\OwnerDAO as OwnerDAO;
 use Exception;
 use Models\Pet;
 use Utils\GenerateFile;
@@ -25,7 +25,7 @@ class PetDAO implements IPetDAO {
     /**
      * @throws Exception
      */
-    public function Add(Pet $pet, array $files) {
+    public function Add(Pet $pet, array $files): int {
         $this->RetrieveData();
 
         $id = $this->GetNextId();
@@ -46,6 +46,8 @@ class PetDAO implements IPetDAO {
         array_push($this->petList, $pet);
 
         $this->SaveData();
+
+        return $id;
     }
 
     private function RetrieveData() {

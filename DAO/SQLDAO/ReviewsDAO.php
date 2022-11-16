@@ -6,13 +6,7 @@ use DAO\Connection;
 use DAO\IReviewsDAO as IReviewsDAO;
 use DAO\QueryType;
 use Exception;
-use Models\Keeper;
-use Models\Owner;
-use Models\Pet;
-use Models\Reservation;
 use Models\Reviews as Reviews;
-use Models\Stay;
-use Utils\FormatterDate;
 use Utils\MapFromSQL;
 use Utils\SetterSQLData;
 
@@ -24,7 +18,7 @@ class ReviewsDAO implements IReviewsDAO
     /**
      * @throws Exception
      */
-    public function Add(Reviews $reviews)
+    public function Add(Reviews $reviews): ?int
     {
         $this->connection = Connection::GetInstance();
 

@@ -5,7 +5,7 @@ namespace DAO;
 use Models\Reservation;
 
 interface IReservationDAOJson {
-    public function Add(Reservation $reservation);
+    public function Add(Reservation $reservation): ?int;
 
     public function GetAll(): array;
 

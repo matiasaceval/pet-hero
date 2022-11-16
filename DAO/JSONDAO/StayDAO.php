@@ -16,12 +16,14 @@ class StayDAO implements IStayDAO {
         $this->fileName = ROOT . "/Data/stays.json";
     }
 
-    function Add(Stay $stay) {
+    function Add(Stay $stay): ?int {
         $this->RetrieveData();
 
         array_push($this->stayList, $stay);
 
         $this->SaveData();
+
+        return $stay->getId();
     }
 
     private function RetrieveData() {

@@ -16,14 +16,18 @@ class OwnerDAO implements IOwnerDAO {
         $this->fileName = ROOT . "/Data/owners.json";
     }
 
-    function Add(Owner $owner) {
+    function Add(Owner $owner): int {
         $this->RetrieveData();
 
-        $owner->setId($this->GetNextId());
+        $id = $this->GetNextId();
+
+        $owner->setId($id);
 
         array_push($this->ownerList, $owner);
 
         $this->SaveData();
+
+        return $id;
     }
 
     private function RetrieveData() {
