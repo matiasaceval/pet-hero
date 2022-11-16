@@ -19,24 +19,27 @@ class PetSQLDAO implements IPetDAO
     /**
      * @throws Exception
      */
-    public function Add(Pet $pet, array $files): int
+    public function Add(Pet $pet, array $files): ?int
     {
         $this->connection = Connection::GetInstance();
         $query = "CALL addPet(?,?,?,?,?,?,?,?)";
         $parameters = SetterSQLData::SetFromPet($pet);
 
 
-        $id = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
-        var_dump($id);
-        $pet->setId($id);
-        $image = $files['image'];
-        $vaccine = $files['vaccine'];
-        $fileName = GenerateFile::PersistFile($image, "photo-pet-", $pet->getId());
-        $fileVaccine = GenerateFile::PersistFile($vaccine, "vaccine-pet-", $pet->getId());
-        $pet->setImage($fileName);
-        $pet->setVaccine($fileVaccine);
-        $updatePet = $this->Update($pet); //TODO: rompe aca
-        return $updatePet->getId();
+        $id = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+        if (count($id) > 0) {
+            $id = $id[0]['LAST_INSERT_ID()'];
+            $pet->setId($id);
+            $image = $files['image'];
+            $vaccine = $files['vaccine'];
+            $fileName = GenerateFile::PersistFile($image, "photo-pet-", $id);
+            $fileVaccine = GenerateFile::PersistFile($vaccine, "vaccine-pet-", $id);
+            $pet->setImage($fileName);
+            $pet->setVaccine($fileVaccine);
+            $this->Update($pet);
+            return $id;
+        }
+        return null;
     }
 
 
@@ -127,8 +130,11 @@ class PetSQLDAO implements IPetDAO
         $this->connection = Connection::GetInstance();
         $query = "CALL updatePet(?,?,?,?,?,?,?,?,?,?)";
         $parameters = $this->SetParametersToUpdate($pet);
-        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
-
+        $petUpdated = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+        if (count($petUpdated) > 0) {
+            return MapFromSQL::MapFromPet($petUpdated[0]);
+        }
+        return null;
     }
 
     /**

@@ -21,7 +21,11 @@ class OwnerSQLDAO implements IOwnerDao
         $this->connection = Connection::GetInstance();
         $query = "CALL addOwner(?,?,?,?,?)";
         $parameters = SetterSQLData::SetFromOwner($owner);
-        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+        $id = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+        if(count($id) > 0) {
+            return $id[0]['LAST_INSERT_ID()'];
+        }
+        return null;
     }
 
     /**
