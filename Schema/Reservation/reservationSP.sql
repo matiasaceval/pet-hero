@@ -112,10 +112,15 @@ SET
 UPDATE reservation r
 
 SET r.state = CASE
-                  WHEN r.state = 'PENDING' AND r.since < @date THEN 'CANCELED'
-                  WHEN r.state = 'CONFIRMED' AND r.since < @date THEN 'CANCELED'
-                  WHEN r.state = 'PAID' AND r.since = @date THEN 'IN_PROGRESS'
-                  WHEN r.state = 'IN_PROGRESS' AND r.until < @date THEN 'FINISHED'
+                  WHEN (
+                       r.state = 'PENDING' 
+                    OR r.state = 'ACCEPTED'
+                    OR r.state = 'PAID'
+                  )
+                  AND CAST(r.since AS Date) < @date THEN 'CANCELED'
+
+                  WHEN r.state = 'CONFIRMED' AND CAST(r.since AS Date) >= @date AND CAST(r.until AS Date) <= @date THEN 'IN PROGRESS'
+                  WHEN r.state = 'IN PROGRESS' AND CAST(r.until AS Date) < @date THEN 'FINISHED'
                   ELSE r.state
     END;
 END$$
