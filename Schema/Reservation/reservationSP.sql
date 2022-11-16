@@ -2,7 +2,7 @@ DELIMITER
 $$
 CREATE PROCEDURE getAllReservations()
 BEGIN
-SELECT r.*, p.*, k.*
+SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
 FROM reservation r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN owner k ON p.ownerId = k.id;
@@ -13,7 +13,7 @@ DELIMITER
 $$
 CREATE PROCEDURE `getReservationById`(IN `id` INT)
 BEGIN
-SELECT r.*, p.*, k.*
+SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
 FROM reservation r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN keeper k ON r.keeperId = k.id
@@ -25,7 +25,7 @@ DELIMITER
 $$
 CREATE PROCEDURE `getReservationByState`(IN state VARCHAR (191) COLLATE utf8_unicode_ci)
 BEGIN
-SELECT r.*, p.*, k.*
+SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
 FROM `reservation` r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN keeper k ON r.keeperId = k.id
@@ -37,7 +37,7 @@ DELIMITER
 $$
 CREATE PROCEDURE `getReservationByPetId`(IN `petId` INT)
 BEGIN
-SELECT r.*, p.*, k.*
+SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
 FROM `reservation` r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN keeper k ON r.keeperId = k.id
@@ -49,7 +49,7 @@ DELIMITER
 $$
 CREATE PROCEDURE `getReservationByKeeperId`(IN `keeperId` INT)
 BEGIN
-SELECT r.*, p.*, k.*
+SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
 FROM `reservation` r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN keeper k ON r.keeperId = k.id
@@ -61,7 +61,7 @@ DELIMITER
 $$
 CREATE PROCEDURE `getReservationByOwnerId`(IN `ownerId` INT)
 BEGIN
-SELECT r.*, p.*, k.*
+SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
 FROM `reservation` r
          INNER JOIN pet p ON r.petId = p.id
          INNER JOIN keeper k ON r.keeperId = k.id

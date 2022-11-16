@@ -12,7 +12,18 @@ DELIMITER
 $$
 CREATE PROCEDURE `getAllReviews`()
 BEGIN
-SELECT r.*, k.*, p.*, o.*, s.*, re.*
+SELECT r.id  as reviewId,
+       r.*,
+       k.id  as keeperId,
+       k.*,
+       p.id  as petId,
+       p.*,
+       o.id  as ownerId,
+       o.*,
+       s.id  as stayId,
+       s.*,
+       re.id as reservationId,
+       re.*
 FROM review r
          INNER JOIN reservation re ON re.id = r.reservationId
          INNER JOIN keeper k ON k.id = re.keeperId
@@ -26,7 +37,18 @@ DELIMITER
 $$
 CREATE PROCEDURE getReviewByKeeperId(IN id INT)
 BEGIN
-SELECT r.*, k.*, p.*, o.*, s.*, re.*
+SELECT r.id  as reviewId,
+       r.*,
+       k.id  as keeperId,
+       k.*,
+       p.id  as petId,
+       p.*,
+       o.id  as ownerId,
+       o.*,
+       s.id  as stayId,
+       s.*,
+       re.id as reservationId,
+       re.*
 FROM review r
          INNER JOIN reservation re ON re.id = r.reservationId
          INNER JOIN keeper k ON k.id = re.keeperId
@@ -41,7 +63,18 @@ DELIMITER
 $$
 CREATE PROCEDURE getReviewById(IN id INT)
 BEGIN
-SELECT r.*, k.*, p.*, o.*, s.*, re.*
+SELECT r.id  as reviewId,
+       r.*,
+       k.id  as keeperId,
+       k.*,
+       p.id  as petId,
+       p.*,
+       o.id  as ownerId,
+       o.*,
+       s.id  as stayId,
+       s.*,
+       re.id as reservationId,
+       re.*
 FROM review r
          INNER JOIN reservation re ON re.id = r.reservationId
          INNER JOIN keeper k ON k.id = re.keeperId
@@ -56,7 +89,18 @@ DELIMITER
 $$
 CREATE PROCEDURE getReviewByOwnerId(IN id INT)
 BEGIN
-SELECT r.*, k.*, p.*, o.*, s.*, re.*
+SELECT r.id  as reviewId,
+       r.*,
+       k.id  as keeperId,
+       k.*,
+       p.id  as petId,
+       p.*,
+       o.id  as ownerId,
+       o.*,
+       s.id  as stayId,
+       s.*,
+       re.id as reservationId,
+       re.*
 FROM review r
          INNER JOIN reservation re ON re.id = r.reservationId
          INNER JOIN keeper k ON k.id = re.keeperId
@@ -70,7 +114,18 @@ DELIMITER
 $$
 CREATE PROCEDURE getReviewByReservationId(IN id INT)
 BEGIN
-SELECT r.*, k.*, p.*, o.*, s.*, re.*
+SELECT r.id  as reviewId,
+       r.*,
+       k.id  as keeperId,
+       k.*,
+       p.id  as petId,
+       p.*,
+       o.id  as ownerId,
+       o.*,
+       s.id  as stayId,
+       s.*,
+       re.id as reservationId,
+       re.*
 FROM review r
          INNER JOIN reservation re ON re.id = r.reservationId
          INNER JOIN keeper k ON k.id = re.keeperId

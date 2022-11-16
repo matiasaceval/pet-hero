@@ -11,7 +11,7 @@ DELIMITER
 $$
 CREATE PROCEDURE GetPetById(IN id INT)
 BEGIN
-SELECT p.*, o.*
+SELECT p.id as petID, p.*, o.id as ownerId, o.*
 FROM pet p
          INNER JOIN owner o ON p.ownerId = o.id
 WHERE p.id = id;
@@ -22,7 +22,7 @@ DELIMITER
 $$
 CREATE PROCEDURE getPetByOwnerId(IN id INT)
 BEGIN
-SELECT p.*, o.*
+SELECT p.id as petID, p.*, o.id as ownerId, o.*
 FROM pet p
          INNER JOIN owner o ON p.ownerId = o.id
 WHERE id = o.id;
@@ -33,7 +33,7 @@ DELIMITER
 $$
 CREATE PROCEDURE getAllPetAndOwner()
 BEGIN
-SELECT p.*, o.*
+SELECT p.id as petID, p.*, o.id as ownerId, o.*
 FROM pet p
          INNER JOIN owner o ON p.ownerId = o.id;
 END $$

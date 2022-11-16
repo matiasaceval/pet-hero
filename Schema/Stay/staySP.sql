@@ -2,7 +2,7 @@ DELIMITER
 $$
 CREATE PROCEDURE `getAllStays`()
 BEGIN
-SELECT s.*, k.firstname, k.lastname, k.email, k.phone
+SELECT s.id as stayId, s.*, k.id as keeperId, k.*
 FROM stay s
          INNER JOIN keeper k ON s.id = k.id;
 END$$
