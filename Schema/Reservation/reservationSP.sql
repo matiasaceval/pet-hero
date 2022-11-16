@@ -96,8 +96,8 @@ $$
 CREATE PROCEDURE `addReservation`(IN petId INT, IN keeperId INT, IN state VARCHAR (191), IN since DATE, IN until DATE,
                                   price FLOAT (10), IN payment VARCHAR (191))
 BEGIN
-INSERT INTO reservation (petId, keeperId, state, since, until, price, payment)
-VALUES (default, since, until, state, price, default, petId, keeperId, payment);
+INSERT INTO reservation (since, until, state, price, petId, keeperId, payment)
+VALUES (since, until, state, price, petId, keeperId, payment);
 SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
