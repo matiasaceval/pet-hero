@@ -13,6 +13,13 @@ class Reservation {
     private int $id;
     private string $payment;
 
+    public function __construct()
+    {
+        $this->keeper = new Keeper();
+        $this->pet = new Pet();
+        $payment = "pending";
+    }
+
     /**
      * @return Keeper
      */

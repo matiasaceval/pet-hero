@@ -20,7 +20,6 @@ class ReservationDAOJson implements IReservationDAOJson {
         $this->RetrieveData();
         $reservation->setId($this->GetNextId());
         $reservation->setCreatedAt(date("Y-m-d H:i:s"));
-        $reservation->setPayment("pending");
         array_push($this->reservationList, $reservation);
         $this->SaveData();
     }
