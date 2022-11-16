@@ -67,9 +67,10 @@ SET p.name     = name,
     p.image    = image,
     p.vaccines = vaccines,
     p.ownerId  = ownerId,
-    p.active   = active,
+    p.active   = active
 WHERE p.id = id;
-SELECT p.* FROM pet p
+SELECT p.*, o.* FROM pet p
+INNER JOIN owner o ON p.ownerId = o.id
 WHERE p.id = id;
 END $$
 DELIMITER ;
