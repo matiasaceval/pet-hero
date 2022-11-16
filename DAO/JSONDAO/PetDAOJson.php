@@ -132,17 +132,17 @@ class PetDAOJson implements IPetDAO {
 
     }
 
-    public function Update(Pet $pet): ?Pet {
+    public function Update(Pet $pet): bool {
         $this->RetrieveData();
 
         foreach ($this->petList as $key => $value) {
             if ($value->getId() == $pet->getId()) {
                 $this->petList[$key] = $pet;
                 $this->SaveData();
-                return $this->petList[$key];
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     public function DisablePetById(int $id): bool {

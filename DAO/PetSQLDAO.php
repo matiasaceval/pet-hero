@@ -125,16 +125,12 @@ class PetSQLDAO implements IPetDAO
     /**
      * @throws Exception
      */
-    public function Update(Pet $pet): ?Pet
+    public function Update(Pet $pet): bool
     {
         $this->connection = Connection::GetInstance();
         $query = "CALL updatePet(?,?,?,?,?,?,?,?,?,?)";
         $parameters = $this->SetParametersToUpdate($pet);
-        $petUpdated = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-        if (count($petUpdated) > 0) {
-            return MapFromSQL::MapFromPet($petUpdated[0]);
-        }
-        return null;
+        return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) != null;
     }
 
     /**
