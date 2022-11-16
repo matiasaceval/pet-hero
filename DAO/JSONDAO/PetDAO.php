@@ -3,7 +3,7 @@
 namespace DAO\JSONDAO;
 
 use DAO\IPetDAO;
-use DAO\SQLDAO\OwnerDAO as OwnerDAO;
+use DAO\JSONDAO\OwnerDAO as OwnerDAO;
 use Exception;
 use Models\Pet;
 use Utils\GenerateFile;

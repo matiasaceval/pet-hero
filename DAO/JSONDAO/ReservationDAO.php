@@ -3,8 +3,8 @@
 namespace DAO\JSONDAO;
 
 use DAO\IReservationDAOJson;
-use DAO\SQLDAO\PetDAO as PetDAO;
-use DAO\SQLDAO\KeeperDAO as KeeperDAO;
+use DAO\JSONDAO\PetDAO as PetDAO;
+use DAO\JSONDAO\KeeperDAO as KeeperDAO;
 use Models\Reservation;
 
 class ReservationDAO implements IReservationDAOJson {
