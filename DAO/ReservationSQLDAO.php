@@ -182,7 +182,7 @@ class ReservationSQLDAO implements IReservationDAOJson
     public function Update(Reservation $reservation): bool
     {
         $this->connection = Connection::GetInstance();
-        $query = 'CALL updateReservation(?,?,?)';
+        $query = 'CALL updateReservationState(?,?,?)';
         $parameters = $this->SetDataUpdate($reservation);
         return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure) != null;
     }
