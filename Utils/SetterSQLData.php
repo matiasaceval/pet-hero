@@ -40,7 +40,7 @@ abstract class SetterSQLData
      */
     public static function SetFromOwner(Owner $owner, int $id = null): array
     {
-        if($id != null) $parameters["id"] = $id;
+        if($id != null) $value["id"] = $id;
         $value["firstname"] = $owner->getFirstname();
         $value["lastname"] = $owner->getLastname();
         $value["email"] = $owner->getEmail();
