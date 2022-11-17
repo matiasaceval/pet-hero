@@ -730,6 +730,102 @@ input[type='checkbox']:checked {
   filter: blur(1px) !important;
 }
 
+.fp-card-box {
+    border-radius: 10px;
+    padding: 32px;
+    margin: 12px 12px 12px;
+    width: 800px;
+    position: relative;
+    background-color: #fefcfd;
+}
+
+.fp-card-box h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.fp-card-box h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.fp-card-box h3 {
+    font-size: 20px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.fp-card-box h4 {
+    font-size: 18px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.fp-card-box p {
+    font-size: 18px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.fp-card-box span {
+    font-size: 24px !important;
+    color: #222 !important;
+    border: none !important;
+    background-color: none !important;
+}
+
+.input-no-underline {
+    border: none !important;
+    outline: none !important;
+    background-color: none !important;
+}
+
+.input-no-underline:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+}
+
+.box-input-border {
+    border: #463ac5 1px solid !important;
+    border-radius: 10px !important;
+    margin: 4px !important;
+    padding: 8px 22px 8px 22px !important;
+    width: fit-content !important;
+    background-color: none !important;
+    outline: none !important;
+}
+
+.box-input {
+    font-size: 24px !important;
+    color: #222 !important;
+    border: none !important;
+    background-color: none !important;
+    text-align: center !important;
+    width: 1ch !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing:border-box !important;
+    outline: none !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+}
+
+.box-input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+}
+
 /* Overwriting Bootstrap */
 .container {
     scroll-behavior: smooth;

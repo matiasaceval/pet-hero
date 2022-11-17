@@ -15,7 +15,7 @@ use Utils\LoginMiddleware;
 use Utils\Session;
 use Utils\SingUpMiddleware;
 use Utils\TempValues;
-
+use Utils\Email;
 class OwnerController
 {
     private OwnerDAO $ownerDAO;
@@ -122,6 +122,107 @@ class OwnerController
         $userType = "Owner";
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "user-login.php");
+    }
+
+    /* -------------------------------------------------------------------------- */
+
+
+    /* Owner Forgot Password */
+
+    public function ForgotPasswordView(): void {
+        LoginMiddleware::IfLoggedGoToIndex();
+        $userType = "Owner";
+        TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/LoginView"]);
+        require_once(VIEWS_PATH . "user-forgot-password.php");
+    }
+
+    public function ForgotPassword(string $email): void {
+        LoginMiddleware::IfLoggedGoToIndex();
+        $owner = $this->ownerDAO->GetByEmail($email);
+
+        if($owner != null){
+            $code = rand(10000, 99999);
+            TempValues::InitValues(["code" => $code, "email" => $email]);
+
+            $message = Email::forgotPassword($code, 'an', 'owner');
+            
+            Email::sendEmail([$owner->getEmail()], "Password Recovery", $message);
+        }
+
+        header("Location: " . FRONT_ROOT . "Owner/ForgotPasswordCodeView");
+    }
+
+    public function ForgotPasswordCodeView(): void {
+        LoginMiddleware::IfLoggedGoToIndex();
+        $userType = "Owner";
+        
+        if(TempValues::ValueExist("code")){
+            TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/ForgotPasswordView"]);
+            require_once(VIEWS_PATH . "user-forgot-password-code.php");
+        } else {
+            header("Location: " . FRONT_ROOT . "Owner/ForgotPasswordView");
+            exit;
+        }
+    }
+
+    public function SubmitCode(array $code): void {
+        LoginMiddleware::IfLoggedGoToIndex();
+        $userType = "Owner";
+
+        $code = intval(implode("", $code));
+        $randCode = TempValues::GetValue("code");
+        $correct = $code == $randCode;
+
+        if($correct) {
+            TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/ForgotPasswordView"]);
+            header("Location: " . FRONT_ROOT . "Owner/ResetPasswordView");
+            exit;
+        }
+
+        Session::Set("error", "Invalid code!");
+        header("Location: " . FRONT_ROOT . "Owner/ForgotPasswordView");
+    }
+
+    public function ResetPasswordView(): void {
+        LoginMiddleware::IfLoggedGoToIndex();
+        $userType = "Owner";
+        
+        if(TempValues::ValueExist("email")){
+            TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/ForgotPasswordView"]);
+            require_once(VIEWS_PATH . "user-reset-password.php");
+        } else {
+            header("Location: " . FRONT_ROOT . "Owner/ForgotPasswordView");
+            exit;
+        }
+    }
+
+    public function ResetPassword(string $password, string $confirmPassword): void {
+        LoginMiddleware::IfLoggedGoToIndex();
+        $userType = "Owner";
+
+        if ($password != $confirmPassword) {
+            Session::Set("error", "Passwords do not match");
+            header("location:" . FRONT_ROOT . "Owner/ResetPasswordView");
+            exit;
+        }
+
+        if (!SingUpMiddleware::VerifySecurePassword($password)) {
+            Session::Set("error", "Password must have at least 8 characters, 2 digits, 1 uppercase and 1 lowercase letter");
+            header("location:" . FRONT_ROOT . "Owner/ResetPasswordView");
+            exit;
+        }
+
+        $email = TempValues::GetValue("email");
+
+        $owner = $this->ownerDAO->GetByEmail($email);
+
+        $owner->setPassword(password_hash($password, PASSWORD_DEFAULT));
+
+        $this->ownerDAO->Update($owner);
+
+        TempValues::UnsetValues();
+        Session::Set("success", "Password changed successfully!");
+        header("Location: " . FRONT_ROOT . "Owner/LoginView");
     }
 
     /* -------------------------------------------------------------------------- */
