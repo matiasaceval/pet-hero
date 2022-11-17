@@ -53,18 +53,20 @@ a:hover {
 .card-box .card-box {
     background-color: #ffffff;
     border-radius: 10px;
+    color: #222;
     margin: 0 auto;
     padding: 24px;
     width: 168px;
     height: 200px;
     position: relative;
     top: 0;
-    transition: top ease 0.5s;
+    transition: top ease 0.5s, box-shadow ease 0.5s, border-color ease 0.5s;
 }
 
-.card-box .card-box:hover {
+.card-box .card-box:hover, .card-box .card-box .title:focus {
     top: -15px;
     box-shadow: 4px 5px 8px 0 rgba(0, 0, 0, 0.2);
+    border-color: #222;
 }
 
 .card-box-margin-bottom {
@@ -728,8 +730,8 @@ input[type='checkbox']:checked {
 }
 
 .blur-wrap:hover > .blur-card:not(:hover) {
-  filter: blur(1px) !important;
-  opacity: 0.5 !important;
+  filter: blur(0.8px) !important;
+  opacity: 0.8 !important;
 }
 
 .fp-card-box {
