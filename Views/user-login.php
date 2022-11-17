@@ -16,7 +16,7 @@ require_once(VIEWS_PATH . "back-nav-no-logout.php");
             <a href="<?php echo FRONT_ROOT . $userType ?>/SignUpView" class=" signin-image-link">I do not have an account</a>
         </div>
         <div class="signin-content">
-            <div class="signin-form">
+            <div class="signin-form" style="width: fit-content; padding-left:0; margin-left: 20px">
                 <h2 class="form-title">Login</h2>
                 <form method="POST" action="<?php echo FRONT_ROOT . $userType ?>/Login" class="register-form" id="register-form">
                     <div class="form-group">
@@ -32,20 +32,22 @@ require_once(VIEWS_PATH . "back-nav-no-logout.php");
                             <span class="signin-image-link">Forgot password</span>
                         </a>
                     </div>
-                    <div class=" form-group form-button">
-                        <input required type="submit" id="signin" class="form-submit" value="Login" />
+                    <div style="margin: 0px 0 0px 0; width: fit-content; display: block; margin-left: auto; margin-right: auto;">
+                        <?php
+                        $error = Session::Get("error");
+                        $success = Session::Get("success");
+                        if ($error) {
+                            echo "<span class='error'>$error</span>";
+                            Session::Unset("error");
+                        } else if ($success) {
+                            echo "<span class='success'>$success</span>";
+                            Session::Unset("success");
+                        }
+                        ?>
                     </div>
-                    <?php
-                    $error = Session::Get("error");
-                    $success = Session::Get("success");
-                    if ($error) {
-                        echo "<span class='error'>$error</span>";
-                        Session::Unset("error");
-                    } else if ($success) {
-                        echo "<span class='alert-success'>$success</span>";
-                        Session::Unset("success");
-                    }
-                    ?>
+                    <div class=" form-group form-button">
+                        <input required type="submit" id="signin" class="form-submit" style="display: block; margin-left: auto; margin-right: auto;" value="Login" />
+                    </div>
                 </form>
             </div>
         </div>

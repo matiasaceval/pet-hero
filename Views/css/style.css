@@ -8,7 +8,7 @@
 body {
     background: url(../img/background.png) no-repeat center center fixed;
     background-size: cover;
-    color: #fefcfd;
+    color: #ffffff;
     font-family: 'Outfit';
     height: 100%;
     padding-top: 124px;
@@ -38,7 +38,7 @@ a:hover {
 }
 
 .card-box {
-    background-color: #fefcfd;
+    background-color: #ffffff;
     border-radius: 10px;
     margin: 0 auto;
     padding: 64px 48px 64px 48px;
@@ -51,7 +51,7 @@ a:hover {
 }
 
 .card-box .card-box {
-    background-color: #fefcfd;
+    background-color: #ffffff;
     border-radius: 10px;
     margin: 0 auto;
     padding: 24px;
@@ -159,7 +159,7 @@ select {
     font-weight: bold;
     text-transform: uppercase;
     border: none;
-    background-color: #fefcfd;
+    background-color: #ffffff;
 }
 
 .image-upload {
@@ -348,7 +348,7 @@ h1 {
     width: 800px;
     position: relative;
     transform: translateY(5%);
-    background-color: #fefcfd;
+    background-color: #ffffff;
 }
 
 .kr-card-box h2 {
@@ -391,7 +391,7 @@ h1 {
 }
 
 .opr-card-box {
-    background-color: #fefcfd;
+    background-color: #ffffff;
     border-radius: 10px;
     margin: 0 auto;
     padding: 64px 48px 64px 48px;
@@ -455,17 +455,17 @@ h1 {
   height: 1.7em;
   aspect-ratio: 1/1;
   background: rgb(255, 67, 67);
-  color: #fefcfd;
+  color: #ffffff;
   text-align: center;
   font-size: 24px;
   font-family: 'Outfit';
-  border: 2px solid #fefcfd; 
+  border: 2px solid #ffffff; 
   outline: 1px solid #463ac5;
 }
 
 /** kpr = keeper pending reservations */
 .kpr-card-box {
-    background-color: #fefcfd;
+    background-color: #ffffff;
     border-radius: 10px;
     margin: 0 auto;
     padding: 24px 42px 38px 42px;
@@ -538,7 +538,7 @@ input[type='checkbox']:checked {
 
 .state-filter {
     font-size: 18px;
-    color: #fefcfd;
+    color: #ffffff;
     border: none;
     background-color: none;
     padding: 0 18px 0 4px;
@@ -638,7 +638,7 @@ input[type='checkbox']:checked {
     margin: 12px 12px 12px;
     width: 800px;
     position: relative;
-    background-color: #fefcfd;
+    background-color: #ffffff;
 }
 
 .kvp-card-box h1 {
@@ -723,11 +723,13 @@ input[type='checkbox']:checked {
 }
 
 .blur-card:not(:hover) {
-    transition: filter 0.3s ease-in-out;
+    transition: filter 0.2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .blur-wrap:hover > .blur-card:not(:hover) {
   filter: blur(1px) !important;
+  opacity: 0.5 !important;
 }
 
 .fp-card-box {
@@ -736,7 +738,7 @@ input[type='checkbox']:checked {
     margin: 12px 12px 12px;
     width: 800px;
     position: relative;
-    background-color: #fefcfd;
+    background-color: #ffffff;
 }
 
 .fp-card-box h1 {
@@ -826,6 +828,16 @@ input[type='checkbox']:checked {
     text-decoration: none !important;
 }
 
+.error {
+    font-size: 16px !important;
+    color: rgb(255, 85, 85) !important;
+}
+
+.success {
+    font-size: 16px !important;
+    color: rgb(34, 158, 34) !important;
+}
+
 /* Overwriting Bootstrap */
 .container {
     scroll-behavior: smooth;
@@ -838,11 +850,11 @@ input[type='checkbox']:checked {
 }
 
 .navbar-dark {
-    background-color: #fefcfd00 !important;
+    background-color: #ffffff00 !important;
 }
 
 .nav-text {
-    color: #fefcfd !important;
+    color: #ffffff !important;
     font-size: 24px;
     padding: 32px !important;
 }
@@ -857,14 +869,14 @@ input[type='checkbox']:checked {
     padding-left: 24px;
     padding-right: 24px;
     transition: color 0.8s ease;
-    background-color: #fefcfd !important;
-    border-color: #fefcfd !important;
+    background-color: #ffffff !important;
+    border-color: #ffffff !important;
     color: #222 !important;
 }
 
 .btn-primary:hover {
     background-color: rgba(34, 34, 34, 0) !important;
-    color: #fefcfd !important;
+    color: #ffffff !important;
 }
 
 .btn-secondary {
@@ -875,7 +887,7 @@ input[type='checkbox']:checked {
     transition: background-color 0.3s ease;
     background-color: #463ac5 !important;
     border-color: #463ac5 !important;
-    color: #fefcfd !important;
+    color: #ffffff !important;
 }
 
 .btn-secondary:hover {
@@ -890,7 +902,7 @@ input[type='checkbox']:checked {
     transition: background-color 0.3s ease;
     background-color: rgb(219, 46, 46) !important;
     border-color: rgb(219, 46, 46) !important;
-    color: #fefcfd !important;
+    color: #ffffff !important;
 }
 
 .btn-error:hover {

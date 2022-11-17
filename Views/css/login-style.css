@@ -681,7 +681,7 @@ canvas {
     transition: top ease 0.5s;
     display: flex;
     width: fit-content;
-    background: #fefcfd;
+    background: #ffffff;
     margin: 0 auto;
     box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
     -moz-box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
@@ -717,11 +717,11 @@ a:hover {
 }
 
 .navbar-dark {
-    background-color: #fefcfd00 !important;
+    background-color: #ffffff00 !important;
 }
 
 .nav-text {
-    color: #fefcfd !important;
+    color: #ffffff !important;
     font-size: 24px;
     padding: 32px !important;
 }
@@ -736,19 +736,24 @@ a:hover {
     padding-left: 24px;
     padding-right: 24px;
     transition: color 0.8s ease;
-    background-color: #fefcfd !important;
-    border-color: #fefcfd !important;
+    background-color: #ffffff !important;
+    border-color: #ffffff !important;
     color: #222 !important;
 }
 
 .btn-primary:hover {
     background-color: rgba(34, 34, 34, 0) !important;
-    color: #fefcfd !important;
+    color: #ffffff !important;
 }
 
 .error {
     font-size: 16px !important;
     color: rgb(255, 85, 85) !important;
+}
+
+.success {
+    font-size: 16px !important;
+    color: rgb(34, 158, 34) !important;
 }
 
 .error-centered {
@@ -795,7 +800,7 @@ a:hover {
 .card-box {
     width: 400px;
     height: fit-content;
-    background-color: #fefcfd;
+    background-color: #ffffff;
     border-radius: 10px;
     margin: 0 auto;
     padding: 64px 0px 64px 0px;
@@ -823,14 +828,14 @@ a:hover {
 
 h1 {
     text-align: center;
-    color: #fefcfd;
+    color: #ffffff;
     font-family: "Outfit";
     font-size: 64px;
 }
 
 .user-type h2 {
     text-align: center;
-    color: #fefcfd;
+    color: #ffffff;
     font-family: "Outfit";
     font-size: 36px;
 }
