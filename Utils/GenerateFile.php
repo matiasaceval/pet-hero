@@ -7,7 +7,7 @@ abstract class GenerateFile
     /**
      * @throws Exception
      */
-    public static function PersistFile(array $file, string $prefix, int $id, string $suffix = '', $deleteAllWithDifferentType = true): ?string
+    public static function PersistFile(array $file, string $prefix, int $id, string $suffix = '', bool $deleteAllWithDifferentType = true): ?string
     {
         $fileExt = explode(".", $file["name"]);
         $fileType = strtolower(end($fileExt));
