@@ -1,5 +1,6 @@
 <?php
 
+use Utils\Session;
 use Models\ReservationState;
 
 require_once(VIEWS_PATH . "back-nav.php");
@@ -10,6 +11,17 @@ require_once(VIEWS_PATH . "back-nav.php");
     document.title = "Reservations / Pet Hero"
 </script>
 <div class="container overflow-hidden">
+    <?php
+    $error = Session::Get("error");
+    $success = Session::Get("success");
+    if ($error) {
+        echo "<span class='error' style='margin-bottom: 32px'>$error</span>";
+        Session::Unset("error");
+    } else if ($success) {
+        echo "<span class='success' style='margin-bottom: 32px'>$success</span>";
+        Session::Unset("success");
+    }
+    ?>
     <div class="centered-wrapper">
         <div id="filter-row" class="row justify-content-center unselectable" style="flex-direction: column">
             <div class="dropdown unselectable">

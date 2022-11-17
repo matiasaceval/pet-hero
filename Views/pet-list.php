@@ -5,18 +5,16 @@ use Utils\Session;
 require_once(VIEWS_PATH . "back-nav.php");
 ?>
 <?php
-$err = Session::Get("error");
-$succ = Session::Get("success");
-if ($err || $succ) { ?>
-    <div class="row mt-1 justify-content-center">
-        <div class="col-md-auto">
-            <p><span style="color: #fefcfd"><?php echo $err ?? $succ ?></span></p>
-        </div>
-    </div>
-<?php
-    if ($err) Session::Unset('error');
-    if ($succ) Session::Unset('success');
-} ?>
+$error = Session::Get("error");
+$success = Session::Get("success");
+if ($error) {
+    echo "<span class='error' style='margin-bottom: 32px'>$error</span>";
+    Session::Unset("error");
+} else if ($success) {
+    echo "<span class='success' style='margin-bottom: 32px'>$success</span>";
+    Session::Unset("success");
+}
+?>
 
 <script>
     document.title = "Pets / Pet Hero"

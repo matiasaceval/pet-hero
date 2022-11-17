@@ -6,7 +6,9 @@ use Utils\Session;
 require_once(VIEWS_PATH . "back-nav.php");
 ?>
 
-<script>document.title = "Keepers / Pet Hero" </script>
+<script>
+    document.title = "Keepers / Pet Hero"
+</script>
 <script>
     function filterBtn() {
         const url = window.location.pathname;
@@ -14,17 +16,17 @@ require_once(VIEWS_PATH . "back-nav.php");
     }
 </script>
 <form id="filter-form" method="get" action="<?php echo FRONT_ROOT ?>Owner/KeepersListView">
-    <input type="hidden" id="since" name="since"/>
-    <input type="hidden" id="until" name="until"/>
+    <input type="hidden" id="since" name="since" />
+    <input type="hidden" id="until" name="until" />
     <script>
-        $(function () {
+        $(function() {
             const minDate = format(new Date());
             const maxDate = format(new Date(), 1);
             $('button[id="filter-btn"]').daterangepicker({
                 opens: 'center',
                 minDate: minDate,
                 maxDate: maxDate,
-            }, function (start, end, label) {
+            }, function(start, end, label) {
                 if (start == "" || end == "") {
                     alert('Please select a valid range of days!');
                 } else {
@@ -49,20 +51,20 @@ require_once(VIEWS_PATH . "back-nav.php");
         }
     </script>
 </form>
-<?php
-$err = Session::Get("error");
-$succ = Session::Get("success");
-if ($err || $succ) { ?>
-    <div class="row mt-1 justify-content-center">
-        <div class="col-md-auto">
-            <p><span style="color: #fefcfd"><?php echo $err ?? $succ ?></span></p>
-        </div>
-    </div>
-    <?php
-    if ($err) Session::Unset('error');
-    if ($succ) Session::Unset('success');
-} ?>
 <div class="container overflow-hidden">
+    <div class="row justify-content-center">
+        <?php
+        $error = Session::Get("error");
+        $success = Session::Get("success");
+        if ($error) {
+            echo "<span class='error' style='margin-bottom: 32px'>$error</span>";
+            Session::Unset("error");
+        } else if ($success) {
+            echo "<span class='success' style='margin-bottom: 32px'>$success</span>";
+            Session::Unset("success");
+        }
+        ?>
+    </div>
     <div class="centered-wrapper">
         <?php
         if (empty($keepersFromToday)) { ?>
@@ -95,8 +97,7 @@ if ($err || $succ) { ?>
                     <?php if ($since && $until) { ?>
                         <div class="col-md-auto" style="padding: 4px">
                             <a href="<?php echo FRONT_ROOT . "Owner/KeepersListView" ?>">
-                                <button class="btn btn-primary" type="button" title="Clear filter"><i
-                                            class="fa fa-trash" aria-hidden="true"></i></button>
+                                <button class="btn btn-primary" type="button" title="Clear filter"><i class="fa fa-trash" aria-hidden="true"></i></button>
                             </a>
                         </div>
                     <?php } ?>
@@ -105,9 +106,7 @@ if ($err || $succ) { ?>
                     <div class="row mt-1">
                         <div class="col-md-auto">
                             <?php if ($since && $until) { ?>
-                                <p><span style="color: #fefcfd">Showing keepers available from <span
-                                                style="font-weight:bold"><?php echo $since ?></span> to <span
-                                                style="font-weight:bold"><?php echo $until ?></span></span></p>
+                                <p><span style="color: #fefcfd">Showing keepers available from <span style="font-weight:bold"><?php echo $since ?></span> to <span style="font-weight:bold"><?php echo $until ?></span></span></p>
                             <?php } else { ?>
                                 <p>
                                     <span style="color: #fefcfd">Please enter a full range of days to filter properly!</span>
@@ -123,7 +122,7 @@ if ($err || $succ) { ?>
     <div class="row mt-4 justify-content-center">
         <?php
         foreach ($keepersFromToday as $key => $keeper) {
-            ?>
+        ?>
             <div class="kl-card-box keeper-card-background kl">
                 <div class="row" style="padding: 0px 15px 0 15px">
                     <div class="col-8">
@@ -137,17 +136,17 @@ if ($err || $succ) { ?>
                             $reviews = $this->reviewsDAO->GetByKeeperId($keeper->getId());
                             $rating = round(ReviewsAverage::getReviewsAverage($reviews), 1);
                             if ($rating == -1) {
-                                ?> <p><span>Not reviewed</span></p> <?php
-                            } else {
-                                for ($i = 1; $i <= 5; $i++) {
-                                    if ($i <= $rating) {
-                                        echo '<span class="light-text-color fa fa-star checked"></span>';
-                                    } else {
-                                        echo '<span class="light-text-color fa fa-star"></span>';
-                                    }
-                                }
-                            }
-                            ?>
+                            ?> <p><span>Not reviewed</span></p> <?php
+                                                            } else {
+                                                                for ($i = 1; $i <= 5; $i++) {
+                                                                    if ($i <= $rating) {
+                                                                        echo '<span class="light-text-color fa fa-star checked"></span>';
+                                                                    } else {
+                                                                        echo '<span class="light-text-color fa fa-star"></span>';
+                                                                    }
+                                                                }
+                                                            }
+                                                                ?>
                         </div>
                         <div class="row mt-4">
                             <h2>fee per day: <span style="font-weight: bold">$<?php echo $keeper->getFee() ?><span></h2>
