@@ -31,7 +31,7 @@ class OwnerController
         $this->reviewsDAO = new ReviewsDAO();
     }
 
-    public function Index()
+    public function Index(): void
     {
         LoginMiddleware::VerifyOwner();
 
@@ -44,7 +44,7 @@ class OwnerController
     /**
      * @throws Exception
      */
-    public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword)
+    public function SignUp(string $firstname, string $lastname, string $email, string $phone, string $password, string $confirmPassword): void
     {
         // if there's an owner session already, redirect to home
         LoginMiddleware::IfLoggedGoToIndex();
@@ -102,7 +102,7 @@ class OwnerController
     /**
      * @throws Exception
      */
-    public function Login(string $email, string $password)
+    public function Login(string $email, string $password): void
     {
         $owner = $this->ownerDAO->GetByEmail($email);
         if ($owner != null && password_verify($password, $owner->getPassword())) {
@@ -116,7 +116,7 @@ class OwnerController
         header("Location: " . FRONT_ROOT . "Owner/LoginView");
     }
 
-    public function LoginView()
+    public function LoginView(): void
     {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
@@ -132,7 +132,7 @@ class OwnerController
     /**
      * @throws Exception
      */
-    public function KeepersListView(string $since = null, string $until = null)
+    public function KeepersListView(string $since = null, string $until = null): void
     {
         LoginMiddleware::VerifyOwner();
         $keeperList = $this->keeperDAO->GetAll();
@@ -141,6 +141,9 @@ class OwnerController
         require_once(VIEWS_PATH . "owner-list-keepers.php");
     }
 
+    /**
+     * @throws Exception
+     */
     private function SanitizeKeepers(array $keeperList, string $since, string $until): array
     {
         if ($since == null || $until == null) {
@@ -162,11 +165,8 @@ class OwnerController
 
         }
 
-        $keepersFromToday = array_filter(/**
-         * @throws Exception
-         */ /**
-         * @throws Exception
-         */ $keepersFromToday, function ($keeper) {
+        $keepersFromToday = array_filter(
+            $keepersFromToday, function ($keeper) {
             $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
             $availableDays = $keeper->getAvailableDays($reservations);
             return $availableDays >= 1;
@@ -189,7 +189,7 @@ class OwnerController
     /**
      * @throws Exception
      */
-    public function UploadPayment(int $id, array $image)
+    public function UploadPayment(int $id, array $image): void
     {
         LoginMiddleware::VerifyOwner();
 
@@ -226,7 +226,7 @@ class OwnerController
     /**
      * @throws Exception
      */
-    public function GenerateReservationBill(int $id)
+    public function GenerateReservationBill(int $id): void
     {
         LoginMiddleware::VerifyOwner();
 
@@ -252,7 +252,7 @@ class OwnerController
     /**
      * @throws Exception
      */
-    public function ReviewsMade()
+    public function ReviewsMade(): void
     {
         LoginMiddleware::VerifyOwner();
         $owner = Session::Get("owner");
