@@ -3,7 +3,8 @@
 namespace Utils;
 
 abstract class LoginMiddleware {
-    public static function VerifyOwner() {
+    public static function VerifyOwner(): void
+    {
         if (!Session::VerifySession("owner")) {
             Session::Set("error", "You must be logged in to access this page.");
             header("location:" . FRONT_ROOT . "Owner/LoginView");
@@ -11,7 +12,8 @@ abstract class LoginMiddleware {
         }
     }
 
-    public static function VerifyKeeper() {
+    public static function VerifyKeeper(): void
+    {
         if (Session::VerifySession("keeper") == false) {
             Session::Set("error", "You must be logged in to access this page.");
             header("location:" . FRONT_ROOT . "Keeper/LoginView");
@@ -19,7 +21,8 @@ abstract class LoginMiddleware {
         }
     }
 
-    public static function IfLoggedGoToIndex() {
+    public static function IfLoggedGoToIndex(): void
+    {
         if (Session::VerifySession("owner")) {
             header("Location: " . FRONT_ROOT . "Owner");
             exit;

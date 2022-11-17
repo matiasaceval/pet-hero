@@ -32,7 +32,7 @@ class ReviewsDAO implements IReviewsDAO {
         return $id;
     }
 
-    private function RetrieveData() {
+    private function RetrieveData() : void {
         $this->reviewList = array();
 
         if (file_exists($this->fileName)) {
@@ -60,13 +60,14 @@ class ReviewsDAO implements IReviewsDAO {
         return array_shift($review);
     }
 
-    private function GetNextId() {
+    private function GetNextId(): int
+    {
         $this->RetrieveData();
         $lastReviews = end($this->reviewList);
         return $lastReviews === false ? 1 : $lastReviews->getId() + 1;
     }
 
-    private function SaveData() {
+    private function SaveData() : void {
         $arrayToEncode = array();
 
         foreach ($this->reviewList as $review) {

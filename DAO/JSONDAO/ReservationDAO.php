@@ -30,7 +30,7 @@ class ReservationDAO implements IReservationDAOJson {
         return $id;
     }
 
-    private function RetrieveData() {
+    private function RetrieveData() : void {
         $this->reservationList = array();
         if (file_exists($this->fileName)) {
             $jsonContent = file_get_contents($this->fileName);
@@ -59,7 +59,8 @@ class ReservationDAO implements IReservationDAOJson {
         return array_shift($reservation);
     }
 
-    private function GetNextId() {
+    private function GetNextId(): int
+    {
         $this->RetrieveData();
         $lastReservation = end($this->reservationList);
         return $lastReservation == false ? 0 : $lastReservation->getId() + 1;

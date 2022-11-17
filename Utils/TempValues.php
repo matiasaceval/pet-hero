@@ -2,13 +2,15 @@
 
 abstract class TempValues {
 
-    public static function InitValues($values) {
+    public static function InitValues($values): void
+    {
         foreach ($values as $key => $param) {
             $_SESSION["temp-" . $key] = $param;
         }
     }
 
-    public static function ValueExist($key) {
+    public static function ValueExist($key): bool
+    {
         return isset($_SESSION["temp-" . $key]);
     }
 
@@ -21,7 +23,8 @@ abstract class TempValues {
         return null;
     }
 
-    public static function UnsetValues() {
+    public static function UnsetValues(): void
+    {
         foreach ($_SESSION as $key => $_) {
             if (strpos($key, "temp-") !== false) {
                 unset($_SESSION[$key]);

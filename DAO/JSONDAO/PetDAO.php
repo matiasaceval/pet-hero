@@ -50,7 +50,7 @@ class PetDAO implements IPetDAO {
         return $id;
     }
 
-    private function RetrieveData() {
+    private function RetrieveData() : void {
         $this->petList = array();
 
         if (file_exists($this->fileName)) {
@@ -84,13 +84,14 @@ class PetDAO implements IPetDAO {
         return array_shift($owner);
     }
 
-    private function GetNextId() {
+    private function GetNextId(): int
+    {
         $this->RetrieveData();
         $lastPet = end($this->petList);
         return $lastPet === false ? 1 : $lastPet->getId() + 1;
     }
 
-    private function SaveData() {
+    private function SaveData() : void {
         $arrayToEncode = array();
         /**
          * @var Pet $pet

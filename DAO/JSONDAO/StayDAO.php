@@ -26,7 +26,7 @@ class StayDAO implements IStayDAO {
         return $stay->getId();
     }
 
-    private function RetrieveData() {
+    private function RetrieveData(): void {
         $this->stayList = array();
 
         if (file_exists($this->fileName)) {
@@ -45,7 +45,7 @@ class StayDAO implements IStayDAO {
         }
     }
 
-    private function SaveData() {
+    private function SaveData() : void {
         $arrayToEncode = array();
 
         foreach ($this->stayList as $stay) {
@@ -98,7 +98,8 @@ class StayDAO implements IStayDAO {
         return false;
     }
 
-    private function GetNextId() {
+    private function GetNextId(): int
+    {
         $this->RetrieveData();
         $lastStay = end($this->stayList);
         return $lastStay === false ? 1 : $lastStay->getId() + 1;
