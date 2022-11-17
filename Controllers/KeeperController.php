@@ -392,7 +392,7 @@ class KeeperController
 
 
         if ($reservation->getState() !== ReservationState::PAID) {
-            Session::Set("error", "You can't verify a payment because it's not paid or it's already confirmed/rejected");
+            Session::Set("error", "You can't verify that payment because it's not paid or it's already confirmed/rejected");
             header("location:" . FRONT_ROOT . "Keeper/Reservations");
             exit;
         }
