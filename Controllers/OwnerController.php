@@ -242,7 +242,7 @@ class OwnerController
         require_once(VIEWS_PATH . "owner-list-keepers.php");
     }
 
-    private function SanitizeKeepers(array $keeperList, string $since, string $until): array
+    private function SanitizeKeepers(array $keeperList, ?string $since, ?string $until): array
     {
         if ($since == null || $until == null) {
             // only show those who are available
