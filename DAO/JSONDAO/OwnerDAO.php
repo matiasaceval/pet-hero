@@ -5,18 +5,21 @@ namespace DAO\JSONDAO;
 use DAO\IOwnerDAO;
 use Models\Owner;
 
-class OwnerDAO implements IOwnerDAO {
+class OwnerDAO implements IOwnerDAO
+{
     /**
      * @var Owner[]
      */
     private array $ownerList = array();
     private string $fileName;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->fileName = ROOT . "/Data/owners.json";
     }
 
-    function Add(Owner $owner): int {
+    function Add(Owner $owner): int
+    {
         $this->RetrieveData();
 
         $id = $this->GetNextId();
@@ -30,7 +33,8 @@ class OwnerDAO implements IOwnerDAO {
         return $id;
     }
 
-    private function RetrieveData() {
+    private function RetrieveData(): void
+    {
         $this->ownerList = array();
 
         if (file_exists($this->fileName)) {
@@ -52,13 +56,15 @@ class OwnerDAO implements IOwnerDAO {
         }
     }
 
-    private function GetNextId() {
+    private function GetNextId(): int
+    {
         $this->RetrieveData();
         $lastElement = end($this->ownerList);
         return $lastElement == false ? 0 : $lastElement->getId() + 1;
     }
 
-    private function SaveData() {
+    private function SaveData(): void
+    {
         $arrayToEncode = array();
 
         foreach ($this->ownerList as $owner) {
@@ -77,13 +83,15 @@ class OwnerDAO implements IOwnerDAO {
         file_put_contents($this->fileName, $jsonContent);
     }
 
-    function GetAll(): array {
+    function GetAll(): array
+    {
         $this->RetrieveData();
 
         return $this->ownerList;
     }
 
-    function GetById(int $id): ?Owner {
+    function GetById(int $id): ?Owner
+    {
         $this->RetrieveData();
 
         $owner = array_filter($this->ownerList, fn($owner) => $owner->getId() == $id);
@@ -91,7 +99,8 @@ class OwnerDAO implements IOwnerDAO {
         return array_shift($owner);
     }
 
-    function RemoveById(int $id): bool {
+    function RemoveById(int $id): bool
+    {
         $this->RetrieveData();
 
         $cleanedArray = array_filter($this->ownerList, fn($owner) => $owner->getId() != $id);
@@ -102,7 +111,8 @@ class OwnerDAO implements IOwnerDAO {
         return count($cleanedArray) < count($this->ownerList);
     }
 
-    function Update(Owner $owner): bool {
+    function Update(Owner $owner): bool
+    {
         $this->RetrieveData();
         foreach ($this->ownerList as $key => $ownerOfList) {
             if ($ownerOfList->getId() == $owner->getId()) {
@@ -114,7 +124,8 @@ class OwnerDAO implements IOwnerDAO {
         return false;
     }
 
-    public function GetByEmail(string $email): ?Owner {
+    public function GetByEmail(string $email): ?Owner
+    {
 
         $this->RetrieveData();
 

@@ -21,7 +21,8 @@ class Owner {
         return $this->id;
     }
 
-    public function setId(int $id) {
+    public function setId(int $id): void
+    {
         $this->id = $id;
     }
 
@@ -29,7 +30,8 @@ class Owner {
         return $this->firstname;
     }
 
-    public function setFirstname(string $firstname) {
+    public function setFirstname(string $firstname): void
+    {
         $this->firstname = $firstname;
     }
 
@@ -37,7 +39,8 @@ class Owner {
         return $this->lastname;
     }
 
-    public function setLastname(string $lastname) {
+    public function setLastname(string $lastname): void
+    {
         $this->lastname = $lastname;
     }
 
@@ -45,7 +48,8 @@ class Owner {
         return $this->email;
     }
 
-    public function setEmail(string $email) {
+    public function setEmail(string $email): void
+    {
         $this->email = $email;
     }
 
@@ -53,7 +57,8 @@ class Owner {
         return $this->password;
     }
 
-    public function setPassword(string $password) {
+    public function setPassword(string $password): void
+    {
         $this->password = $password;
     }
 
@@ -61,7 +66,8 @@ class Owner {
         return $this->phone;
     }
 
-    public function setPhone(string $phone) {
+    public function setPhone(string $phone): void
+    {
         $this->phone = $phone;
     }
 

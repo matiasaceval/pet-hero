@@ -38,7 +38,8 @@ class ReservationState {
         ];
     }
 
-    public static function StateAsId(string $state){
+    public static function StateAsId(string $state): string
+    {
         return strtolower(implode('_', explode(" ", $state)));
     }
 }

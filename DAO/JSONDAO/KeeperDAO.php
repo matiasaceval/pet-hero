@@ -37,7 +37,7 @@ class KeeperDAO implements IKeeperDAO {
         return $id;
     }
 
-    private function RetrieveData() {
+    private function RetrieveData(): void {
         $this->keeperList = array();
 
         if (file_exists($this->fileName)) {
@@ -68,13 +68,14 @@ class KeeperDAO implements IKeeperDAO {
         return array_shift($keeper);
     }
 
-    public function GetNextId() {
+    public function GetNextId(): int
+    {
         $this->RetrieveData();
         $lastKeeper = end($this->keeperList);
         return $lastKeeper === false ? 1 : $lastKeeper->getId() + 1;
     }
 
-    private function SaveData() {
+    private function SaveData(): void {
         $arrayToEncode = array();
 
         foreach ($this->keeperList as $keeper) {
