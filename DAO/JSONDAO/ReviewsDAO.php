@@ -4,7 +4,7 @@ namespace DAO\JSONDAO;
 
 use DAO\IReviewsDAO;
 use Models\Reviews;
-use DAO\SQLDAO\ReservationDAO as ReservationDAO;
+use DAO\JSONDAO\ReservationDAO as ReservationDAO;
 class ReviewsDAO implements IReviewsDAO {
     /**
      * @var Reviews[]
