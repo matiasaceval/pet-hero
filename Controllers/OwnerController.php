@@ -129,29 +129,30 @@ class OwnerController
 
     /* Owner Forgot Password */
 
-    public function ForgotPasswordView()
-    {
+    public function ForgotPasswordView(): void {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
         TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/LoginView"]);
         require_once(VIEWS_PATH . "user-forgot-password.php");
     }
 
-    public function ForgotPassword(string $email) {
+    public function ForgotPassword(string $email): void {
+        LoginMiddleware::IfLoggedGoToIndex();
         $owner = $this->ownerDAO->GetByEmail($email);
 
         if($owner != null){
             $code = rand(10000, 99999);
             TempValues::InitValues(["code" => $code, "email" => $email]);
+
+            $message = Email::forgotPassword($code, 'an', 'owner');
             
-            Email::sendEmail([$owner->getEmail()], "Password Recovery", "Your code is: " . $code);
+            Email::sendEmail([$owner->getEmail()], "Password Recovery", $message);
         }
 
         header("Location: " . FRONT_ROOT . "Owner/ForgotPasswordCodeView");
     }
 
-    public function ForgotPasswordCodeView()
-    {
+    public function ForgotPasswordCodeView(): void {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
         
@@ -164,8 +165,10 @@ class OwnerController
         }
     }
 
-    public function SubmitCode(array $code) {
+    public function SubmitCode(array $code): void {
+        LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
+
         $code = intval(implode("", $code));
         $randCode = TempValues::GetValue("code");
         $correct = $code == $randCode;
@@ -180,8 +183,7 @@ class OwnerController
         header("Location: " . FRONT_ROOT . "Owner/ForgotPasswordView");
     }
 
-    public function ResetPasswordView()
-    {
+    public function ResetPasswordView(): void {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
         
@@ -194,7 +196,8 @@ class OwnerController
         }
     }
 
-    public function ResetPassword(string $password, string $confirmPassword) {
+    public function ResetPassword(string $password, string $confirmPassword): void {
+        LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
 
         if ($password != $confirmPassword) {
