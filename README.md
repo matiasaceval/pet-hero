@@ -40,6 +40,15 @@ care is a short stay in exchange for remuneration.*
 - Need to create "Data" and "Uploads" folders on root
 
 ## How to run prisma migrations
+1. Create an `.env` file on root.
+2. Set DATABASE_URL like in the example below
+```
+DATABASE_URL="mysql://root:@localhost:3306/pet_hero/"
+```
+
+3. Run the next npm command in your favorite console
 ```sh
 npx prisma migrate dev
 ```
+
+
