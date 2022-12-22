@@ -191,7 +191,7 @@ require_once(VIEWS_PATH . "back-nav.php");
                         <div class="row mt-2">
                             <div class="col-md-auto wrap-text wrap-text-max-width">
                                 <p>Vaccines</p>
-                                <a href="<?php echo $pet->getVaccine() ?>">
+                                <a href="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getVaccine() ?>" target="_blank">
                                     <p><span class="pet-data">Click to see</span></p>
                                 </a>
                             </div>

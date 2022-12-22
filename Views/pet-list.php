@@ -149,7 +149,7 @@ if ($error) {
                             <div class="row mt-2">
                                 <div class="col-md-auto">
                                     <p>Vaccines</p>
-                                    <a href="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getVaccine() ?>">
+                                    <a href="<?php echo FRONT_ROOT . UPLOADS_PATH . $pet->getVaccine() ?>" target="_blank">
                                         <p><span class=" pet-data small-card-box-overwrapped">Click to see</span></p>
                                     </a>
                                 </div>
