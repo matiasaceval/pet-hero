@@ -2,7 +2,8 @@
 
 namespace Models;
 
-class Chat {
+class Chat
+{
     private int $id;
     private Keeper $keeper;
     private Owner $owner;
@@ -14,7 +15,8 @@ class Chat {
      * @param Owner $owner
      * @param array $messages
      */
-    public function __construct(int $id, Keeper $keeper, Owner $owner, array $messages) {
+    public function __construct(int $id, Keeper $keeper, Owner $owner, array $messages)
+    {
         $this->id = $id;
         $this->keeper = $keeper;
         $this->owner = $owner;
@@ -24,58 +26,82 @@ class Chat {
     /**
      * @return int
      */
-    public function getId(): int {
+    public function getId(): int
+    {
         return $this->id;
     }
 
     /**
      * @param int $id
      */
-    public function setId(int $id): void {
+    public function setId(int $id): void
+    {
         $this->id = $id;
     }
 
     /**
      * @return Keeper
      */
-    public function getKeeper(): Keeper {
+    public function getKeeper(): Keeper
+    {
         return $this->keeper;
     }
 
     /**
      * @param Keeper $keeper
      */
-    public function setKeeper(Keeper $keeper): void {
+    public function setKeeper(Keeper $keeper): void
+    {
         $this->keeper = $keeper;
     }
 
     /**
      * @return Owner
      */
-    public function getOwner(): Owner {
+    public function getOwner(): Owner
+    {
         return $this->owner;
     }
 
     /**
      * @param Owner $owner
      */
-    public function setOwner(Owner $owner): void {
+    public function setOwner(Owner $owner): void
+    {
         $this->owner = $owner;
     }
 
     /**
      * @return array
      */
-    public function getMessages(): array {
+    public function getMessages(): array
+    {
         return $this->messages;
     }
 
     /**
      * @param array $messages
      */
-    public function setMessages(array $messages): void {
+    public function setMessages(array $messages): void
+    {
         $this->messages = $messages;
     }
 
+    public function addMessage(Message $message): void
+    {
+        array_push($this->messages, $message);
+    }
 
+    /**
+     * @param Owner|Keeper $session
+     * @return Owner|Keeper
+     */
+    public function getOtherParticipant(Owner|Keeper $session)
+    {
+        if ($session instanceof Keeper) {
+            return $this->getOwner();
+        } else {
+            return $this->getKeeper();
+        }
+    }
 }
