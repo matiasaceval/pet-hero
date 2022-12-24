@@ -2,7 +2,8 @@
 
 namespace Utils;
 
-abstract class LoginMiddleware {
+abstract class LoginMiddleware
+{
     public static function VerifyOwner(): void
     {
         if (!Session::VerifySession("owner")) {
@@ -30,5 +31,10 @@ abstract class LoginMiddleware {
             header("Location: " . FRONT_ROOT . "Keeper");
             exit;
         }
+    }
+
+    public static function IsLogged(): bool
+    {
+        return Session::VerifySession("owner") || Session::VerifySession("keeper");
     }
 }
