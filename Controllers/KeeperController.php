@@ -115,6 +115,7 @@ class KeeperController
         $keeper = $this->keeperDAO->GetByEmail($email);
         if ($keeper != null && password_verify($password, $keeper->getPassword())) {
             Session::Set("keeper", $keeper);
+            // TODO: Execute stored procedure that does: Mark chats as RECEIVED and SELECT them to store them in a Session value called "chats"
             header("Location: " . FRONT_ROOT . "Keeper");
             exit;
         }
@@ -138,14 +139,16 @@ class KeeperController
 
     /* Keeper Forgot Password */
 
-    public function ForgotPasswordView(): void {
+    public function ForgotPasswordView(): void
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Keeper";
         TempValues::InitValues(["back-page" => FRONT_ROOT . "Keeper/LoginView"]);
         require_once(VIEWS_PATH . "user-forgot-password.php");
     }
 
-    public function ForgotPassword(string $email): void {
+    public function ForgotPassword(string $email): void
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $keeper = $this->keeperDAO->GetByEmail($email);
 
@@ -161,7 +164,8 @@ class KeeperController
         header("Location: " . FRONT_ROOT . "Keeper/ForgotPasswordCodeView");
     }
 
-    public function ForgotPasswordCodeView(): void {
+    public function ForgotPasswordCodeView(): void
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Keeper";
 
@@ -174,7 +178,8 @@ class KeeperController
         }
     }
 
-    public function SubmitCode(array $code): void {
+    public function SubmitCode(array $code): void
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Keeper";
 
@@ -192,7 +197,8 @@ class KeeperController
         header("Location: " . FRONT_ROOT . "Keeper/ForgotPasswordView");
     }
 
-    public function ResetPasswordView(): void {
+    public function ResetPasswordView(): void
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Keeper";
 
@@ -205,7 +211,8 @@ class KeeperController
         }
     }
 
-    public function ResetPassword(string $password, string $confirmPassword): void {
+    public function ResetPassword(string $password, string $confirmPassword): void
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Keeper";
 
@@ -260,8 +267,8 @@ class KeeperController
 
         if ($tempKeeper) {
             $id = $this->keeperDAO->Add($keeper);
-                $keeper->setId($id);
-        } else if(Session::VerifySession("keeper")) {
+            $keeper->setId($id);
+        } else if (Session::VerifySession("keeper")) {
             $this->keeperDAO->Update($keeper);
         }
 
@@ -311,6 +318,7 @@ class KeeperController
         LoginMiddleware::VerifyKeeper();
         $keeper = Session::Get("keeper");
         $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
+        // TODO: Execute stored procedure that does: Mark chats as RECEIVED and SELECT them to store them in a Session value called "chats"
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "keeper-reservations.php");
     }

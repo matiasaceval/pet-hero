@@ -16,6 +16,7 @@ use Utils\Session;
 use Utils\SingUpMiddleware;
 use Utils\TempValues;
 use Utils\Email;
+
 class OwnerController
 {
     private OwnerDAO $ownerDAO;
@@ -107,6 +108,7 @@ class OwnerController
         $owner = $this->ownerDAO->GetByEmail($email);
         if ($owner != null && password_verify($password, $owner->getPassword())) {
             Session::Set("owner", $owner);
+            // TODO: Mark chats as RECEIVED and store them in a Session value called "chats"
             header("Location: " . FRONT_ROOT . "Owner");
             exit;
         }
@@ -129,34 +131,37 @@ class OwnerController
 
     /* Owner Forgot Password */
 
-    public function ForgotPasswordView(): void {
+    public function ForgotPasswordView(): void
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
         TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/LoginView"]);
         require_once(VIEWS_PATH . "user-forgot-password.php");
     }
 
-    public function ForgotPassword(string $email): void {
+    public function ForgotPassword(string $email): void
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $owner = $this->ownerDAO->GetByEmail($email);
 
-        if($owner != null){
+        if ($owner != null) {
             $code = rand(10000, 99999);
             TempValues::InitValues(["code" => $code, "email" => $email]);
 
             $message = Email::forgotPassword($code, 'an', 'owner');
-            
+
             Email::sendEmail([$owner->getEmail()], "Password Recovery", $message);
         }
 
         header("Location: " . FRONT_ROOT . "Owner/ForgotPasswordCodeView");
     }
 
-    public function ForgotPasswordCodeView(): void {
+    public function ForgotPasswordCodeView(): void
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
-        
-        if(TempValues::ValueExist("code")){
+
+        if (TempValues::ValueExist("code")) {
             TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/ForgotPasswordView"]);
             require_once(VIEWS_PATH . "user-forgot-password-code.php");
         } else {
@@ -165,7 +170,8 @@ class OwnerController
         }
     }
 
-    public function SubmitCode(array $code): void {
+    public function SubmitCode(array $code): void
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
 
@@ -173,7 +179,7 @@ class OwnerController
         $randCode = TempValues::GetValue("code");
         $correct = $code == $randCode;
 
-        if($correct) {
+        if ($correct) {
             TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/ForgotPasswordView"]);
             header("Location: " . FRONT_ROOT . "Owner/ResetPasswordView");
             exit;
@@ -183,11 +189,12 @@ class OwnerController
         header("Location: " . FRONT_ROOT . "Owner/ForgotPasswordView");
     }
 
-    public function ResetPasswordView(): void {
+    public function ResetPasswordView(): void
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
-        
-        if(TempValues::ValueExist("email")){
+
+        if (TempValues::ValueExist("email")) {
             TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/ForgotPasswordView"]);
             require_once(VIEWS_PATH . "user-reset-password.php");
         } else {
@@ -196,7 +203,8 @@ class OwnerController
         }
     }
 
-    public function ResetPassword(string $password, string $confirmPassword): void {
+    public function ResetPassword(string $password, string $confirmPassword): void
+    {
         LoginMiddleware::IfLoggedGoToIndex();
         $userType = "Owner";
 
@@ -260,18 +268,22 @@ class OwnerController
                 $until = DateTime::createFromFormat("m-d-Y", $until);
                 return ($since >= $keeperSince) && ($until <= $keeperUntil);
             });
-
         }
 
-        $keepersFromToday = array_filter(/**
-         * @throws Exception
-         */ /**
-         * @throws Exception
-         */ $keepersFromToday, function ($keeper) {
-            $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
-            $availableDays = $keeper->getAvailableDays($reservations);
-            return $availableDays >= 1;
-        });
+        $keepersFromToday = array_filter(
+            /**
+             * @throws Exception
+             */
+            /**
+             * @throws Exception
+             */
+            $keepersFromToday,
+            function ($keeper) {
+                $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
+                $availableDays = $keeper->getAvailableDays($reservations);
+                return $availableDays >= 1;
+            }
+        );
 
         usort($keepersFromToday, function ($a, $b) {
             $aDate = DateTime::createFromFormat("m-d-Y", $a->getStay()->getUntil());
@@ -363,5 +375,4 @@ class OwnerController
     }
 
     /* -------------------------------------------------------------------------- */
-
 }

@@ -50,7 +50,6 @@ class ReservationController
         $reviews = $this->reviewsDAO->GetByKeeperId($keeper->getId());
         TempValues::InitValues(["back-page" => FRONT_ROOT . "Owner/KeepersListView"]);
         require_once(VIEWS_PATH . "owner-place-reservation.php");
-
     }
 
     /**
@@ -118,6 +117,7 @@ class ReservationController
     {
         LoginMiddleware::VerifyOwner();
         $reservations = $this->reservationDAO->GetByOwnerId(Session::Get("owner")->getId());
+        // TODO: Execute stored procedure that does: Mark chats as RECEIVED and SELECT them to store them in a Session value called "chats"
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "owner-reservations.php");
     }
