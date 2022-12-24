@@ -241,6 +241,13 @@ require_once(VIEWS_PATH . "back-nav.php");
                                 <p>Phone: <span class="pet-data"><?php echo $keeper->getPhone() ?></span></p>
                             </div>
                         </div>
+                        <div class="row mt-1">
+                            <div class="col-md-auto wrap-text" style="max-width: 30em">
+                                <a href="<?php echo FRONT_ROOT ?>Chat?id=<?php echo $reservation->getId() ?>">
+                                    <button class="btn btn-secondary" style="font-size: 22px; min-width: 150px; width: 250px">Chat</button>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <?php
                     $state = $reservation->getState();
