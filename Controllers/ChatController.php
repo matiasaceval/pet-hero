@@ -43,7 +43,7 @@ class ChatController
             $owner->setPhone("123456789");
         }
 
-        $chat = new Chat(1, $keeper, $owner, [
+        $chat = TempValues::GetValue("chat") ?? new Chat(1, $keeper, $owner, [
             new Message($owner, $keeper, "Hi", "12/23/2022 22:15", "READ"),
             new Message($keeper, $owner, "Hello", "12/23/2022 22:16", "READ"),
             new Message($owner, $keeper, "How are you?", "12/23/2022 22:17", "READ"),
