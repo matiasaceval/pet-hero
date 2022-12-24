@@ -24,19 +24,6 @@ class ChatController
 
         // -------------- MOCKUP --------------
         // here should be ChatDAO.getById($id), and if it's == null then redirect to 404
-        $chat = TempValues::GetValue("chat") ?? new Chat(1, $keeper, $owner, [
-            new Message($owner, $keeper, "Hi", "12/23/2022 22:15", "READ"),
-            new Message($keeper, $owner, "Hello", "12/23/2022 22:16", "READ"),
-            new Message($owner, $keeper, "How are you?", "12/23/2022 22:17", "READ"),
-            new Message($keeper, $owner, "I'm fine, and you?", "12/23/2022 22:18", "READ"),
-            new Message($owner, $keeper, "I'm fine too", "12/23/2022 22:19", "RECEIVED"),
-            new Message($owner, $keeper, "Can I ask you something?", "12/23/2022 22:20", "PENDING"),
-            new Message($owner, $keeper, "Hey", "12/23/2022 22:21", "PENDING"),
-            new Message($owner, $keeper, "Hey", "12/23/2022 22:22", "PENDING"),
-            new Message($owner, $keeper, "Hey", "12/23/2022 22:23", "PENDING"),
-            new Message($owner, $keeper, "Hey", "12/23/2022 22:32", "PENDING"),
-        ]);
-
         if ($session instanceof Owner) {
             $owner = $session;
             $keeper->setId(3);
@@ -55,6 +42,19 @@ class ChatController
             $owner->setPassword("1234");
             $owner->setPhone("123456789");
         }
+
+        $chat = new Chat(1, $keeper, $owner, [
+            new Message($owner, $keeper, "Hi", "12/23/2022 22:15", "READ"),
+            new Message($keeper, $owner, "Hello", "12/23/2022 22:16", "READ"),
+            new Message($owner, $keeper, "How are you?", "12/23/2022 22:17", "READ"),
+            new Message($keeper, $owner, "I'm fine, and you?", "12/23/2022 22:18", "READ"),
+            new Message($owner, $keeper, "I'm fine too", "12/23/2022 22:19", "RECEIVED"),
+            new Message($owner, $keeper, "Can I ask you something?", "12/23/2022 22:20", "PENDING"),
+            new Message($owner, $keeper, "Hey", "12/23/2022 22:21", "PENDING"),
+            new Message($owner, $keeper, "Hey", "12/23/2022 22:22", "PENDING"),
+            new Message($owner, $keeper, "Hey", "12/23/2022 22:23", "PENDING"),
+            new Message($owner, $keeper, "Hey", "12/23/2022 22:32", "PENDING"),
+        ]);
         // ------------ END OF MOCKUP ------------
 
         $otherParticipant = $chat->getOtherParticipant($session);

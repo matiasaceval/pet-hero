@@ -26,14 +26,11 @@ require_once(VIEWS_PATH . "back-nav.php");
             <p><?php echo $otherParticipant->getFullname(); ?></p>
         </div>
         <div class="card-body overflow-auto">
-
-            <!-- Mensajes aquí -->
             <?php
             $previousMessageFromOtherParticipant = false;
             foreach ($chat->getMessages() as $row) {
                 echo "<div class='message'>";
                 if ($row->getSender() == $session) {
-                    // Muestra el mensaje alineado a la derecha
                     echo "<div class='message text-right'>";
                     echo "<p>" . $row->getText() . "</p>";
                     echo "<div>";
@@ -51,7 +48,6 @@ require_once(VIEWS_PATH . "back-nav.php");
                     echo "</div>";
                     $previousMessageFromOtherParticipant = false;
                 } else {
-                    // Muestra el mensaje alineado a la izquierda
                     echo "<div class='message text-left'>";
                     if (!$previousMessageFromOtherParticipant) echo "<p class='chat-other-user'>" . $row->getSender()->getFirstName() . "</p>";
                     echo "<p>" . $row->getText() . "</p>";
