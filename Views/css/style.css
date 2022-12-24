@@ -840,6 +840,115 @@ input[type='checkbox']:checked {
     color: rgb(34, 158, 34) !important;
 }
 
+.card {
+  width: 800px !important;
+  height: 760px !important;
+}
+
+.card-body {
+  padding: 40px 30px;
+  overflow-y: scroll;
+}
+
+.card-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+.card-body::-webkit-scrollbar-thumb {
+    background-color: #574ae2;
+    border-radius: 20px;
+}
+
+.card p {
+    font-size: 22px;
+    color: #222;
+    border: none;
+    background-color: none;
+}
+
+.chat-other-user {
+    color: #574ae2 !important;
+    font-weight: bold;
+}
+
+.time {
+    font-size: 14px;
+    color: rgba(34, 34, 34, 0.507);
+    border: none;
+    background-color: none;
+    vertical-align: bottom;
+    padding-right: 10px;
+}
+
+.message {
+    padding: 5px;
+}
+
+.participant-info {
+  text-align: center;
+  position: sticky;
+  top: 0;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+}
+
+.message-form-div {
+  display: flex;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+  align-items: center;
+  justify-content: center;
+}
+
+.message-form {
+    display: flex;
+    align-items: center;
+}
+
+.message-form-div textarea {
+  flex-basis: 90%;
+  resize: none;
+  width: 700px;
+  border-color: #333;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 20px;
+}
+
+.message-form-div textarea::-webkit-scrollbar {
+    width: 0;
+}
+
+.message-form-div textarea:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.message-form button {
+  flex-basis: 10%;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  width: 64px;
+  height: 64px;
+  outline: none;
+}
+
+.message-form button img:hover {
+  filter: brightness(3);
+}
+
+.message-form button img {
+    align-self: center;
+    transition: 0.2s;
+}
+
+.message-send-button {
+    border: 0;
+    background-color: transparent;
+}
+
+
 /* Overwriting Bootstrap */
 .container {
     scroll-behavior: smooth;
