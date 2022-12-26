@@ -20,6 +20,7 @@ model Keeper {
   fee       Int
   stay      Stay?
   Reservation Reservation[]
+  Chat        Chat[]
 }
 
 model Owner {
@@ -30,6 +31,7 @@ model Owner {
   password String
   phone    String
   Pets     Pet[]
+  Chat     Chat[]
 }
 
 model Pet {
@@ -80,4 +82,34 @@ model Reservation {
   Keeper   Keeper   @relation(fields: [keeperId], references: [id], onDelete: Cascade)
   keeperId Int
   Review   Review?
+  Chat    Chat?
+}
+
+model Chat {
+ reservationId Int @id @unique
+ keeperId Int
+ ownerId Int
+ Reservation Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+ Keeper Keeper @relation(fields: [keeperId], references: [id], onDelete: Cascade)
+ Owner Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+ Message Message[]
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  text      String   @db.VarChar(2000)
+  createdAt DateTime @default(now())
+  messageStateId Int @default(1)
+  sender    String
+  //relations
+  Chat      Chat     @relation(fields: [chatId], references: [reservationId], onDelete: Cascade)
+  chatId    Int
+  MessageState MessageState @relation(fields: [messageStateId], references: [id], onDelete: Cascade)
+}
+
+model MessageState {
+  id        Int      @id @default(autoincrement())
+  state     String   @default("PENDING")
+  //relations one to one
+  Message   Message[]
 }

@@ -98,6 +98,8 @@ CREATE PROCEDURE `addReservation`(IN petId INT, IN keeperId INT, IN state VARCHA
 BEGIN
 INSERT INTO reservation
 VALUES (default, since, until, state, price, default, petId, keeperId, payment);
+INSERT INTO chat
+VALUES (LAST_INSERT_ID() , keeperId, (SELECT p.ownerId FROM pet p WHERE p.id = petId));
 SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
