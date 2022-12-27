@@ -2,8 +2,10 @@
 
 namespace Utils;
 
+use DateTime;
 use Exception;
 use Models\Keeper;
+use Models\Message;
 use Models\Owner as Owner;
 use Models\Pet;
 use Models\Reservation;
@@ -16,7 +18,7 @@ abstract class SetterSQLData
      */
     public static function SetFromKeeper(Keeper $keeper, int $id = null): array
     {
-        if($id != null) $parameters["id"] = $id;
+        if ($id != null) $parameters["id"] = $id;
         $parameters["firstname"] = $keeper->getFirstname();
         $parameters["lastname"] = $keeper->getLastname();
         $parameters["email"] = $keeper->getEmail();
@@ -40,7 +42,7 @@ abstract class SetterSQLData
      */
     public static function SetFromOwner(Owner $owner, int $id = null): array
     {
-        if($id != null) $value["id"] = $id;
+        if ($id != null) $value["id"] = $id;
         $value["firstname"] = $owner->getFirstname();
         $value["lastname"] = $owner->getLastname();
         $value["email"] = $owner->getEmail();
@@ -88,7 +90,7 @@ abstract class SetterSQLData
         $parameters["petId"] = $reservation->getPet()->getId();
         $parameters["keeperId"] = $reservation->getKeeper()->getId();
         $parameters["state"] = $reservation->getState();
-        
+
         $dates["since"] = $reservation->getSince();
         $dates["until"] = $reservation->getUntil();
         $value = FormatterDate::ConvertRangeAppToSQL($dates);
@@ -101,4 +103,14 @@ abstract class SetterSQLData
         return $parameters;
     }
 
+    /**
+     * @throws Exception
+     */
+    public static function SetFromMessage(int $chatId, Message $message): array
+    {
+        $parameters["chatId"] = $chatId;
+        $parameters["content"] = $message->getText();
+        $parameters["ownerIsSender"] = $message->getSender() instanceof Owner;
+        return $parameters;
+    }
 }

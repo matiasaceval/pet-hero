@@ -2,8 +2,11 @@
 
 namespace Utils;
 
+use DateTime;
 use Exception;
+use Models\Chat;
 use Models\Keeper;
+use Models\Message;
 use Models\Owner;
 use Models\Pet;
 use Models\Reservation;
@@ -45,7 +48,6 @@ abstract class MapFromSQL
         $reservation->setKeeper(self::MapFromKeeper($value));
 
         return $reservation;
-
     }
 
     public static function MapFromPet($value): Pet
@@ -62,7 +64,6 @@ abstract class MapFromSQL
         $pet->setActive($value["active"]);
         $pet->setOwner(self::MapFromOwner($value));
         return $pet;
-
     }
 
 
@@ -102,6 +103,48 @@ abstract class MapFromSQL
         $keeper->setStay($stay);
         return $keeper;
     }
-}
 
-?>
+    /**
+     * @throws Exception
+     */
+    public static function MapFromChat($value): Chat
+    {
+        $owner = new Owner();
+        $keeper = new Keeper();
+
+
+        $owner->setId(intval($value["ownerId"]));
+        $owner->setFirstname($value["ownerFirstname"]);
+        $owner->setLastname($value["ownerLastname"]);
+
+        $keeper->setId(intval($value["keeperId"]));
+        $keeper->setFirstname($value["keeperFirstname"]);
+        $keeper->setLastname($value["keeperLastname"]);
+
+        $chat = new Chat(
+            $value["reservationId"],
+            $keeper,
+            $owner,
+            [],
+        );
+
+        return $chat;
+    }
+
+    public static function MapFromMessages($chat, $value): array
+    {
+        $messages = [];
+        foreach ($value as $message) {
+            if ($message["id"] !== NULL) {
+                $date = date("m-d-Y H:i", strtotime($message["createdAt"]));
+                array_push($messages, new Message(
+                    boolval($message["ownerIsSender"]) ? $chat->getOwner() : $chat->getKeeper(),
+                    $message["text"],
+                    $message["state"],
+                    $date
+                ));
+            }
+        }
+        return $messages;
+    }
+}
