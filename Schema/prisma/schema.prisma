@@ -100,7 +100,7 @@ model Message {
   text      String   @db.VarChar(2000)
   createdAt DateTime @default(now())
   messageStateId Int @default(1)
-  sender    String
+  ownerIsSender      Boolean
   //relations
   Chat      Chat     @relation(fields: [chatId], references: [reservationId], onDelete: Cascade)
   chatId    Int

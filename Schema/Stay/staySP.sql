@@ -1,5 +1,4 @@
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE `getAllStays`()
 BEGIN
 SELECT s.id as stayId, s.*, k.id as keeperId, k.*
@@ -9,8 +8,7 @@ END$$
 DELIMITER ;
 
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE `deleteStay`(IN stayId INT)
 BEGIN
 DELETE
@@ -20,8 +18,7 @@ END$$
 DELIMITER ;
 
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE `updateStay`(IN stayId INT, IN since DATE, IN until DATE)
 BEGIN
 UPDATE stay s
@@ -34,8 +31,7 @@ DELIMITER ;
 
 -- if keeper doesn't have a stay, it will be created
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE `addStay`(IN id INT, IN since DATE, IN until DATE)
 BEGIN
 INSERT INTO stay (id, since, until)

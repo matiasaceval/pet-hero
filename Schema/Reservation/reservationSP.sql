@@ -1,5 +1,4 @@
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE getAllReservations()
 BEGIN
 SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
@@ -9,8 +8,7 @@ FROM reservation r
 END $$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE `getReservationById`(IN `id` INT)
 BEGIN
 SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
@@ -21,8 +19,7 @@ WHERE `id` = r.id;
 END$$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE `getReservationByState`(IN state VARCHAR (191) COLLATE utf8_unicode_ci)
 BEGIN
 SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
@@ -33,8 +30,7 @@ WHERE r.state = state;
 END$$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE `getReservationByPetId`(IN `petId` INT)
 BEGIN
 SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
@@ -45,8 +41,7 @@ WHERE `petId` = r.petId;
 END$$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE `getReservationByKeeperId`(IN `keeperId` INT)
 BEGIN
 SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
@@ -57,8 +52,7 @@ WHERE `keeperId` = r.keeperId;
 END$$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE `getReservationByOwnerId`(IN `ownerId` INT)
 BEGIN
 SELECT r.id as reservationId, r.*, p.id as petId, p.*, k.id as keeperId, k.*
@@ -69,8 +63,7 @@ WHERE `ownerId` = p.ownerId;
 END$$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE `deleteReservation`(IN id INT)
 BEGIN
 DELETE
@@ -79,8 +72,7 @@ WHERE r.id = id;
 END$$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE `updateReservationState`(IN id INT, IN state VARCHAR (191), IN payment VARCHAR (191))
 BEGIN
 UPDATE reservation r
@@ -91,8 +83,7 @@ END$$
 DELIMITER ;
 
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE `addReservation`(IN petId INT, IN keeperId INT, IN state VARCHAR (191), IN since DATE, IN until DATE,
                                   price FLOAT (10), IN payment VARCHAR (191))
 BEGIN
@@ -104,8 +95,7 @@ SELECT LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 create procedure `verifyReservation`()
 BEGIN
 

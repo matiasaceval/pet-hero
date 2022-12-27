@@ -1,5 +1,4 @@
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE getAllPets()
 BEGIN
 SELECT *, id as petId
@@ -7,8 +6,7 @@ FROM pet;
 END $$
 DELIMITER
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE GetPetById(IN id INT)
 BEGIN
 SELECT p.id as petId, p.*, o.id as ownerId, o.*
@@ -18,8 +16,7 @@ WHERE p.id = id;
 END $$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE getPetByOwnerId(IN id INT)
 BEGIN
 SELECT p.id as petId, p.*, o.id as ownerId, o.*
@@ -29,8 +26,7 @@ WHERE id = o.id;
 END $$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE getAllPetAndOwner()
 BEGIN
 SELECT p.id as petId, p.*, o.id as ownerId, o.*
@@ -40,8 +36,7 @@ END $$
 DELIMITER ;
 
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE addPet(IN name VARCHAR (191), IN species VARCHAR (191), IN breed VARCHAR (191),
                         IN sex VARCHAR (191), IN age VARCHAR (191), IN image VARCHAR (191), IN vaccines VARCHAR (191),
                         IN ownerId INT)
@@ -52,8 +47,7 @@ SELECT LAST_INSERT_ID();
 END $$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE updatePet(IN id INT, IN name VARCHAR (191), IN species VARCHAR (191), IN breed VARCHAR (191),
                            IN sex VARCHAR (191), IN age VARCHAR (191), IN image VARCHAR (191), IN vaccines VARCHAR (191),
                            IN ownerId INT, IN active BOOLEAN)
@@ -75,8 +69,7 @@ WHERE p.id = id;
 END $$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE deletePet(IN id INT)
 BEGIN
 DELETE
@@ -86,8 +79,7 @@ SELECT LAST_INSERT_ID();
 END $$
 DELIMITER ;
 
-DELIMITER
-$$
+DELIMITER $$
 CREATE PROCEDURE disablePet(IN id INT)
 BEGIN
 UPDATE pet p
