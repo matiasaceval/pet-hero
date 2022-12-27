@@ -2,9 +2,11 @@
 
 namespace Models;
 
-class Message {
+use Utils\Session;
+
+class Message
+{
     private Owner|Keeper $sender;
-    private Owner|Keeper $receiver;
     private string $text;
     private string $date;
     private string $state;
@@ -16,83 +18,81 @@ class Message {
      * @param string $date
      * @param string $state
      */
-    public function __construct(Keeper|Owner $sender, Keeper|Owner $receiver, string $text, string $date, string $state) {
+    public function __construct(Keeper|Owner $sender, string $text, string $state, string $date = "")
+    {
         $this->sender = $sender;
-        $this->receiver = $receiver;
         $this->text = $text;
-        $this->date = $date;
         $this->state = $state;
+        $this->date = $date;
     }
 
     /**
      * @return Keeper|Owner
      */
-    public function getSender(): Keeper|Owner {
+    public function getSender(): Keeper|Owner
+    {
         return $this->sender;
     }
 
     /**
      * @param Keeper|Owner $sender
      */
-    public function setSender(Keeper|Owner $sender): void {
+    public function setSender(Keeper|Owner $sender): void
+    {
         $this->sender = $sender;
-    }
-
-    /**
-     * @return Keeper|Owner
-     */
-    public function getReceiver(): Keeper|Owner {
-        return $this->receiver;
-    }
-
-    /**
-     * @param Keeper|Owner $receiver
-     */
-    public function setReceiver(Keeper|Owner $receiver): void {
-        $this->receiver = $receiver;
     }
 
     /**
      * @return string
      */
-    public function getText(): string {
+    public function getText(): string
+    {
         return $this->text;
     }
 
     /**
      * @param string $text
      */
-    public function setText(string $text): void {
+    public function setText(string $text): void
+    {
         $this->text = $text;
     }
 
     /**
      * @return string
      */
-    public function getDate(): string {
+    public function getDate(): string
+    {
         return $this->date;
     }
 
     /**
      * @param string $date
      */
-    public function setDate(string $date): void {
+    public function setDate(string $date): void
+    {
         $this->date = $date;
     }
 
     /**
      * @return string
      */
-    public function getState(): string {
+    public function getState(): string
+    {
         return $this->state;
     }
 
     /**
      * @param string $state
      */
-    public function setState(string $state): void {
+    public function setState(string $state): void
+    {
         $this->state = $state;
     }
 
-
+    public function senderIsSession(): bool
+    {
+        $session = Session::Get("owner") ?? Session::Get("keeper");
+        return $this->sender->getId() === $session->getId() && get_class($this->sender) === get_class($session);
+    }
 }
