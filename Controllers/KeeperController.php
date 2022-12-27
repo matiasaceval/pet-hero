@@ -2,7 +2,7 @@
 
 namespace Controllers;
 
-
+use DAO\SQLDAO\ChatDAO;
 use DAO\SQLDAO\KeeperDAO as KeeperDAO;
 use DAO\SQLDAO\ReservationDAO as ReservationDAO;
 use DAO\SQLDAO\ReviewsDAO as ReviewsDAO;
@@ -23,6 +23,7 @@ class KeeperController
     private KeeperDAO $keeperDAO;
     private ReservationDAO $reservationDAO;
     private ReviewsDAO $reviewsDAO;
+    private ChatDAO $chatDAO;
 
 
     public function __construct()
@@ -30,6 +31,7 @@ class KeeperController
         $this->keeperDAO = new KeeperDAO();
         $this->reservationDAO = new ReservationDAO();
         $this->reviewsDAO = new ReviewsDAO();
+        $this->chatDAO = new ChatDAO();
     }
 
     /**
@@ -115,7 +117,7 @@ class KeeperController
         $keeper = $this->keeperDAO->GetByEmail($email);
         if ($keeper != null && password_verify($password, $keeper->getPassword())) {
             Session::Set("keeper", $keeper);
-            // TODO: Execute stored procedure that does: Mark chats as RECEIVED and SELECT them to store them in a Session value called "chats"
+            $this->chatDAO->MarkAsReceived($keeper);
             header("Location: " . FRONT_ROOT . "Keeper");
             exit;
         }
@@ -318,7 +320,12 @@ class KeeperController
         LoginMiddleware::VerifyKeeper();
         $keeper = Session::Get("keeper");
         $reservations = $this->reservationDAO->GetByKeeperId($keeper->getId());
-        // TODO: Execute stored procedure that does: Mark chats as RECEIVED and SELECT them to store them in a Session value called "chats"
+        $this->chatDAO->MarkAsReceived($keeper);
+        $chats = [];
+        foreach ($reservations as $reservation) {
+            $chat = $this->chatDAO->GetById($reservation->getId());
+            $chats[$reservation->getId()] = $chat;
+        }
         TempValues::InitValues(["back-page" => FRONT_ROOT]);
         require_once(VIEWS_PATH . "keeper-reservations.php");
     }

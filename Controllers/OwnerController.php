@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use DAO\SQLDAO\ChatDAO;
 use DAO\SQLDAO\KeeperDAO as KeeperDAO;
 use DAO\SQLDAO\OwnerDAO as OwnerDAO;
 use DAO\SQLDAO\ReservationDAO as ReservationDAO;
@@ -23,6 +24,7 @@ class OwnerController
     private KeeperDAO $keeperDAO;
     private ReservationDAO $reservationDAO;
     private ReviewsDAO $reviewsDAO;
+    private ChatDAO $chatDAO;
 
     public function __construct()
     {
@@ -30,6 +32,7 @@ class OwnerController
         $this->keeperDAO = new KeeperDAO();
         $this->reservationDAO = new ReservationDAO();
         $this->reviewsDAO = new ReviewsDAO();
+        $this->chatDAO = new ChatDAO();
     }
 
     public function Index()
@@ -108,7 +111,7 @@ class OwnerController
         $owner = $this->ownerDAO->GetByEmail($email);
         if ($owner != null && password_verify($password, $owner->getPassword())) {
             Session::Set("owner", $owner);
-            // TODO: Mark chats as RECEIVED and store them in a Session value called "chats"
+            $this->chatDAO->MarkAsReceived($owner);
             header("Location: " . FRONT_ROOT . "Owner");
             exit;
         }
