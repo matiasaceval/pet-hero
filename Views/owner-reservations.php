@@ -1,5 +1,7 @@
 <?php
 
+use Models\Keeper;
+use Models\MessageState;
 use Utils\Session;
 use Models\ReservationState;
 
@@ -241,6 +243,14 @@ require_once(VIEWS_PATH . "back-nav.php");
                                 <p>Phone: <span class="pet-data"><?php echo $keeper->getPhone() ?></span></p>
                             </div>
                         </div>
+                        <?php
+                        $messages = $chats[$reservation->getId()]->getMessages();
+                        $unreadMessages = array_filter($messages, function ($message) {
+                            return $message->getState() == MessageState::RECEIVED && $message->getSender() instanceof Keeper;
+                        });
+
+                        $count = count($unreadMessages);
+                        if ($count > 0) { ?><div title="You have messages pending!" class="circle" style="position: absolute; transform: translateX(550%) translateY(-30%); z-index: 3000"><?php echo $count > 9 ? "+9" : $count ?></div><?php } ?>
                         <div class="row mt-1">
                             <div class="col-md-auto wrap-text" style="max-width: 30em">
                                 <a href="<?php echo FRONT_ROOT ?>Chat?id=<?php echo $reservation->getId() ?>">
